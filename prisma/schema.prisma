@@ -178,11 +178,9 @@ model Registry {
   eventType   String
   eventDate   DateTime
   location    String
-  guestCount  Int
   description String?
   status      String   @default("draft") // draft, active, completed
   planType    String   @default("free")  // free, combined, fullSuite
-  goalAmount  Decimal  @default(0)
   
   // Relations
   userId      String
