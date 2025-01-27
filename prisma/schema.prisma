@@ -25,6 +25,7 @@ model User {
   roles       Role[]
   sessions    Session[]
   connections Connection[]
+  registries  Registry[]
 }
 
 model Note {
@@ -166,4 +167,127 @@ model Connection {
   userId String
 
   @@unique([providerName, providerId])
+}
+
+model Registry {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  title       String
+  eventType   String
+  eventDate   DateTime
+  location    String
+  guestCount  Int
+  description String?
+  status      String   @default("draft") // draft, active, completed
+  planType    String   @default("free")  // free, combined, fullSuite
+  goalAmount  Decimal  @default(0)
+  
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       RegistryItem[]
+  contributions Contribution[]
+  withdrawals Withdrawal[]
+  
+  @@index([userId])
+  ChildProfile ChildProfile[]
+}
+
+model RegistryItem {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  name        String
+  description String?
+  price       Decimal
+  url         String?
+  imageUrl    String?
+  
+  // Relations
+  registryId  String
+  registry    Registry @relation(fields: [registryId], references: [id], onDelete: Cascade)
+  
+  @@index([registryId])
+}
+
+// prisma/schema.prisma
+model Contribution {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  amount      Decimal
+  guestName   String
+  guestEmail  String?
+  message     String?
+  status      String   @default("pending") // pending, completed, refunded
+  
+  registryId  String
+  registry    Registry @relation(fields: [registryId], references: [id], onDelete: Cascade)
+  
+  @@index([registryId])
+}
+
+model Withdrawal {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  amount      Decimal
+  status      String   @default("pending") // pending, completed, failed
+  
+  registryId  String
+  registry    Registry @relation(fields: [registryId], references: [id], onDelete: Cascade)
+  
+  @@index([registryId])
+}
+
+model ChildProfile {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Basic Info
+  name        String
+  birthdate   DateTime
+  interests   Json  @default("[]")
+  dreams      Json  @default("[]")
+
+  // Activities
+  currentActivities Json  @default("[]")
+  upcomingActivities Json  @default("[]")
+
+  // Milestones from previous year
+  milestones  Milestone[]
+  
+  // Photos
+  photos      ProfilePhoto[]
+
+  // Relation to Registry
+  registryId  String   @unique
+  registry    Registry @relation(fields: [registryId], references: [id], onDelete: Cascade)
+}
+
+model Milestone {
+  id          String   @id @default(cuid())
+  date        DateTime
+  title       String
+  description String
+  
+  profileId   String
+  profile     ChildProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+}
+
+model ProfilePhoto {
+  id          String   @id @default(cuid())
+  url         String
+  altText     String
+  category    String   // 'activity', 'family', 'friends', 'throwback'
+  caption     String?
+  
+  profileId   String
+  profile     ChildProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
 }
