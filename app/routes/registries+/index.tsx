@@ -3,7 +3,7 @@ import { type LoaderFunctionArgs, Link, useLoaderData } from 'react-router'
 import { Button } from '#app/components/ui/button'
 import { requireUserId } from '#app/utils/auth.server'
 import { prisma } from '#app/utils/db.server'
-import { type Registry, type RegistryListItem } from './+types/index.ts'
+import { type RegistryListItem } from './+types/index.ts'
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
