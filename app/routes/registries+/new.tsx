@@ -42,7 +42,7 @@ const RegistrySchema = z.object({
 			return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 		}),
 	location: z.string().min(1, 'Location is required'),
-	guestCount: z.number().min(1, 'Must have at least 1 guest'),
+	// guestCount: z.number().min(1, 'Must have at least 1 guest'),
 	description: z.string().optional(),
 })
 
