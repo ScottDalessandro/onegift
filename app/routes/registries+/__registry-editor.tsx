@@ -14,6 +14,7 @@ import { Label } from '#app/components/ui/label.tsx'
 import { type Info } from './+types/$registryId.edit.ts'
 
 export const RegistrySchema = z.object({
+	id: z.string().optional(),
 	title: z.string().min(1, 'Title is required'),
 	eventType: z.enum(['birthday', 'wedding', 'baby-shower', 'other'], {
 		errorMap: () => ({ message: 'Please select an event type' }),

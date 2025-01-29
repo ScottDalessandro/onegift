@@ -4,15 +4,29 @@ import { type ActionFunctionArgs, data, redirect } from 'react-router'
 import { requireUserId } from '#app/utils/auth.server'
 import { prisma } from '#app/utils/db.server'
 import { RegistrySchema } from './__registry-editor'
+import { z } from 'zod'
 
 export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
+	const formData = await parseFormData(request)
 
-	const formData = await parseFormData(request) // note: this is not the same as request.formData(), it's a different parser that's more robust
-	// and can handle file uploads and other multipart/form-data content types, this will be used for the file uploads in the future...
+	const submission = await parseWithZod(formData, {
+		schema: RegistrySchema.superRefine(async (data, ctx) => {
+			if (!data.id) return
 
-	const submission = parseWithZod(formData, {
-		schema: RegistrySchema,
+			const registry = await prisma.registry.findUnique({
+				select: { id: true },
+				where: { id: data.id, userId },
+			})
+
+			if (!registry) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Registry not found',
+				})
+			}
+		}),
+		async: true,
 	})
 
 	if (submission.status !== 'success') {
@@ -22,15 +36,46 @@ export async function action({ request }: ActionFunctionArgs) {
 		)
 	}
 
-	// try {
+	const {
+		id: registryId,
+		title,
+		eventType,
+		eventDate,
+		location,
+		description,
+	} = submission.value
 
-	const registry = await prisma.registry.create({
-		data: {
-			...submission.value,
+	const updatedRegistry = await prisma.registry.upsert({
+		select: { id: true },
+		where: { id: registryId ?? '__new_registry__' },
+		create: {
 			userId,
+			title,
+			eventType,
+			eventDate,
+			location,
+			description,
+		},
+		update: {
+			title,
+			eventType,
+			eventDate,
+			location,
+			description,
 		},
 	})
-	return redirect(`/registries/${registry.id}`)
+
+	return redirect(`/registries/${updatedRegistry.id}`)
+
+	// try {
+	// 	const registry = await prisma.registry.create({
+	// 		data: {
+	// 			...submission.value,
+	// 			userId,
+	// 		},
+	// 	})
+
+	// 	return redirect(`/registries/${registry.id}`)
 	// } catch (error) {
 	// 	console.error('Failed to create registry:', error)
 	// 	return submission.reply({
