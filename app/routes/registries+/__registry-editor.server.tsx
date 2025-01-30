@@ -5,7 +5,6 @@ import { z } from 'zod'
 import { requireUserId } from '#app/utils/auth.server'
 import { prisma } from '#app/utils/db.server'
 import { RegistrySchema } from './__registry-editor'
-import { Prisma } from '@prisma/client'
 
 export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
