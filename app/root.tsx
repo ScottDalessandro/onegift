@@ -203,6 +203,11 @@ function App() {
 						<div className="ml-auto hidden max-w-sm flex-1 sm:block">
 							{searchBar}
 						</div>
+						<div>
+							<Button asChild variant="default" size="lg">
+								<Link to="/registries/new">Create Registry</Link>
+							</Button>
+						</div>
 						<div className="flex items-center gap-10">
 							{user ? (
 								<UserDropdown />

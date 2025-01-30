@@ -56,7 +56,6 @@ export default function RegistryDetail() {
 						<div>
 							<h3 className="font-semibold">Event Details</h3>
 							<p>Date: {new Date(registry.eventDate).toLocaleDateString()}</p>
-							<p>Location: {registry.location}</p>
 						</div>
 
 						<div>

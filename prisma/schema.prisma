@@ -177,7 +177,6 @@ model Registry {
   title       String
   eventType   String
   eventDate   DateTime
-  location    String
   description String?
   status      String   @default("draft") // draft, active, completed
   planType    String   @default("free")  // free, combined, fullSuite

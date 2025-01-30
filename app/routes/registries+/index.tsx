@@ -3,7 +3,6 @@ import { type LoaderFunctionArgs, Link, useLoaderData } from 'react-router'
 import { Button } from '#app/components/ui/button'
 import { requireUserId } from '#app/utils/auth.server'
 import { prisma } from '#app/utils/db.server'
-import { type RegistryListItem } from './+types/index.ts'
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
@@ -34,7 +33,7 @@ export default function RegistriesList() {
 				</p>
 			) : (
 				<div className="space-y-4">
-					{registries.map((registry: RegistryListItem) => (
+					{registries.map((registry) => (
 						<div
 							key={registry.id}
 							className="rounded-lg border p-4 hover:bg-gray-50"
