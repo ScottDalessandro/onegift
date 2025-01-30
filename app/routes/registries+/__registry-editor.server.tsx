@@ -1,10 +1,11 @@
 import { parseWithZod } from '@conform-to/zod'
-import { parseFormData } from '@mjackson/form-data-parser'
+import { parseFormData } from '@mjackson/form-data-parser' // will support file uploads in the future
 import { type ActionFunctionArgs, data, redirect } from 'react-router'
 import { z } from 'zod'
 import { requireUserId } from '#app/utils/auth.server'
 import { prisma } from '#app/utils/db.server'
 import { RegistrySchema } from './__registry-editor'
+import { Prisma } from '@prisma/client'
 
 export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
@@ -63,20 +64,4 @@ export async function action({ request }: ActionFunctionArgs) {
 	})
 
 	return redirect(`/registries/${updatedRegistry.id}`)
-
-	// try {
-	// 	const registry = await prisma.registry.create({
-	// 		data: {
-	// 			...submission.value,
-	// 			userId,
-	// 		},
-	// 	})
-
-	// 	return redirect(`/registries/${registry.id}`)
-	// } catch (error) {
-	// 	console.error('Failed to create registry:', error)
-	// 	return submission.reply({
-	// 		formErrors: ['Failed to create registry. Please try again.'],
-	// 	})
-	// }
 }
