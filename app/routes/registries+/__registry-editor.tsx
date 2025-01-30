@@ -12,6 +12,7 @@ import { Button } from '#app/components/ui/button.tsx'
 import { Input } from '#app/components/ui/input.tsx'
 import { Label } from '#app/components/ui/label.tsx'
 import { type Info } from './+types/$registryId.edit.ts'
+import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 
 export const RegistrySchema = z.object({
 	id: z.string().optional(),
@@ -30,7 +31,6 @@ export const RegistrySchema = z.object({
 			// Remove time component for consistency
 			return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 		}),
-	location: z.string().min(1, 'Location is required'),
 	description: z.string().optional(),
 })
 
@@ -108,17 +108,6 @@ export function RegistryEditor({
 				</div>
 
 				<div>
-					<Label htmlFor={fields.location.id}>Location</Label>
-					<Input
-						{...getInputProps(fields.location, { type: 'text' })}
-						placeholder="Please enter the address"
-					/>
-					{fields.location.errors?.length && (
-						<span className="text-red-500">{fields.location.errors}</span>
-					)}
-				</div>
-
-				<div>
 					<Label htmlFor={fields.description.id}>Description</Label>
 					<textarea
 						{...getTextareaProps(fields.description)}
@@ -133,5 +122,17 @@ export function RegistryEditor({
 				<Button type="submit">{registry ? 'Update' : 'Create'} Registry</Button>
 			</Form>
 		</div>
+	)
+}
+
+export function ErrorBoundary() {
+	return (
+		<GeneralErrorBoundary
+			statusHandlers={{
+				404: ({ params }) => (
+					<p>No registry with the id "{params.registryId}" exists</p>
+				),
+			}}
+		/>
 	)
 }

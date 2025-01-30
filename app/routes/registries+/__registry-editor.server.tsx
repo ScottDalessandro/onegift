@@ -1,10 +1,10 @@
 import { parseWithZod } from '@conform-to/zod'
 import { parseFormData } from '@mjackson/form-data-parser'
 import { type ActionFunctionArgs, data, redirect } from 'react-router'
+import { z } from 'zod'
 import { requireUserId } from '#app/utils/auth.server'
 import { prisma } from '#app/utils/db.server'
 import { RegistrySchema } from './__registry-editor'
-import { z } from 'zod'
 
 export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
@@ -41,7 +41,6 @@ export async function action({ request }: ActionFunctionArgs) {
 		title,
 		eventType,
 		eventDate,
-		location,
 		description,
 	} = submission.value
 
@@ -53,14 +52,12 @@ export async function action({ request }: ActionFunctionArgs) {
 			title,
 			eventType,
 			eventDate,
-			location,
 			description,
 		},
 		update: {
 			title,
 			eventType,
 			eventDate,
-			location,
 			description,
 		},
 	})

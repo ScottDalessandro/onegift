@@ -13,7 +13,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 			title: true,
 			eventType: true,
 			eventDate: true,
-			location: true,
 			description: true,
 		},
 		where: {
