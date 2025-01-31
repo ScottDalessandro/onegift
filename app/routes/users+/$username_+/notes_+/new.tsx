@@ -1,5 +1,5 @@
 import { requireUserId } from '#app/utils/auth.server.ts'
-import { type Route } from './+types/notes.new.ts'
+import { type Route } from './+types/new.ts'
 import { NoteEditor } from './__note-editor.tsx'
 
 export { action } from './__note-editor.server.tsx'

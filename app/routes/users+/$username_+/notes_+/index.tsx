@@ -1,5 +1,5 @@
-import { type Route } from './+types/notes.index.ts'
-import { type Info as notesInfo } from './+types/notes.ts'
+import { type Route } from './+types/index.ts'
+import { type Info as notesInfo } from './+types/_layout.ts'
 
 export default function NotesIndexRoute() {
 	return (
