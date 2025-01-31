@@ -8,6 +8,7 @@ import { RegistrySchema } from './__registry-editor'
 
 export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
+
 	const formData = await parseFormData(request)
 
 	const submission = await parseWithZod(formData, {
@@ -45,7 +46,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	} = submission.value
 
 	const updatedRegistry = await prisma.registry.upsert({
-		select: { id: true },
+		select: { id: true, user: { select: { username: true } } },
 		where: { id: registryId ?? '__new_registry__' },
 		create: {
 			userId,
@@ -62,5 +63,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		},
 	})
 
-	return redirect(`/registries/${updatedRegistry.id}`)
+	return redirect(
+		`/users/${updatedRegistry.user.username}/registries/${updatedRegistry.id}`,
+	)
 }
