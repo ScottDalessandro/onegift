@@ -8,7 +8,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
 
 	const registries = await prisma.registry.findMany({
-		where: { userId },
+		where: { ownerId: userId },
 		orderBy: { createdAt: 'desc' },
 	})
 

@@ -17,7 +17,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 	const registry = await prisma.registry.findFirst({
 		where: {
 			id: params.registryId,
-			userId,
+			ownerId: userId,
 		},
 		include: {
 			items: true,
