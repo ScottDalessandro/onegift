@@ -182,13 +182,13 @@ model Registry {
   planType    String   @default("free")  // free, combined, fullSuite
   
   // Relations
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ownerId      String
+  owner        User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   items       RegistryItem[]
   contributions Contribution[]
   withdrawals Withdrawal[]
   
-  @@index([userId])
+  @@index([ownerId])
   ChildProfile ChildProfile[]
 }
 

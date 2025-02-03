@@ -1,26 +1,14 @@
-// app/routes/registries.$registryId.tsx
-import { useEffect, useState } from 'react'
-import {
-	type LoaderFunctionArgs,
-	useLoaderData,
-	Link,
-	Outlet,
-} from 'react-router'
+import { type LoaderFunctionArgs } from 'react-router'
+import { prisma } from '#app/utils/db.server.ts'
+import { type Route } from './+types/$registryId.ts'
 
-import { Button } from '#app/components/ui/button'
-import { Input } from '#app/components/ui/input'
-import { requireUserId } from '#app/utils/auth.server'
-import { prisma } from '#app/utils/db.server'
-
-export async function loader({ request, params }: LoaderFunctionArgs) {
-	const userId = await requireUserId(request)
-	const registry = await prisma.registry.findFirst({
-		where: {
-			id: params.registryId,
-			userId,
-		},
+export async function loader({ params }: LoaderFunctionArgs) {
+	const registry = await prisma.registry.findUnique({
+		where: { id: params.registryId },
 		include: {
-			items: true,
+			items: {
+				orderBy: { createdAt: 'desc' },
+			},
 		},
 	})
 
@@ -28,75 +16,86 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 		throw new Response('Not found', { status: 404 })
 	}
 
-	return { registry }
+	// Group items by category
+	const itemsByCategory = registry.items.reduce(
+		(acc, item) => {
+			const category = item.category || 'Uncategorized'
+			if (!acc[category]) {
+				acc[category] = []
+			}
+			acc[category].push(item)
+			return acc
+		},
+		{} as Record<string, typeof registry.items>,
+	)
+
+	return { registry, itemsByCategory }
 }
 
-export default function RegistryDetail() {
-	const { registry } = useLoaderData<typeof loader>()
-	const [origin, setOrigin] = useState('')
-
-	useEffect(() => {
-		setOrigin(window.location.origin)
-	}, [])
+export default function RegistryRoute({ loaderData }: Route.ComponentProps) {
+	const { registry, itemsByCategory } = loaderData
 
 	return (
-		<div className="mx-auto max-w-6xl p-8">
-			<div className="mb-8">
-				<Link to="/registries" className="text-blue-600 hover:underline">
-					← Back to Registries
-				</Link>
+		<div className="mx-auto max-w-4xl p-8">
+			<div className="mb-8 text-center">
+				<h1 className="text-3xl font-bold">{registry.title}</h1>
+				<p className="mt-2 text-gray-600">
+					Event Date: {new Date(registry.eventDate).toLocaleDateString()}
+				</p>
 			</div>
 
-			<div className="grid grid-cols-1 gap-8 text-black md:grid-cols-3">
-				{/* Sidebar */}
-				<div className="rounded-lg bg-gray-50 p-6">
-					<h1 className="mb-4 text-2xl font-bold">{registry.title}</h1>
+			{registry.description && (
+				<div className="mb-8 rounded-lg bg-gray-50 p-6">
+					<h2 className="mb-2 text-xl font-semibold">
+						A Note from the Recipient
+					</h2>
+					<p className="text-gray-700">{registry.description}</p>
+				</div>
+			)}
 
-					<div className="space-y-4">
-						<div>
-							<h3 className="font-semibold">Event Details</h3>
-							<p>Date: {new Date(registry.eventDate).toLocaleDateString()}</p>
-						</div>
-
-						<div>
-							<h3 className="font-semibold">Registry Status</h3>
-							<p className="capitalize">{registry.status}</p>
-							{registry.status === 'draft' && (
-								<Button asChild className="mt-2">
-									<Link to="activate">Activate Registry</Link>
-								</Button>
-							)}
-						</div>
-
-						<div>
-							<h3 className="font-semibold">Registry Stats</h3>
-							<p>Total Items: {registry.items ? registry.items.length : 0}</p>
+			<div className="space-y-8">
+				{Object.entries(itemsByCategory).map(([category, items]) => (
+					<div key={category}>
+						<h2 className="mb-4 text-2xl font-semibold capitalize">
+							{category}
+						</h2>
+						<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+							{items.map((item) => (
+								<div
+									key={item.id}
+									className="rounded-lg border p-4 shadow-sm transition hover:shadow-md"
+								>
+									{item.imageUrl && (
+										<img
+											src={item.imageUrl}
+											alt={item.name}
+											className="mb-3 h-48 w-full rounded-md object-cover"
+										/>
+									)}
+									<h3 className="font-semibold">{item.name}</h3>
+									{item.description && (
+										<p className="mt-1 text-sm text-gray-600">
+											{item.description}
+										</p>
+									)}
+									<p className="mt-2 text-lg font-medium">
+										${Number(item.price).toFixed(2)}
+									</p>
+									{item.url && (
+										<a
+											href={item.url}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="mt-3 block rounded bg-blue-500 px-4 py-2 text-center text-white hover:bg-blue-600"
+										>
+											View Item
+										</a>
+									)}
+								</div>
+							))}
 						</div>
 					</div>
-				</div>
-
-				{/* Main Content */}
-				<div className="text-black md:col-span-2">
-					<Outlet context={{ registry }} />
-				</div>
-			</div>
-
-			<div className="mt-4">
-				<h3 className="font-semibold">Share Registry</h3>
-				<div className="mt-2 flex items-center gap-2">
-					<Input
-						readOnly
-						value={origin ? `${origin}/r/${registry.id}` : ''}
-						onClick={(e) => e.currentTarget.select()}
-					/>
-					<Button
-						onClick={async () => {
-							await navigator.clipboard.writeText(`${origin}/r/${registry.id}`)
-						}}
-					>
-						Copy
-					</Button>
-				</div>
+				))}
 			</div>
 		</div>
 	)
