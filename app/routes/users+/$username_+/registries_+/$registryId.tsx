@@ -14,6 +14,7 @@ import { prisma } from '#app/utils/db.server'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
+	console.log('right before findFirst')
 	const registry = await prisma.registry.findFirst({
 		where: {
 			id: params.registryId,

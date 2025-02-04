@@ -202,8 +202,8 @@ model RegistryItem {
   price       Decimal
   url         String?
   imageUrl    String?
+  category    String?
   
-  // Relations
   registryId  String
   registry    Registry @relation(fields: [registryId], references: [id], onDelete: Cascade)
   
