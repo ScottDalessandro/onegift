@@ -205,9 +205,7 @@ function App() {
 						</div>
 						<div>
 							<Button asChild variant="default" size="lg">
-								<Link to={`/users/${user?.name}/registries/new`}>
-									Create Registry
-								</Link>
+								<Link to={`/registries/new`}>Create Registry</Link>
 							</Button>
 						</div>
 						<div className="flex items-center gap-10">

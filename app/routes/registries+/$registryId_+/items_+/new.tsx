@@ -13,7 +13,6 @@ export { action } from './__item-editor.server.tsx'
 // }
 
 export async function loader({ request }: Route.LoaderArgs) {
-	console.log('RUNNING ADD ITEM LOADER!')
 	const userId = await requireUserId(request)
 	return { userId }
 }

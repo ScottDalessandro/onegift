@@ -53,7 +53,7 @@ export default function ItemRoute() {
 				<div className="mb-6 flex items-center justify-between">
 					<h1 className="text-2xl font-bold">{item.name}</h1>
 					<Button asChild variant="outline">
-						<Link to="edit">Edit Item</Link>
+						<Link to="/edit">Edit Item</Link>
 					</Button>
 				</div>
 
