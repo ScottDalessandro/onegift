@@ -8,11 +8,11 @@ import {
 import { parseWithZod, getZodConstraint } from '@conform-to/zod'
 import { Form } from 'react-router'
 import { z } from 'zod'
+import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { Button } from '#app/components/ui/button.tsx'
 import { Input } from '#app/components/ui/input.tsx'
 import { Label } from '#app/components/ui/label.tsx'
-import { type Info } from './+types/$registryId.edit.ts'
-import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
+import { type Info } from './$registryId_+/+types/edit.tsx'
 
 export const RegistrySchema = z.object({
 	id: z.string().optional(),

@@ -1,6 +1,6 @@
-import { type Registry, type RegistryItem } from '@prisma/client'
 import { useOutletContext, Link } from 'react-router'
 import { Button } from '#app/components/ui/button'
+import { type Registry, type RegistryItem } from '@prisma/client'
 
 type ContextType = {
 	registry: Registry & { items: RegistryItem[] }

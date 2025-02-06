@@ -7,6 +7,7 @@ import { prisma } from '#app/utils/db.server'
 import { RegistryItemSchema } from './__item-editor'
 
 export async function action({ request, params }: ActionFunctionArgs) {
+	console.log('RUNNING ADD ITEM ACTION!')
 	const userId = await requireUserId(request)
 	const { registryId } = params
 	const formData = await parseFormData(request)
@@ -72,6 +73,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 		},
 	})
 
+	console.log('updatedRegistryItem', updatedRegistryItem)
 	return redirect(
 		`/users/${updatedRegistryItem.registry.owner.username}/registries/${updatedRegistryItem.registry.id}/items/${updatedRegistryItem.id}`,
 	)

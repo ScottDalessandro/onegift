@@ -6,10 +6,10 @@ import {
 } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 
-import { type RegistryItem } from '@prisma/client'
 import { Form } from 'react-router'
 
 import { z } from 'zod'
+import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { Button } from '#app/components/ui/button'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
@@ -18,37 +18,42 @@ import { type Info } from './+types/$itemId.edit.ts'
 export const RegistryItemSchema = z.object({
 	id: z.string().optional(),
 	name: z.string().min(1, 'Name is required'),
-	price: z.number().min(0.01, 'Price must be greater than 0'),
+	price: z.number().min(1.0, 'Price must be greater than 0'),
 	url: z.string().optional(),
 	description: z.string().optional(),
 	imageUrl: z.string().optional(),
-	// category: z.string().optional(),
-	registryId: z.string(),
+	category: z.string().optional(),
+	registryId: z.string().optional(),
 })
 
-export default function ItemEditor({
+export function ItemEditor({
 	item,
 	actionData,
 }: {
-	item?: RegistryItem
+	item?: Info['loaderData']['item']
 	actionData?: Info['actionData']
 }) {
-	const lastResult = actionData
+	console.log('actionData', actionData)
 	const [form, fields] = useForm({
 		id: 'registry-item-form',
-		lastResult,
+		lastResult: actionData,
 		constraint: getZodConstraint(RegistryItemSchema),
 		onValidate({ formData }) {
 			return parseWithZod(formData, { schema: RegistryItemSchema })
 		},
 		shouldValidate: 'onBlur',
 		shouldRevalidate: 'onInput',
-		defaultValue: item,
+		defaultValue: {
+			...item,
+			price: item?.price.toString() ?? '',
+		},
 	})
 
 	return (
 		<div className="mx-auto max-w-3xl p-8">
-			<h1 className="mb-8 text-2xl font-bold">Add New Item</h1>
+			<h1 className="mb-8 text-2xl font-bold">
+				{item ? 'Edit' : 'Add New'} Item
+			</h1>
 
 			<Form
 				method="post"
@@ -71,8 +76,8 @@ export default function ItemEditor({
 					<Input
 						{...getInputProps(fields.price, {
 							type: 'number',
-							step: '0.01',
-							min: '0.01',
+							step: '1.00',
+							min: '1.00',
 						})}
 					/>
 					{fields.price.errors?.length && (
@@ -120,16 +125,28 @@ export default function ItemEditor({
 				</div>
 
 				<div className="flex gap-4">
-					<Button type="submit">Add Item</Button>
-					<Button
+					<Button type="submit">{item ? 'Update' : 'Add'} Item</Button>
+					{/* <Button
 						type="button"
 						variant="outline"
 						onClick={() => window.history.back()}
 					>
 						Cancel
-					</Button>
+					</Button> */}
 				</div>
 			</Form>
 		</div>
+	)
+}
+
+export function ErrorBoundary() {
+	return (
+		<GeneralErrorBoundary
+			statusHandlers={{
+				404: ({ params }) => (
+					<p>No registry with the id "{params.registryId}" exists</p>
+				),
+			}}
+		/>
 	)
 }
