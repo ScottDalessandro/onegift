@@ -5,6 +5,10 @@ type PrismaDecimal = {
   }
   
   export const formatDecimal = (price: PrismaDecimal) => {
-    if (!price) return "0.00";
-    return Number(`${price.d[0]}.${String(price.d[1]).slice(0, 2)}`).toFixed(2);
+    if (!price || !price.d || price.d.length === 0) return "0.00";
+    
+    const whole = price.d[0] ?? 0;
+    const decimal = price.d[1] ?? 0;
+    
+    return Number(`${whole}.${String(decimal).slice(0, 2)}`).toFixed(2);
   };

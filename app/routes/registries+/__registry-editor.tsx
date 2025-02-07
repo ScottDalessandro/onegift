@@ -6,7 +6,7 @@ import {
 	useForm,
 } from '@conform-to/react'
 import { parseWithZod, getZodConstraint } from '@conform-to/zod'
-import { Form } from 'react-router'
+import { Link, Form, NavLink } from 'react-router'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { Button } from '#app/components/ui/button.tsx'
@@ -60,6 +60,26 @@ export function RegistryEditor({
 
 	return (
 		<div className="mx-auto max-w-3xl p-8">
+			{registry ? (
+				<div className="mb-8">
+					<NavLink
+						to={`/registries/${registry.id}`}
+						className="inline-flex items-center gap-1 text-sm font-medium text-blue-500"
+					>
+						&larr; Back to Registry
+					</NavLink>
+				</div>
+			) : (
+				<div className="mb-8">
+					<Link
+						to="/registries"
+						className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground"
+					>
+						&larr; Back to Registries
+					</Link>
+				</div>
+			)}
+
 			<h1 className="mb-8 text-2xl font-bold">
 				{registry ? 'Edit' : 'Create New'} Registry
 			</h1>
@@ -119,7 +139,16 @@ export function RegistryEditor({
 					)}
 				</div>
 
-				<Button type="submit">{registry ? 'Update' : 'Create'} Registry</Button>
+				<div className="flex gap-4">
+					<Button type="submit">
+						{registry ? 'Update' : 'Create'} Registry
+					</Button>
+					<Button type="button" variant="outline" asChild>
+						<Link to={registry ? `/registries/${registry.id}` : '/registries'}>
+							Cancel
+						</Link>
+					</Button>
+				</div>
 			</Form>
 		</div>
 	)

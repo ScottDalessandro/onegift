@@ -1,7 +1,8 @@
 import { type Registry, type RegistryItem } from '@prisma/client'
 import { useOutletContext, Link } from 'react-router'
+import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { Button } from '#app/components/ui/button'
-
+import { formatDecimal } from '#app/utils/format.ts'
 type ContextType = {
 	registry: Registry & { items: RegistryItem[] }
 }
@@ -24,16 +25,32 @@ export default function RegistryIndex() {
 			) : (
 				<div className="grid gap-4 sm:grid-cols-2">
 					{registry.items.map((item) => (
-						<div key={item.id} className="rounded-lg border p-4">
-							<h3 className="font-semibold">{item.name}</h3>
-							{/* <p className="text-gray-600">${item.price.toString()}</p> */}
-							{item.description && (
-								<p className="mt-2 text-sm text-gray-500">{item.description}</p>
-							)}
-						</div>
+						<Link to={`items/${item.id}`} key={item.id}>
+							<div className="rounded-lg border p-4">
+								<h3 className="font-semibold">{item.name}</h3>
+								<p className="text-gray-600">${formatDecimal(item.price)}</p>
+								{item.description && (
+									<p className="mt-2 text-sm text-gray-500">
+										{item.description}
+									</p>
+								)}
+							</div>
+						</Link>
 					))}
 				</div>
 			)}
 		</div>
+	)
+}
+
+export function ErrorBoundary() {
+	return (
+		<GeneralErrorBoundary
+			statusHandlers={{
+				404: ({ params }) => (
+					<p>No registry with the id "{params.registryId}" exists</p>
+				),
+			}}
+		/>
 	)
 }

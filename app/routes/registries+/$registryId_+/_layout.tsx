@@ -1,16 +1,16 @@
 // app/routes/registries.$registryId.tsx
 import { useEffect, useState } from 'react'
-import {
-	type LoaderFunctionArgs,
-	useLoaderData,
-	Link,
-	Outlet,
-} from 'react-router'
+import { type LoaderFunctionArgs, Link, Outlet } from 'react-router'
 
 import { Button } from '#app/components/ui/button'
 import { Input } from '#app/components/ui/input'
 import { requireUserId } from '#app/utils/auth.server'
 import { prisma } from '#app/utils/db.server'
+import { type Route } from './+types/index.tsx'
+
+type LoaderData = {
+	registry: Awaited<ReturnType<typeof loader>>['registry']
+}
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
@@ -31,14 +31,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 	return { registry }
 }
 
-export default function RegistryLayout() {
-	const { registry } = useLoaderData<typeof loader>()
-	console.log('registry', registry)
-	// const [origin, setOrigin] = useState('')
+export default function RegistryLayout({
+	loaderData,
+}: {
+	loaderData: LoaderData
+}) {
+	const { registry } = loaderData
+	const [origin, setOrigin] = useState('')
 
-	// useEffect(() => {
-	// 	setOrigin(window.location.origin)
-	// }, [])
+	useEffect(() => {
+		setOrigin(window.location.origin)
+	}, [])
 
 	return (
 		<div className="mx-auto max-w-6xl p-8">
@@ -63,7 +66,7 @@ export default function RegistryLayout() {
 							<h3 className="font-semibold">Registry Status</h3>
 							<p className="capitalize">{registry.status}</p>
 							{registry.status === 'draft' && (
-								<Button asChild className="mt-2">
+								<Button asChild className="mt-2 px-3 py-1">
 									<Link to="activate">Activate Registry</Link>
 								</Button>
 							)}
@@ -72,6 +75,15 @@ export default function RegistryLayout() {
 						<div>
 							<h3 className="font-semibold">Registry Stats</h3>
 							<p>Total Items: {registry.items ? registry.items.length : 0}</p>
+						</div>
+
+						<div>
+							<h3 className="font-semibold">Edit Registry</h3>
+							<Button asChild className="mt-2 px-3 py-1">
+								<Link to={`/registries/${registry.id}/edit`}>
+									Edit Registry
+								</Link>
+							</Button>
 						</div>
 					</div>
 				</div>
@@ -87,12 +99,12 @@ export default function RegistryLayout() {
 				<div className="mt-2 flex items-center gap-2">
 					<Input
 						readOnly
-						// value={origin ? `${origin}/r/${registry.id}` : ''}
+						value={origin ? `${origin}/r/${registry.id}` : ''}
 						onClick={(e) => e.currentTarget.select()}
 					/>
 					<Button
 						onClick={async () => {
-							// await navigator.clipboard.writeText(`${origin}/r/${registry.id}`)
+							await navigator.clipboard.writeText(`${origin}/r/${registry.id}`)
 						}}
 					>
 						Copy

@@ -7,7 +7,7 @@ import { prisma } from '#app/utils/db.server'
 import { RegistryItemSchema } from './__item-editor'
 
 export async function action({ request, params }: ActionFunctionArgs) {
-	const userId = await requireUserId(request)
+	await requireUserId(request)
 	const { registryId } = params
 	const formData = await parseFormData(request)
 
@@ -44,7 +44,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 		url,
 		description,
 		imageUrl,
-		// category,
+		category,
 	} = submission.value
 
 	const updatedRegistryItem = await prisma.registryItem.upsert({
@@ -60,7 +60,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 			url,
 			description,
 			imageUrl,
-			// category,
+			category,
 		},
 		update: {
 			name,
@@ -68,11 +68,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
 			url,
 			description,
 			imageUrl,
-			// category,
+			category,
 		},
 	})
-
-	console.log('updatedRegistryItem', updatedRegistryItem)
 	return redirect(
 		`/registries/${updatedRegistryItem.registry.id}/items/${updatedRegistryItem.id}`,
 	)

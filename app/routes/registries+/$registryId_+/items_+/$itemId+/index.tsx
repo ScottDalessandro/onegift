@@ -1,51 +1,20 @@
-import { type LoaderFunctionArgs, Link, useLoaderData } from 'react-router'
+import { Link, useOutletContext } from 'react-router'
 import { Button } from '#app/components/ui/button.tsx'
-import { requireUserId } from '#app/utils/auth.server.ts'
-import { prisma } from '#app/utils/db.server.ts'
 import { formatDecimal } from '#app/utils/format.ts'
-export async function loader({ request, params }: LoaderFunctionArgs) {
-	const userId = await requireUserId(request)
-	const item = await prisma.registryItem.findFirst({
-		where: {
-			id: params.itemId,
-			registry: {
-				id: params.registryId,
-				ownerId: userId,
-			},
-		},
-		include: {
-			registry: {
-				select: {
-					id: true,
-					title: true,
-					owner: {
-						select: {
-							username: true,
-						},
-					},
-				},
-			},
-		},
-	})
+import { type loader } from './_layout.tsx'
 
-	if (!item) {
-		throw new Response('Not found', { status: 404 })
-	}
-
-	return { item }
-}
-
-export default function ItemRoute() {
-	const { item } = useLoaderData<typeof loader>()
-	console.log(item.price)
+export default function ItemDetailsRoute() {
+	const { item } = useOutletContext<{
+		item: Awaited<ReturnType<typeof loader>>['item']
+	}>()
 	return (
-		<div className="mx-auto max-w-3xl p-8">
+		<>
 			<div className="mb-8">
 				<Link
 					to={`/registries/${item.registry.id}`}
 					className="text-blue-600 hover:underline"
 				>
-					← Back to {item.registry.title}
+					← Back to Items
 				</Link>
 			</div>
 
@@ -53,7 +22,7 @@ export default function ItemRoute() {
 				<div className="mb-6 flex items-center justify-between">
 					<h1 className="text-2xl font-bold">{item.name}</h1>
 					<Button asChild variant="outline">
-						<Link to={`/items/${item.id}/edit`}>Edit Item</Link>
+						<Link to="edit">Edit Item</Link>
 					</Button>
 				</div>
 
@@ -107,6 +76,6 @@ export default function ItemRoute() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	)
 }

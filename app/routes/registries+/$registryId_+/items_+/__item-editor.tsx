@@ -13,7 +13,8 @@ import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { Button } from '#app/components/ui/button'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import { type Info } from './+types/$itemId.edit.ts'
+import { formatDecimal } from '#app/utils/format.ts'
+import { type Info } from '../+types/index.tsx'
 
 export const RegistryItemSchema = z.object({
 	id: z.string().optional(),
@@ -33,7 +34,6 @@ export function ItemEditor({
 	item?: Info['loaderData']['item']
 	actionData?: Info['actionData']
 }) {
-	console.log('actionData', actionData)
 	const [form, fields] = useForm({
 		id: 'registry-item-form',
 		lastResult: actionData,
@@ -45,7 +45,7 @@ export function ItemEditor({
 		shouldRevalidate: 'onInput',
 		defaultValue: {
 			...item,
-			price: item?.price.toString() ?? '',
+			price: item?.price ? formatDecimal(item.price) : '',
 		},
 	})
 
