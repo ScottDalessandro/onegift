@@ -2,7 +2,6 @@ import { type LoaderFunctionArgs, Outlet } from 'react-router'
 
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
-import { type Route } from './+types/index.tsx'
 
 type LoaderData = {
 	item: Awaited<ReturnType<typeof loader>>['item']
