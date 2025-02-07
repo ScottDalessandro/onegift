@@ -17,7 +17,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function RegistriesList() {
 	const { registries } = useLoaderData<typeof loader>()
-
+	// console.log('registries', registries)
 	return (
 		<div className="mx-auto max-w-3xl p-8">
 			<div className="mb-8 flex items-center justify-between">
@@ -40,9 +40,7 @@ export default function RegistriesList() {
 						>
 							<Link to={registry.id}>
 								<h2 className="text-xl font-semibold">{registry.title}</h2>
-								<p className="text-gray-600">
-									{new Date(registry.eventDate).toLocaleDateString()}
-								</p>
+								{/* <p className="text-gray-600">{registry.eventDate}</p> */}
 								<p className="text-gray-600">Status: {registry.status}</p>
 							</Link>
 						</div>

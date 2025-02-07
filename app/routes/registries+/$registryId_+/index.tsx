@@ -1,6 +1,6 @@
+import { type Registry, type RegistryItem } from '@prisma/client'
 import { useOutletContext, Link } from 'react-router'
 import { Button } from '#app/components/ui/button'
-import { type Registry, type RegistryItem } from '@prisma/client'
 
 type ContextType = {
 	registry: Registry & { items: RegistryItem[] }
@@ -8,7 +8,6 @@ type ContextType = {
 
 export default function RegistryIndex() {
 	const { registry } = useOutletContext<ContextType>()
-
 	return (
 		<div>
 			<div className="mb-6 flex justify-between">
@@ -27,7 +26,7 @@ export default function RegistryIndex() {
 					{registry.items.map((item) => (
 						<div key={item.id} className="rounded-lg border p-4">
 							<h3 className="font-semibold">{item.name}</h3>
-							<p className="text-gray-600">${item.price.toString()}</p>
+							{/* <p className="text-gray-600">${item.price.toString()}</p> */}
 							{item.description && (
 								<p className="mt-2 text-sm text-gray-500">{item.description}</p>
 							)}

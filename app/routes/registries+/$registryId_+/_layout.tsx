@@ -33,11 +33,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function RegistryLayout() {
 	const { registry } = useLoaderData<typeof loader>()
-	const [origin, setOrigin] = useState('')
+	console.log('registry', registry)
+	// const [origin, setOrigin] = useState('')
 
-	useEffect(() => {
-		setOrigin(window.location.origin)
-	}, [])
+	// useEffect(() => {
+	// 	setOrigin(window.location.origin)
+	// }, [])
 
 	return (
 		<div className="mx-auto max-w-6xl p-8">
@@ -86,12 +87,12 @@ export default function RegistryLayout() {
 				<div className="mt-2 flex items-center gap-2">
 					<Input
 						readOnly
-						value={origin ? `${origin}/r/${registry.id}` : ''}
+						// value={origin ? `${origin}/r/${registry.id}` : ''}
 						onClick={(e) => e.currentTarget.select()}
 					/>
 					<Button
 						onClick={async () => {
-							await navigator.clipboard.writeText(`${origin}/r/${registry.id}`)
+							// await navigator.clipboard.writeText(`${origin}/r/${registry.id}`)
 						}}
 					>
 						Copy
