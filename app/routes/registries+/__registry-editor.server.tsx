@@ -63,7 +63,5 @@ export async function action({ request }: ActionFunctionArgs) {
 		},
 	})
 
-	return redirect(
-		`/users/${updatedRegistry.owner.username}/registries/${updatedRegistry.id}`,
-	)
+	return redirect(`/registries/${updatedRegistry.id}`)
 }

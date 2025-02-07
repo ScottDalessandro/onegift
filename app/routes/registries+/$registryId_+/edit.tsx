@@ -1,10 +1,10 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { prisma } from '#app/utils/db.server.ts'
-import { type Route } from './+types/$registryId.edit.ts'
-import { RegistryEditor } from './__registry-editor.tsx'
+import { RegistryEditor } from '../__registry-editor.tsx'
+import { type Route } from './+types/edit.ts'
 
-export { action } from './__registry-editor.server.tsx'
+export { action } from '../__registry-editor.server.tsx'
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const registry = await prisma.registry.findFirst({

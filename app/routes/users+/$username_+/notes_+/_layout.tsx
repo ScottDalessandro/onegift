@@ -27,7 +27,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 export default function NotesRoute({ loaderData }: Route.ComponentProps) {
 	const user = useOptionalUser()
 	const isOwner = user?.id === loaderData.owner.id
-	const ownerDisplayName = loaderData.owner.name ?? loaderData.owner.username
+	// const ownerDisplayName = loaderData.owner.name ?? loaderData.owner.username
+	const ownerDisplayName = 'TESTING'
 	const navLinkDefaultClassName =
 		'line-clamp-2 block rounded-l-full py-2 pl-8 pr-6 text-base lg:text-xl'
 	return (
