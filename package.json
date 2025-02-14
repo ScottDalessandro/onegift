@@ -91,6 +91,7 @@
     "litefs-js": "^1.1.2",
     "lru-cache": "^11.0.2",
     "morgan": "^1.10.0",
+    "open-graph-scraper": "^6.9.0",
     "prisma": "^6.2.1",
     "qrcode": "^1.5.4",
     "react": "^19.0.0",

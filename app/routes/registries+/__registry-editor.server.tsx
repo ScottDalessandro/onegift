@@ -10,7 +10,6 @@ export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
 
 	const formData = await parseFormData(request)
-
 	const submission = await parseWithZod(formData, {
 		schema: RegistrySchema.superRefine(async (data, ctx) => {
 			if (!data.id) return

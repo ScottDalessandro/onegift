@@ -1,9 +1,28 @@
-import { useOutletContext } from 'react-router'
+import { invariantResponse } from '@epic-web/invariant'
+import { type LoaderFunctionArgs, useOutletContext } from 'react-router'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
+import { prisma } from '#app/utils/db.server.ts'
 import { ItemEditor } from '../__item-editor.tsx'
-import { type loader } from './_layout.tsx'
 
 export { action } from '../__item-editor.server.tsx'
+
+export async function loader({ params }: LoaderFunctionArgs) {
+	const { itemId } = params
+	const item = await prisma.registryItem.findUnique({
+		where: { id: itemId },
+		include: {
+			registry: {
+				select: {
+					id: true,
+					title: true,
+					owner: { select: { username: true } },
+				},
+			},
+		},
+	})
+	invariantResponse(item, 'Not found', { status: 404 })
+	return { item }
+}
 
 export default function ItemEditRoute() {
 	const { item } = useOutletContext<{
