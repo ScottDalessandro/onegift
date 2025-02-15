@@ -82,38 +82,6 @@ export function ItemEditor({
 				{...getFormProps(form)}
 			>
 				<div>
-					<Label htmlFor="name">Item Name</Label>
-					{(() => {
-						const { key, ...rest } = separateKey(
-							getInputProps(fields.name, { type: 'text' }),
-						)
-						return <Input key={key} {...rest} />
-					})()}
-					{fields.name.errors?.length && (
-						<span id="name-error" className="text-red-500">
-							{fields.name.errors}
-						</span>
-					)}
-				</div>
-
-				<div>
-					<Label htmlFor="price">Price</Label>
-					{(() => {
-						const { key, ...rest } = separateKey(
-							getInputProps(fields.price, {
-								type: 'number',
-								step: '1.00',
-								min: '1.00',
-							}),
-						)
-						return <Input {...rest} key={key} />
-					})()}
-					{fields.price.errors?.length && (
-						<span className="text-red-500">{fields.price.errors}</span>
-					)}
-				</div>
-
-				<div>
 					<Label htmlFor="url">Product URL</Label>
 					<div className="relative">
 						{(() => {
@@ -137,6 +105,38 @@ export function ItemEditor({
 							</div>
 						)}
 					</div>
+					<div>
+						<Label htmlFor="name">Item Name</Label>
+						{(() => {
+							const { key, ...rest } = separateKey(
+								getInputProps(fields.name, { type: 'text' }),
+							)
+							return <Input key={key} {...rest} />
+						})()}
+						{fields.name.errors?.length && (
+							<span id="name-error" className="text-red-500">
+								{fields.name.errors}
+							</span>
+						)}
+					</div>
+
+					<div>
+						<Label htmlFor="price">Price</Label>
+						{(() => {
+							const { key, ...rest } = separateKey(
+								getInputProps(fields.price, {
+									type: 'number',
+									step: '1.00',
+									min: '1.00',
+								}),
+							)
+							return <Input {...rest} key={key} />
+						})()}
+						{fields.price.errors?.length && (
+							<span className="text-red-500">{fields.price.errors}</span>
+						)}
+					</div>
+
 					{error && <span className="text-red-500">{error}</span>}
 					{fields.url.errors?.length && (
 						<span className="text-red-500">{fields.url.errors}</span>
