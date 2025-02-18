@@ -1,5 +1,5 @@
 import { type FormMetadata, type FieldMetadata } from '@conform-to/react'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFetcher } from 'react-router'
 import { type z } from 'zod'
 import { type RegistryItemSchema } from '#app/routes/registries+/$registryId_+/items_+/__item-editor.tsx'
@@ -19,6 +19,7 @@ export function useUrlUnfurl({form}: UnfurlFields) {
   const fetcher = useFetcher()
   const lastUrlRef = useRef<string | undefined>(undefined)
   const updatedRef = useRef(false)
+  const [previewImage, setPreviewImage] = useState<string | null>(null)
   
   const handleUrlPaste = useCallback(
     (e: React.ClipboardEvent<HTMLInputElement>) => {   
@@ -42,16 +43,12 @@ export function useUrlUnfurl({form}: UnfurlFields) {
   )
 
   useEffect(() => {
-    
     if (fetcher.data?.metadata && fetcher.state === 'idle' && !updatedRef.current) {
       const { metadata } = fetcher.data
-
       
       try {
         updatedRef.current = true
         
-        // Update each field individually
-
         if (metadata.description) {      
           form.update({ name: 'description', value: metadata.description })
         }
@@ -59,10 +56,14 @@ export function useUrlUnfurl({form}: UnfurlFields) {
           form.update({ name: 'name', value: metadata.title })
         }
         
-        
         if (metadata.price) {
           const parsedPrice = parseFloat(metadata.price.replace(/[^0-9.]/g, '')).toString()
           form.update({ name: 'price', value: parsedPrice })
+        }
+
+        if (metadata.image) {
+          form.update({ name: 'imageUrl', value: metadata.image })
+          setPreviewImage(metadata.image)
         }
 
         if (lastUrlRef.current) {
@@ -80,5 +81,6 @@ export function useUrlUnfurl({form}: UnfurlFields) {
     handleUrlPaste,
     isUnfurling: fetcher.state !== 'idle',
     error: fetcher.data?.error,
+    previewImage,
   }
 }
