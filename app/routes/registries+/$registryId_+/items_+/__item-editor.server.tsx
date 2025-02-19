@@ -37,6 +37,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 		)
 	}
 
+	console.log(submission.value)
+
 	const {
 		id: itemId,
 		name,
