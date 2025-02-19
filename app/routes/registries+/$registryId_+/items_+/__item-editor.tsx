@@ -18,11 +18,15 @@ import { formatDecimal } from '#app/utils/format.ts'
 import { useUrlUnfurl } from '#app/utils/useUnfurlUrl.ts'
 import { type Info } from './$itemId+/+types/edit.tsx'
 import { type loader } from './$itemId+/_layout'
+import { useState } from 'react'
+import { Icon } from '#app/components/ui/icon.tsx'
 
 const separateKey = <T extends { key?: string }>(props: T) => {
 	const { key, ...rest } = props
 	return { key, ...rest }
 }
+
+type ImageInputType = 'url' | 'file'
 
 export const RegistryItemSchema = z.object({
 	id: z.string().optional(),
@@ -45,6 +49,11 @@ export function ItemEditor({
 	item?: Awaited<ReturnType<typeof loader>>['item']
 	actionData?: Info['actionData']
 }) {
+	const [previewImage, setPreviewImage] = useState<string | null>(
+		item?.imageUrl || null,
+	)
+	const [imageInputType, setImageInputType] = useState<ImageInputType>('url')
+
 	const [form, fields] = useForm({
 		id: 'registry-item-form',
 		lastResult: actionData?.result,
@@ -165,13 +174,76 @@ export function ItemEditor({
 
 				<div>
 					<Label htmlFor="image">Item Image</Label>
-					<Input
-						{...getInputProps(fields.imageUrl, {
-							type: 'file',
-							accept: 'image/*',
-						})}
-						className="file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
-					/>
+					<div className="space-y-4">
+						{previewImage && (
+							<div className="relative h-32 w-32">
+								<img
+									src={previewImage}
+									alt="Item preview"
+									className="h-32 w-32 rounded-lg object-cover"
+								/>
+								<button
+									type="button"
+									className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
+									onClick={() => {
+										setPreviewImage(null)
+										form.update({ name: 'imageUrl', value: '' })
+									}}
+								>
+									<Icon name="cross-1" className="h-4 w-4" />
+								</button>
+							</div>
+						)}
+						<div className="mb-2 flex gap-4">
+							<Button
+								type="button"
+								variant={imageInputType === 'url' ? 'default' : 'outline'}
+								onClick={() => setImageInputType('url')}
+								className="flex-1"
+							>
+								URL
+							</Button>
+							<Button
+								type="button"
+								variant={imageInputType === 'file' ? 'default' : 'outline'}
+								onClick={() => setImageInputType('file')}
+								className="flex-1"
+							>
+								Upload File
+							</Button>
+						</div>
+						<div className="flex flex-col gap-2">
+							{imageInputType === 'url' ? (
+								<Input
+									{...getInputProps(fields.imageUrl, { type: 'url' })}
+									placeholder="https://example.com/image.jpg"
+									onChange={(e) => {
+										const url = e.target.value
+										setPreviewImage(url)
+										form.update({ name: 'imageUrl', value: url })
+									}}
+								/>
+							) : (
+								<Input
+									type="file"
+									accept="image/*"
+									onChange={(e) => {
+										const file = e.target.files?.[0]
+										if (file) {
+											const reader = new FileReader()
+											reader.onloadend = () => {
+												const result = reader.result as string
+												setPreviewImage(result)
+												form.update({ name: 'imageUrl', value: result })
+											}
+											reader.readAsDataURL(file)
+										}
+									}}
+									className="file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+								/>
+							)}
+						</div>
+					</div>
 					{fields.imageUrl.errors?.length && (
 						<span className="text-red-500">{fields.imageUrl.errors}</span>
 					)}
