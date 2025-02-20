@@ -25,6 +25,7 @@ model User {
   roles       Role[]
   sessions    Session[]
   connections Connection[]
+  passkey     Passkey[]
   registries  Registry[]
 }
 
@@ -45,6 +46,23 @@ model Note {
   @@index([ownerId])
   // This helps our order by in the user search a LOT
   @@index([ownerId, updatedAt])
+}
+
+model Passkey {
+  id             String   @id
+  aaguid         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  publicKey      Bytes
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  webauthnUserId String
+  counter        BigInt
+  deviceType     String // 'singleDevice' or 'multiDevice'
+  backedUp       Boolean
+  transports     String? // Stored as comma-separated values
+
+  @@index(userId)
 }
 
 model NoteImage {
