@@ -1,6 +1,8 @@
-import { PrismaInstrumentation } from '@prisma/instrumentation'
+import prismaInstrumentation  from '@prisma/instrumentation'
 import * as Sentry from '@sentry/node'
 import { nodeProfilingIntegration } from '@sentry/profiling-node'
+
+const { PrismaInstrumentation } = prismaInstrumentation
 export function init() {
 	Sentry.init({
 		dsn: process.env.SENTRY_DSN,
