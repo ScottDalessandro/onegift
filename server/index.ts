@@ -1,5 +1,6 @@
 import crypto from 'node:crypto'
 import { styleText } from 'node:util'
+import { helmet } from '@nichtsam/helmet/node-http'
 import { createRequestHandler } from '@react-router/express'
 import * as Sentry from '@sentry/node'
 import { ip as ipAddress } from 'address'
@@ -8,7 +9,6 @@ import compression from 'compression'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import getPort, { portNumbers } from 'get-port'
-import helmet from 'helmet'
 import morgan from 'morgan'
 import { type ServerBuild } from 'react-router'
 
@@ -67,6 +67,12 @@ app.use(compression())
 
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
 app.disable('x-powered-by')
+
+app.use((_, res, next) => {
+	// The referrerPolicy breaks our redirectTo logic
+	helmet(res, { general: { referrerPolicy: false } })
+	next()
+})
 
 if (viteDevServer) {
 	app.use(viteDevServer.middlewares)
