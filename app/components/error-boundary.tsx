@@ -28,18 +28,20 @@ export function GeneralErrorBoundary({
 }) {
 	const error = useRouteError()
 	const params = useParams()
+	const isResponseError = isRouteErrorResponse(error)
 
 	if (typeof document !== 'undefined') {
 		console.error(error)
 	}
 
 	useEffect(() => {
+		if (isResponseError) return
 		captureException(error)
-	}, [error])
+	}, [error, isResponseError])
 
 	return (
 		<div className="container flex items-center justify-center p-20 text-h2">
-			{isRouteErrorResponse(error)
+			{isResponseError
 				? (statusHandlers?.[error.status] ?? defaultStatusHandler)({
 						error,
 						params,
