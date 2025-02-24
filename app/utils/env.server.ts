@@ -23,6 +23,7 @@ const schema = z.object({
 	AWS_REGION: z.string(),
 	AWS_ENDPOINT_URL_S3: z.string().url(),
 	BUCKET_NAME: z.string(),
+	GITHUB_REDIRECT_URI: z.string().default('MOCK_GITHUB_REDIRECT_URI'),
 })
 
 declare global {
