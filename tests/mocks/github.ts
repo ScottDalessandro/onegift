@@ -55,7 +55,7 @@ function createGitHubUser(code?: string | null) {
 		accessToken: `${code}_mock_access_token`,
 		profile: {
 			login: faker.internet.username(),
-			id: faker.string.uuid(),
+			id: faker.number.int(),
 			name: faker.person.fullName(),
 			avatar_url: 'https://github.com/ghost.png',
 			emails: emails.map((e) => e.email),
@@ -112,7 +112,7 @@ export async function insertGitHubUser(code?: string | null) {
 async function getUser(request: Request) {
 	const accessToken = request.headers
 		.get('authorization')
-		?.slice('token '.length)
+		?.slice('Bearer '.length)
 
 	if (!accessToken) {
 		return new Response('Unauthorized', { status: 401 })
@@ -145,11 +145,11 @@ export const handlers: Array<HttpHandler> = [
 				user = await insertGitHubUser(code)
 			}
 
-			return new Response(
-				new URLSearchParams({
+			return json(
+				{
 					access_token: user.accessToken,
 					token_type: '__MOCK_TOKEN_TYPE__',
-				}).toString(),
+				},
 				{ headers: { 'content-type': 'application/x-www-form-urlencoded' } },
 			)
 		},
@@ -166,7 +166,7 @@ export const handlers: Array<HttpHandler> = [
 		if (passthroughGitHub) return passthrough()
 
 		const mockUser = (await getGitHubUsers()).find(
-			(u) => u.profile.id === params.id,
+			(u) => u.profile.id === Number(params.id),
 		)
 		if (mockUser) return json(mockUser.profile)
 
