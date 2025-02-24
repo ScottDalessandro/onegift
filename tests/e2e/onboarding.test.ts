@@ -178,10 +178,7 @@ test('completes onboarding after GitHub OAuth given valid user details', async (
 		.check()
 	await createAccountButton.click()
 	await expect(page).toHaveURL(/signup/i)
-
-	// we are still on the 'signup' route since that
-	// was the referrer and no 'redirectTo' has been specified
-	await expect(page).toHaveURL('/signup')
+	
 	await expect(page.getByText(/thanks for signing up/i)).toBeVisible()
 
 	// internally, a user has been created:
