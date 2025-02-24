@@ -53,6 +53,7 @@ export function ItemEditor({
 		item?.imageUrl || null,
 	)
 	const [imageInputType, setImageInputType] = useState<ImageInputType>('url')
+	const [isUploading, setIsUploading] = useState(false)
 
 	const [form, fields] = useForm({
 		id: 'registry-item-form',
@@ -68,6 +69,50 @@ export function ItemEditor({
 			price: item?.price ? formatDecimal(item.price) : '',
 		},
 	})
+
+	const handleFileUpload = async (file: File) => {
+		try {
+			setIsUploading(true)
+
+			const params = new URLSearchParams({
+				fileName: file.name,
+				fileType: file.type,
+			})
+
+			const presignedUrlResponse = await fetch(`/api/s3/file-upload?${params}`)
+
+			if (!presignedUrlResponse.ok) {
+				throw new Error('Failed to get upload URL')
+			}
+
+			const { presignedUrl, fileUrl, error } = await presignedUrlResponse.json()
+			console.log('presignedUrl', presignedUrl)
+			if (error) {
+				throw new Error(error)
+			}
+
+			const uploadResponse = await fetch(presignedUrl, {
+				method: 'PUT',
+				body: file,
+				headers: {
+					'Content-Type': file.type,
+				},
+			})
+
+			if (!uploadResponse.ok) {
+				throw new Error('Failed to upload file')
+			}
+
+			setPreviewImage(fileUrl)
+			form.update({ name: 'imageUrl', value: fileUrl })
+			// toast.success('Image uploaded successfully!')
+		} catch (error) {
+			console.error('Upload error:', error)
+			// toast.error('Failed to upload image. Please try again.')
+		} finally {
+			setIsUploading(false)
+		}
+	}
 
 	const { handleUrlPaste, isUnfurling, error } = useUrlUnfurl({
 		form,
@@ -86,7 +131,7 @@ export function ItemEditor({
 
 			<Form
 				method="post"
-				encType="multipart/form-data"
+				// encType="multipart/form-data"
 				className="space-y-6"
 				{...getFormProps(form)}
 			>
@@ -224,23 +269,28 @@ export function ItemEditor({
 									}}
 								/>
 							) : (
-								<Input
-									type="file"
-									accept="image/*"
-									onChange={(e) => {
-										const file = e.target.files?.[0]
-										if (file) {
-											const reader = new FileReader()
-											reader.onloadend = () => {
-												const result = reader.result as string
-												setPreviewImage(result)
-												form.update({ name: 'imageUrl', value: result })
+								<div>
+									<Input
+										type="file"
+										accept="image/*"
+										disabled={isUploading}
+										onChange={(e) => {
+											const file = e.target.files?.[0]
+											if (file) {
+												void handleFileUpload(file)
 											}
-											reader.readAsDataURL(file)
-										}
-									}}
-									className="file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
-								/>
+										}}
+										className="file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+									/>
+									{isUploading && (
+										<div className="mt-2 flex items-center gap-2">
+											<div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+											<span className="text-sm text-gray-500">
+												Uploading...
+											</span>
+										</div>
+									)}
+								</div>
 							)}
 						</div>
 					</div>
@@ -250,7 +300,9 @@ export function ItemEditor({
 				</div>
 
 				<div className="flex gap-4">
-					<Button type="submit">{item ? 'Update' : 'Add'} Item</Button>
+					<Button type="submit" disabled={isUploading}>
+						{item ? 'Update' : 'Add'} Item
+					</Button>
 					<Button
 						type="button"
 						variant="outline"
