@@ -68,8 +68,7 @@ model Passkey {
 model NoteImage {
   id          String  @id @default(cuid())
   altText     String?
-  contentType String
-  blob        Bytes
+  objectKey   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -84,8 +83,7 @@ model NoteImage {
 model UserImage {
   id          String  @id @default(cuid())
   altText     String?
-  contentType String
-  blob        Bytes
+  objectKey   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
