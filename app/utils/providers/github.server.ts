@@ -35,13 +35,23 @@ const GitHubEmailsResponseSchema = z.array(GitHubEmailSchema)
 
 const GitHubUserResponseSchema = z.object({
 	login: z.string(),
-	id: z.string(),
+	id: z.number().or(z.string()),
 	name: z.string().optional(),
 	avatar_url: z.string().optional(),
 })
 
 export class GitHubProvider implements AuthProvider {
 	getAuthStrategy() {
+		if (
+			!process.env.GITHUB_CLIENT_ID ||
+			!process.env.GITHUB_CLIENT_SECRET ||
+			!process.env.GITHUB_REDIRECT_URI
+		) {
+			console.log(
+				'GitHub OAuth strategy not available because environment variables are not set',
+			)
+			return null
+		}
 		return new GitHubStrategy(
 			{
 				clientId: process.env.GITHUB_CLIENT_ID,

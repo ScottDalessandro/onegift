@@ -18,7 +18,6 @@ import { CheckboxField, ErrorList, Field } from '#app/components/forms.tsx'
 import { Spacer } from '#app/components/spacer.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
 import {
-	authenticator,
 	sessionKey,
 	signupWithConnection,
 	requireAnonymous,
@@ -64,7 +63,7 @@ async function requireData({
 		.object({
 			email: z.string(),
 			providerName: ProviderNameSchema,
-			providerId: z.string(),
+			providerId: z.string().or(z.number()),
 		})
 		.safeParse({ email, providerName: params.provider, providerId })
 	if (result.success) {
@@ -120,7 +119,7 @@ export async function action({ request, params }: Route.ActionArgs) {
 			const session = await signupWithConnection({
 				...data,
 				email,
-				providerId,
+				providerId: String(providerId),
 				providerName,
 			})
 			return { ...data, session }
