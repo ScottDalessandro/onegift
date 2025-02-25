@@ -4,23 +4,23 @@ import { type ActionFunctionArgs, data, redirect } from 'react-router'
 import { z } from 'zod'
 import { requireUserId } from '#app/utils/auth.server'
 import { prisma } from '#app/utils/db.server'
-import { RegistryItemSchema } from './__item-editor'
+import { ListItemSchema } from './__item-editor'
 
 export async function action({ request, params }: ActionFunctionArgs) {
 	await requireUserId(request)
-	const { registryId } = params
+	const { listId } = params
 	const formData = await parseFormData(request)
 
 	const submission = await parseWithZod(formData, {
-		schema: RegistryItemSchema.superRefine(async (data, ctx) => {
+		schema: ListItemSchema.superRefine(async (data, ctx) => {
 			if (!data.id) return
 
-			const registryItem = await prisma.registryItem.findUnique({
+			const listItem = await prisma.listItem.findUnique({
 				select: { id: true },
-				where: { id: data.id, registryId: data.registryId },
+				where: { id: data.id, listId: data.listId },
 			})
 
-			if (!registryItem) {
+			if (!listItem) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
 					message: 'Item not found',
@@ -49,14 +49,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
 		category,
 	} = submission.value
 
-	const updatedRegistryItem = await prisma.registryItem.upsert({
+	const updatedListItem = await prisma.listItem.upsert({
 		where: { id: itemId ?? '__new_item__' },
 		select: {
 			id: true,
-			registry: { select: { id: true, owner: { select: { username: true } } } },
+			list: { select: { id: true, owner: { select: { username: true } } } },
 		},
 		create: {
-			registryId: registryId ?? '__new_item__',
+			listId: listId ?? '__new_item__',
 			name,
 			price,
 			url,
@@ -74,6 +74,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 		},
 	})
 	return redirect(
-		`/registries/${updatedRegistryItem.registry.id}/items/${updatedRegistryItem.id}`,
+		`/lists/${updatedListItem.list.id}/items/${updatedListItem.id}`,
 	)
 }

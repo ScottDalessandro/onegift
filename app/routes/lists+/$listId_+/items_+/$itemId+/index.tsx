@@ -11,7 +11,7 @@ export default function ItemDetailsRoute() {
 		<>
 			<div className="mb-8">
 				<Link
-					to={`/registries/${item.registry.id}`}
+					to={`/lists/${item.list.id}`}
 					className="text-blue-600 hover:underline"
 				>
 					← Back to Items

@@ -6,20 +6,20 @@ import {
 } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 
+import { useState } from 'react'
 import { Form } from 'react-router'
 
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { Button } from '#app/components/ui/button'
+import { Icon } from '#app/components/ui/icon.tsx'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
 import { Textarea } from '#app/components/ui/textarea.tsx'
 import { formatDecimal } from '#app/utils/format.ts'
 import { useUrlUnfurl } from '#app/utils/useUnfurlUrl.ts'
 import { type Info } from './$itemId+/+types/edit.tsx'
-import { type loader } from './$itemId+/_layout'
-import { useState } from 'react'
-import { Icon } from '#app/components/ui/icon.tsx'
+import { type loader } from './$itemId+/_layout.tsx'
 
 const separateKey = <T extends { key?: string }>(props: T) => {
 	const { key, ...rest } = props
@@ -28,7 +28,7 @@ const separateKey = <T extends { key?: string }>(props: T) => {
 
 type ImageInputType = 'url' | 'file'
 
-export const RegistryItemSchema = z.object({
+export const ListItemSchema = z.object({
 	id: z.string().optional(),
 	name: z
 		.string()
@@ -39,7 +39,7 @@ export const RegistryItemSchema = z.object({
 	description: z.string().optional(),
 	imageUrl: z.string().optional(),
 	category: z.string().optional(),
-	registryId: z.string().optional(),
+	listId: z.string().optional(),
 })
 
 export function ItemEditor({
@@ -55,11 +55,11 @@ export function ItemEditor({
 	const [imageInputType, setImageInputType] = useState<ImageInputType>('url')
 
 	const [form, fields] = useForm({
-		id: 'registry-item-form',
+		id: 'list-item-form',
 		lastResult: actionData?.result,
-		constraint: getZodConstraint(RegistryItemSchema),
+		constraint: getZodConstraint(ListItemSchema),
 		onValidate({ formData }) {
-			return parseWithZod(formData, { schema: RegistryItemSchema })
+			return parseWithZod(formData, { schema: ListItemSchema })
 		},
 		shouldValidate: 'onBlur',
 		shouldRevalidate: 'onInput',
@@ -269,7 +269,7 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => (
-					<p>No registry with the id "{params.registryId}" exists</p>
+					<p>No list with the id "{params.listId}" exists</p>
 				),
 			}}
 		/>

@@ -2,12 +2,12 @@ import { type FormMetadata, type FieldMetadata } from '@conform-to/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFetcher } from 'react-router'
 import { type z } from 'zod'
-import { type RegistryItemSchema } from '#app/routes/registries+/$registryId_+/items_+/__item-editor.tsx'
+import { type ListItemSchema } from '#app/routes/lists+/$listId_+/items_+/__item-editor.tsx'
 
-type RegistryItem = z.infer<typeof RegistryItemSchema>
+type ListItem = z.infer<typeof ListItemSchema>
 
 interface UnfurlFields {
-  form: FormMetadata<RegistryItem>
+  form: FormMetadata<ListItem>
   url: FieldMetadata<string | undefined>
   name: FieldMetadata<string>
   description: FieldMetadata<string | undefined>

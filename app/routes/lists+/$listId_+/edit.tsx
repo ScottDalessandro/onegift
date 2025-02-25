@@ -1,13 +1,13 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { prisma } from '#app/utils/db.server.ts'
-import { RegistryEditor } from '../__registry-editor.tsx'
+import { ListEditor } from '../__list-editor.tsx'
 import { type Route } from './+types/edit.ts'
 
-export { action } from '../__registry-editor.server.tsx'
+export { action } from '../__list-editor.server.tsx'
 
 export async function loader({ params }: Route.LoaderArgs) {
-	const registry = await prisma.registry.findFirst({
+	const list = await prisma.list.findFirst({
 		select: {
 			id: true,
 			title: true,
@@ -16,20 +16,18 @@ export async function loader({ params }: Route.LoaderArgs) {
 			description: true,
 		},
 		where: {
-			id: params.registryId,
+			id: params.listId,
 		},
 	})
-	invariantResponse(registry, 'Not found', { status: 404 })
-	return { registry }
+	invariantResponse(list, 'Not found', { status: 404 })
+	return { list }
 }
 
-export default function RegistryEdit({
+export default function ListEdit({
 	loaderData,
 	actionData,
 }: Route.ComponentProps) {
-	return (
-		<RegistryEditor registry={loaderData.registry} actionData={actionData} />
-	)
+	return <ListEditor list={loaderData.list} actionData={actionData} />
 }
 
 export function ErrorBoundary() {
@@ -37,7 +35,7 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => (
-					<p>No registry with the id "{params.registryId}" exists</p>
+					<p>No list with the id "{params.listId}" exists</p>
 				),
 			}}
 		/>
