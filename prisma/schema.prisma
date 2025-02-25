@@ -27,7 +27,7 @@ model User {
   sessions    Session[]
   connections Connection[]
   passkey     Passkey[]
-  registries  Registry[]
+  lists  List[]
 }
 
 model Note {
@@ -186,7 +186,7 @@ model Connection {
   @@unique([providerName, providerId])
 }
 
-model Registry {
+model List {
   id          String   @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -201,7 +201,7 @@ model Registry {
   // Relations
   ownerId      String
   owner        User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  items       RegistryItem[]
+  items       ListItem[]
   contributions Contribution[]
   withdrawals Withdrawal[]
   
@@ -209,7 +209,7 @@ model Registry {
   ChildProfile ChildProfile[]
 }
 
-model RegistryItem {
+model ListItem {
   id          String   @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -221,10 +221,10 @@ model RegistryItem {
   imageUrl    String?
   category    String?
   
-  registryId  String
-  registry    Registry @relation(fields: [registryId], references: [id], onDelete: Cascade)
+  listId  String
+  list    List @relation(fields: [listId], references: [id], onDelete: Cascade)
   
-  @@index([registryId])
+  @@index([listId])
 }
 
 // prisma/schema.prisma
@@ -237,10 +237,10 @@ model Contribution {
   message     String?
   status      String   @default("pending") // pending, completed, refunded
   
-  registryId  String
-  registry    Registry @relation(fields: [registryId], references: [id], onDelete: Cascade)
+  listId  String
+  list    List @relation(fields: [listId], references: [id], onDelete: Cascade)
   
-  @@index([registryId])
+  @@index([listId])
 }
 
 model Withdrawal {
@@ -249,10 +249,10 @@ model Withdrawal {
   amount      Decimal
   status      String   @default("pending") // pending, completed, failed
   
-  registryId  String
-  registry    Registry @relation(fields: [registryId], references: [id], onDelete: Cascade)
+  listId  String
+  list    List @relation(fields: [listId], references: [id], onDelete: Cascade)
   
-  @@index([registryId])
+  @@index([listId])
 }
 
 model ChildProfile {
@@ -276,9 +276,9 @@ model ChildProfile {
   // Photos
   photos      ProfilePhoto[]
 
-  // Relation to Registry
-  registryId  String   @unique
-  registry    Registry @relation(fields: [registryId], references: [id], onDelete: Cascade)
+  // Relation to List
+  listId  String   @unique
+  list    List @relation(fields: [listId], references: [id], onDelete: Cascade)
 }
 
 model Milestone {
