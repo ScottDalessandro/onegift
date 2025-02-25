@@ -2,7 +2,7 @@ import { type FormMetadata, type FieldMetadata } from '@conform-to/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFetcher } from 'react-router'
 import { type z } from 'zod'
-import { type RegistryItemSchema } from '#app/routes/registries+/$registryId_+/items_+/__item-editor.tsx'
+import { type RegistryItemSchema } from '#app/routes/lists+/$registryId_+/items_+/__item-editor.tsx'
 
 type RegistryItem = z.infer<typeof RegistryItemSchema>
 

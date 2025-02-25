@@ -17,7 +17,7 @@ import { Textarea } from '#app/components/ui/textarea.tsx'
 import { formatDecimal } from '#app/utils/format.ts'
 import { useUrlUnfurl } from '#app/utils/useUnfurlUrl.ts'
 import { type Info } from './$itemId+/+types/edit.tsx'
-import { type loader } from './$itemId+/_layout'
+import { type loader } from './$itemId+/_layout.tsx'
 import { useState } from 'react'
 import { Icon } from '#app/components/ui/icon.tsx'
 
