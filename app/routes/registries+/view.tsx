@@ -3,8 +3,8 @@ import { prisma } from '#app/utils/db.server.ts'
 import { type Route } from './+types/$registryId.ts'
 
 export async function loader({ params }: LoaderFunctionArgs) {
-	const registry = await prisma.registry.findUnique({
-		where: { id: params.registryId },
+	const list = await prisma.list.findUnique({
+		where: { id: params.listId },
 		include: {
 			items: {
 				orderBy: { createdAt: 'desc' },
@@ -12,12 +12,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		},
 	})
 
-	if (!registry) {
+	if (!list) {
 		throw new Response('Not found', { status: 404 })
 	}
 
 	// Group items by category
-	const itemsByCategory = registry.items.reduce(
+	const itemsByCategory = list.items.reduce(
 		(acc, item) => {
 			const category = item.category || 'Uncategorized'
 			if (!acc[category]) {
@@ -26,30 +26,30 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			acc[category].push(item)
 			return acc
 		},
-		{} as Record<string, typeof registry.items>,
+		{} as Record<string, typeof list.items>,
 	)
 
-	return { registry, itemsByCategory }
+	return { list, itemsByCategory }
 }
 
-export default function RegistryRoute({ loaderData }: Route.ComponentProps) {
-	const { registry, itemsByCategory } = loaderData
+export default function ListRoute({ loaderData }: Route.ComponentProps) {
+	const { list, itemsByCategory } = loaderData
 
 	return (
 		<div className="mx-auto max-w-4xl p-8">
 			<div className="mb-8 text-center">
-				<h1 className="text-3xl font-bold">{registry.title}</h1>
+				<h1 className="text-3xl font-bold">{list.title}</h1>
 				<p className="mt-2 text-gray-600">
-					Event Date: {new Date(registry.eventDate).toLocaleDateString()}
+					Event Date: {new Date(list.eventDate).toLocaleDateString()}
 				</p>
 			</div>
 
-			{registry.description && (
+			{list.description && (
 				<div className="mb-8 rounded-lg bg-gray-50 p-6">
 					<h2 className="mb-2 text-xl font-semibold">
 						A Note from the Recipient
 					</h2>
-					<p className="text-gray-700">{registry.description}</p>
+					<p className="text-gray-700">{list.description}</p>
 				</div>
 			)}
 
