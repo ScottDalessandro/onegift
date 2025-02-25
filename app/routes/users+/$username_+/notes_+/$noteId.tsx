@@ -17,8 +17,8 @@ import { getNoteImgSrc, useIsPending } from '#app/utils/misc.tsx'
 import { requireUserWithPermission } from '#app/utils/permissions.server.ts'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { userHasPermission, useOptionalUser } from '#app/utils/user.ts'
-import { type Route, type Info } from './+types/notes.$noteId.ts'
-import { type Info as notesInfo } from './+types/notes.ts'
+import { type Route, type Info } from './+types/$username_+/notes_+/_layout.ts'
+import { type Info as notesInfo } from './+types/$username_+/notes_+/_layout.ts'
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const note = await prisma.note.findUnique({
