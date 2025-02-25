@@ -8,10 +8,10 @@ export { action } from '../__item-editor.server.tsx'
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const { itemId } = params
-	const item = await prisma.registryItem.findUnique({
+	const item = await prisma.listItem.findUnique({
 		where: { id: itemId },
 		include: {
-			registry: {
+			list: {
 				select: {
 					id: true,
 					title: true,

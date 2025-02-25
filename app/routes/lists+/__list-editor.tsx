@@ -12,9 +12,9 @@ import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { Button } from '#app/components/ui/button.tsx'
 import { Input } from '#app/components/ui/input.tsx'
 import { Label } from '#app/components/ui/label.tsx'
-import { type Info } from './$registryId_+/+types/edit.tsx'
+import { type Info } from './$listId_+/+types/edit.ts'
 
-export const RegistrySchema = z.object({
+export const ListSchema = z.object({
 	id: z.string().optional(),
 	title: z.string().min(1, 'Title is required'),
 	eventType: z.enum(['birthday', 'wedding', 'baby-shower', 'other'], {
@@ -34,39 +34,39 @@ export const RegistrySchema = z.object({
 	description: z.string().optional(),
 })
 
-export function RegistryEditor({
-	registry,
+export function ListEditor({
+	list,
 	actionData,
 }: {
-	registry?: Info['loaderData']['registry']
+	list?: Info['loaderData']['list']
 	actionData?: Info['actionData']
 }) {
 	const [form, fields] = useForm({
-		id: 'registry-form',
+		id: 'list-form',
 		lastResult: actionData?.result,
-		constraint: getZodConstraint(RegistrySchema),
+		constraint: getZodConstraint(ListSchema),
 		onValidate({ formData }) {
-			return parseWithZod(formData, { schema: RegistrySchema })
+			return parseWithZod(formData, { schema: ListSchema })
 		},
 		shouldValidate: 'onBlur',
 		shouldRevalidate: 'onInput',
 		defaultValue: {
-			...registry,
-			eventDate: registry?.eventDate
-				? new Date(registry.eventDate).toISOString().split('T')[0]
+			...list,
+			eventDate: list?.eventDate
+				? new Date(list.eventDate).toISOString().split('T')[0]
 				: undefined,
 		},
 	})
 
 	return (
 		<div className="mx-auto max-w-3xl p-8">
-			{registry ? (
+			{list ? (
 				<div className="mb-8">
 					<NavLink
-						to={`/registries/${registry.id}`}
+						to={`/lists/${list.id}`}
 						className="inline-flex items-center gap-1 text-sm font-medium text-blue-500"
 					>
-						&larr; Back to Registry
+						&larr; Back to List
 					</NavLink>
 				</div>
 			) : (
@@ -75,18 +75,18 @@ export function RegistryEditor({
 						to="/registries"
 						className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground"
 					>
-						&larr; Back to Registries
+						&larr; Back to Lists
 					</Link>
 				</div>
 			)}
 
 			<h1 className="mb-8 text-2xl font-bold">
-				{registry ? 'Edit' : 'Create New'} Registry
+				{list ? 'Edit' : 'Create New'} List
 			</h1>
 
 			<Form method="post" className="space-y-6" {...getFormProps(form)}>
 				<div>
-					<Label htmlFor={fields.title.id}>Registry Title</Label>
+					<Label htmlFor={fields.title.id}>List Title</Label>
 
 					<Input
 						{...getInputProps(fields.title, {
@@ -140,13 +140,9 @@ export function RegistryEditor({
 				</div>
 
 				<div className="flex gap-4">
-					<Button type="submit">
-						{registry ? 'Update' : 'Create'} Registry
-					</Button>
+					<Button type="submit">{list ? 'Update' : 'Create'} List</Button>
 					<Button type="button" variant="outline" asChild>
-						<Link to={registry ? `/registries/${registry.id}` : '/registries'}>
-							Cancel
-						</Link>
+						<Link to={list ? `/lists/${list.id}` : '/lists'}>Cancel</Link>
 					</Button>
 				</div>
 			</Form>
@@ -159,7 +155,7 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => (
-					<p>No registry with the id "{params.registryId}" exists</p>
+					<p>No list with the id "{params.listId}" exists</p>
 				),
 			}}
 		/>

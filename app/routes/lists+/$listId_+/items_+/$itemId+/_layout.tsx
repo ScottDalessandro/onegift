@@ -9,16 +9,16 @@ type LoaderData = {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-	const item = await prisma.registryItem.findFirst({
+	const item = await prisma.listItem.findFirst({
 		where: {
 			id: params.itemId,
-			registry: {
-				id: params.registryId,
+			list: {
+				id: params.listId,
 				ownerId: userId,
 			},
 		},
 		include: {
-			registry: {
+			list: {
 				select: {
 					id: true,
 					title: true,

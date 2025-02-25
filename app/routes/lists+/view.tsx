@@ -1,6 +1,6 @@
 import { type LoaderFunctionArgs } from 'react-router'
 import { prisma } from '#app/utils/db.server.ts'
-import { type Route } from './+types/$registryId.ts'
+import { type Route } from './+types/$listId.ts'
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const list = await prisma.list.findUnique({
