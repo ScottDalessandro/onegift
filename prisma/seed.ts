@@ -132,7 +132,7 @@ async function seed() {
 		},
 	})
 
-	// Create Kody's notes
+// 	// // Create Kody's notes
 	const kodyNotes = [
 		{
 			id: 'd27a197e',

@@ -16,7 +16,6 @@ model User {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   connections Connection[]
-  lists       List[]
   notes       Note[]
   passkey     Passkey[]
   password    Password?
@@ -37,23 +36,6 @@ model Note {
 
   @@index([ownerId])
   @@index([ownerId, updatedAt])
-}
-
-model Passkey {
-  id             String   @id
-  aaguid         String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  publicKey      Bytes
-  userId         String
-  webauthnUserId String
-  counter        BigInt
-  deviceType     String
-  backedUp       Boolean
-  transports     String?
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
 }
 
 model NoteImage {
@@ -153,102 +135,19 @@ model Connection {
   @@unique([providerName, providerId])
 }
 
-model List {
-  id            String         @id @default(cuid())
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  title         String
-  eventType     String
-  eventDate     DateTime
-  description   String?
-  status        String         @default("draft")
-  planType      String         @default("free")
-  ownerId       String
-  ChildProfile  ChildProfile?
-  contributions Contribution[]
-  owner         User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  items         ListItem[]
-  withdrawals   Withdrawal[]
+model Passkey {
+  id             String   @id
+  aaguid         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  publicKey      Bytes
+  userId         String
+  webauthnUserId String
+  counter        BigInt
+  deviceType     String
+  backedUp       Boolean
+  transports     String?
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([ownerId])
-}
-
-model ListItem {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  name        String
-  description String?
-  price       Decimal
-  url         String?
-  imageUrl    String?
-  category    String?
-  listId      String
-  list        List     @relation(fields: [listId], references: [id], onDelete: Cascade)
-
-  @@index([listId])
-}
-
-model Contribution {
-  id         String   @id @default(cuid())
-  createdAt  DateTime @default(now())
-  amount     Decimal
-  guestName  String
-  guestEmail String?
-  message    String?
-  status     String   @default("pending")
-  listId     String
-  list       List     @relation(fields: [listId], references: [id], onDelete: Cascade)
-
-  @@index([listId])
-}
-
-model Withdrawal {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  amount    Decimal
-  status    String   @default("pending")
-  listId    String
-  list      List     @relation(fields: [listId], references: [id], onDelete: Cascade)
-
-  @@index([listId])
-}
-
-model ChildProfile {
-  id                 String         @id @default(cuid())
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
-  name               String
-  birthdate          DateTime
-  interests          Json           @default("[]")
-  dreams             Json           @default("[]")
-  currentActivities  Json           @default("[]")
-  upcomingActivities Json           @default("[]")
-  listId             String         @unique
-  list               List           @relation(fields: [listId], references: [id], onDelete: Cascade)
-  milestones         Milestone[]
-  photos             ProfilePhoto[]
-}
-
-model Milestone {
-  id          String       @id @default(cuid())
-  date        DateTime
-  title       String
-  description String
-  profileId   String
-  profile     ChildProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-
-  @@index([profileId])
-}
-
-model ProfilePhoto {
-  id        String       @id @default(cuid())
-  url       String
-  altText   String
-  category  String
-  caption   String?
-  profileId String
-  profile   ChildProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-
-  @@index([profileId])
+  @@index([userId])
 }

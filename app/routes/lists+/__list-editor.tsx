@@ -72,7 +72,7 @@ export function ListEditor({
 			) : (
 				<div className="mb-8">
 					<Link
-						to="/registries"
+						to="/lists"
 						className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground"
 					>
 						&larr; Back to Lists
