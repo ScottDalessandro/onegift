@@ -1,6 +1,5 @@
-import { type LoaderFunctionArgs } from 'react-router'
+import { useLoaderData, type LoaderFunctionArgs } from 'react-router'
 import { prisma } from '#app/utils/db.server.ts'
-import { type Route } from './+types/$listId.ts'
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const list = await prisma.list.findUnique({
@@ -32,8 +31,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	return { list, itemsByCategory }
 }
 
-export default function ListRoute({ loaderData }: Route.ComponentProps) {
-	const { list, itemsByCategory } = loaderData
+// Define the type based on the loader's return type
+type LoaderData = Awaited<ReturnType<typeof loader>>
+
+export default function ListRoute() {
+	// Use the useLoaderData hook with the defined type
+	const { list, itemsByCategory } = useLoaderData<LoaderData>()
 
 	return (
 		<div className="mx-auto max-w-4xl p-8">
