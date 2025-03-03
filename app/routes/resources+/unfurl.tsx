@@ -23,7 +23,13 @@ export async function action({ request }: ActionFunctionArgs) {
 			title: result.ogTitle || result.twitterTitle || '',
 			description: result.ogDescription || result.twitterDescription || '',
 			image: result.ogImage?.[0]?.url || result.twitterImage?.[0]?.url || '',
-			price: result.jsonLD?.[0]?.offers?.lowPrice || '',
+			price:
+				result.jsonLD?.[0] &&
+				typeof result.jsonLD[0] === 'object' &&
+				'offers' in result.jsonLD[0]
+					? (result.jsonLD[0] as { offers: { lowPrice: string } }).offers
+							.lowPrice || ''
+					: '', // todo: this was a quick type fix, need to double check this
 		}
 		return Response.json({ metadata })
 	} catch (error) {
