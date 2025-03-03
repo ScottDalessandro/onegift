@@ -30,8 +30,14 @@ jobs:
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
 
+      - name: 🏄 Copy test env vars
+        run: cp .env.example .env
+
       - name: 🖼 Build icons
         run: npm run build:icons
+
+      - name: 🛠 Setup Database
+        run: npx prisma migrate deploy && npx prisma generate --sql
 
       - name: 🔬 Lint
         run: npm run lint
@@ -51,11 +57,14 @@ jobs:
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
 
+      - name: 🏄 Copy test env vars
+        run: cp .env.example .env
+
       - name: 🖼 Build icons
         run: npm run build:icons
 
-      - name: 🧬 Generate Prisma client Typed SQL queries
-        run: npx prisma generate --sql
+      - name: 🛠 Setup Database
+        run: npx prisma migrate deploy && npx prisma generate --sql
 
       - name: 🔎 Type check
         run: npm run typecheck --if-present
@@ -80,6 +89,9 @@ jobs:
 
       - name: 🖼 Build icons
         run: npm run build:icons
+
+      - name: 🛠 Setup Database
+        run: npx prisma migrate deploy && npx prisma generate --sql
 
       - name: ⚡ Run vitest
         run: npm run test -- --coverage
@@ -107,7 +119,7 @@ jobs:
         run: npm run test:e2e:install
 
       - name: 🛠 Setup Database
-        run: npx prisma migrate deploy
+        run: npx prisma migrate deploy && npx prisma generate --sql
 
       - name: 🏦 Cache Database
         id: db-cache
