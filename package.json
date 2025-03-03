@@ -66,6 +66,7 @@
     "@react-router/express": "^7.2.0",
     "@react-router/node": "^7.2.0",
     "@react-router/remix-routes-option-adapter": "^7.2.0",
+    "@remix-run/react": "^2.0.0",
     "@remix-run/server-runtime": "^2.15.2",
     "@sentry/node": "^8.55.0",
     "@sentry/profiling-node": "^8.55.0",
