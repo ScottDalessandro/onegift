@@ -1,4 +1,4 @@
-app = "one-gift-main-86df"
+app = "wishandwell"
 kill_signal = "SIGINT"
 kill_timeout = "5s"
 primary_region = "ewr"
@@ -19,7 +19,7 @@ destination = "/data"
 source = "data"
 
 [[services]]
-internal_port = 8_080
+internal_port = 8080
 processes = [ "app" ]
 protocol = "tcp"
 
