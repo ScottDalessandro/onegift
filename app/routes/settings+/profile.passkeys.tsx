@@ -1,89 +1,191 @@
-import {
-	type AuthenticationResponseJSON,
-	type RegistrationResponseJSON,
-} from '@simplewebauthn/server'
-import { createCookie } from 'react-router'
+import { startRegistration } from '@simplewebauthn/browser'
+import { formatDistanceToNow } from 'date-fns'
+import { useState } from 'react'
+import { Form, useRevalidator } from 'react-router'
 import { z } from 'zod'
-import { getDomainUrl } from '#app/utils/misc.tsx'
+import { Button } from '#app/components/ui/button.tsx'
+import { Icon } from '#app/components/ui/icon.tsx'
+import { requireUserId } from '#app/utils/auth.server.ts'
+import { prisma } from '#app/utils/db.server.ts'
+import { type Route } from './+types/profile.passkeys.ts'
 
-export const passkeyCookie = createCookie('webauthn-challenge', {
-	path: '/',
-	sameSite: 'lax',
-	httpOnly: true,
-	maxAge: 60 * 60 * 2,
-	secure: process.env.NODE_ENV === 'production',
-	secrets: [process.env.SESSION_SECRET],
-})
+export const handle = {
+	breadcrumb: <Icon name="passkey">Passkeys</Icon>,
+}
 
-export const PasskeyCookieSchema = z.object({
-	challenge: z.string(),
-	userId: z.string(),
-})
+export async function loader({ request }: Route.LoaderArgs) {
+	const userId = await requireUserId(request)
+	const passkeys = await prisma.passkey.findMany({
+		where: { userId },
+		orderBy: { createdAt: 'desc' },
+		select: {
+			id: true,
+			deviceType: true,
+			createdAt: true,
+		},
+	})
+	return { passkeys }
+}
 
-export const RegistrationResponseSchema = z.object({
-	id: z.string(),
-	rawId: z.string(),
-	response: z.object({
-		clientDataJSON: z.string(),
-		attestationObject: z.string(),
-		transports: z
-			.array(
-				z.enum([
-					'ble',
-					'cable',
-					'hybrid',
-					'internal',
-					'nfc',
-					'smart-card',
-					'usb',
-				]),
+export async function action({ request }: Route.ActionArgs) {
+	const userId = await requireUserId(request)
+	const formData = await request.formData()
+	const intent = formData.get('intent')
+
+	if (intent === 'delete') {
+		const passkeyId = formData.get('passkeyId')
+		if (typeof passkeyId !== 'string') {
+			return Response.json(
+				{ status: 'error', error: 'Invalid passkey ID' },
+				{ status: 400 },
 			)
-			.optional(),
-	}),
-	authenticatorAttachment: z.enum(['cross-platform', 'platform']).optional(),
-	clientExtensionResults: z.object({
-		credProps: z
+		}
+
+		await prisma.passkey.delete({
+			where: {
+				id: passkeyId,
+				userId, // Ensure the passkey belongs to the user
+			},
+		})
+		return Response.json({ status: 'success' })
+	}
+
+	return Response.json(
+		{ status: 'error', error: 'Invalid intent' },
+		{ status: 400 },
+	)
+}
+
+const RegistrationOptionsSchema = z.object({
+	options: z.object({
+		rp: z.object({
+			id: z.string(),
+			name: z.string(),
+		}),
+		user: z.object({
+			id: z.string(),
+			name: z.string(),
+			displayName: z.string(),
+		}),
+		challenge: z.string(),
+		pubKeyCredParams: z.array(
+			z.object({
+				type: z.literal('public-key'),
+				alg: z.number(),
+			}),
+		),
+		authenticatorSelection: z
 			.object({
-				rk: z.boolean(),
+				authenticatorAttachment: z
+					.enum(['platform', 'cross-platform'])
+					.optional(),
+				residentKey: z
+					.enum(['required', 'preferred', 'discouraged'])
+					.optional(),
+				userVerification: z
+					.enum(['required', 'preferred', 'discouraged'])
+					.optional(),
+				requireResidentKey: z.boolean().optional(),
 			})
 			.optional(),
 	}),
-	type: z.literal('public-key'),
-}) satisfies z.ZodType<RegistrationResponseJSON>
+}) satisfies z.ZodType<{ options: PublicKeyCredentialCreationOptionsJSON }>
 
-const AuthenticationResponseSchema = z.object({
-	id: z.string(),
-	rawId: z.string(),
-	response: z.object({
-		clientDataJSON: z.string(),
-		authenticatorData: z.string(),
-		signature: z.string(),
-		userHandle: z.string().optional(),
-	}),
-	type: z.literal('public-key'),
-	clientExtensionResults: z.object({
-		appid: z.boolean().optional(),
-		credProps: z
-			.object({
-				rk: z.boolean().optional(),
+export default function Passkeys({ loaderData }: Route.ComponentProps) {
+	const revalidator = useRevalidator()
+	const [error, setError] = useState<string | null>(null)
+
+	async function handlePasskeyRegistration() {
+		try {
+			setError(null)
+			const resp = await fetch('/webauthn/registration')
+			const jsonResult = await resp.json()
+			const parsedResult = RegistrationOptionsSchema.parse(jsonResult)
+
+			const regResult = await startRegistration({
+				optionsJSON: parsedResult.options,
 			})
-			.optional(),
-		hmacCreateSecret: z.boolean().optional(),
-	}),
-}) satisfies z.ZodType<AuthenticationResponseJSON>
 
-export const PasskeyLoginBodySchema = z.object({
-	authResponse: AuthenticationResponseSchema,
-	remember: z.boolean().default(false),
-	redirectTo: z.string().nullable(),
-})
+			const verificationResp = await fetch('/webauthn/registration', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(regResult),
+			})
 
-export function getWebAuthnConfig(request: Request) {
-	const url = new URL(getDomainUrl(request))
+			if (!verificationResp.ok) {
+				throw new Error('Failed to verify registration')
+			}
 
-	return {
-		rpName: url.hostname,
-		rpID: url.hostname,
-		origin: url.origin,
-	} as const
+			void revalidator.revalidate()
+		} catch (err) {
+			console.error('Failed to create passkey:', err)
+			setError('Failed to create passkey. Please try again.')
+		}
+	}
+
+	return (
+		<div className="flex flex-col gap-6">
+			<div className="flex justify-between gap-4">
+				<h1 className="text-h1">Passkeys</h1>
+				<form action={handlePasskeyRegistration}>
+					<Button
+						type="submit"
+						variant="secondary"
+						className="flex items-center gap-2"
+					>
+						<Icon name="plus">Register new passkey</Icon>
+					</Button>
+				</form>
+			</div>
+
+			{error ? (
+				<div className="rounded-lg bg-destructive/15 p-4 text-destructive">
+					{error}
+				</div>
+			) : null}
+
+			{loaderData.passkeys.length ? (
+				<ul className="flex flex-col gap-4" title="passkeys">
+					{loaderData.passkeys.map((passkey) => (
+						<li
+							key={passkey.id}
+							className="flex items-center justify-between gap-4 rounded-lg border border-muted-foreground p-4"
+						>
+							<div className="flex flex-col gap-2">
+								<div className="flex items-center gap-2">
+									<Icon name="lock-closed" />
+									<span className="font-semibold">
+										{passkey.deviceType === 'platform'
+											? 'Device'
+											: 'Security Key'}
+									</span>
+								</div>
+								<div className="text-sm text-muted-foreground">
+									Registered {formatDistanceToNow(new Date(passkey.createdAt))}{' '}
+									ago
+								</div>
+							</div>
+							<Form method="POST">
+								<input type="hidden" name="passkeyId" value={passkey.id} />
+								<Button
+									type="submit"
+									name="intent"
+									value="delete"
+									variant="destructive"
+									size="sm"
+									className="flex items-center gap-2"
+								>
+									<Icon name="trash">Delete</Icon>
+								</Button>
+							</Form>
+						</li>
+					))}
+				</ul>
+			) : (
+				<div className="text-center text-muted-foreground">
+					No passkeys registered yet
+				</div>
+			)}
+		</div>
+	)
 }
