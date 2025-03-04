@@ -32,10 +32,12 @@ FROM base as build
 ARG COMMIT_SHA
 ENV COMMIT_SHA=$COMMIT_SHA
 
+# Add temporary DATABASE_URL just for prisma generate
+ENV DATABASE_URL="file:./prisma/dev.db"
+
 # Use the following environment variables to configure Sentry
 # ENV SENTRY_ORG=
 # ENV SENTRY_PROJECT=
-
 
 WORKDIR /myapp
 
