@@ -148,9 +148,9 @@ const ItemEditorForm = () => {
 						</div>
 					))}
 					{imageCount < 5 && (
-						<button type="button" onClick={addImage} className="text-blue-500">
+						<Button type="button" onClick={addImage} className="text-blue-500">
 							Add Another Image
-						</button>
+						</Button>
 					)}
 					{fields.images.errors?.length && (
 						<span className="text-red-500">{fields.images.errors}</span>
