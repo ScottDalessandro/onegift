@@ -1,4 +1,5 @@
 import { type FormMetadata, type FieldMetadata } from '@conform-to/react'
+import { type ListItemImage } from '@prisma/client'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFetcher } from 'react-router'
 import { type z } from 'zod'
@@ -12,7 +13,7 @@ interface UnfurlFields {
   name: FieldMetadata<string>
   description: FieldMetadata<string | undefined>
   price: FieldMetadata<number>
-  imageUrl: FieldMetadata<string | undefined>
+  images: FieldMetadata<ListItemImage[] | undefined>
 }
   
 export function useUrlUnfurl({form}: UnfurlFields) {
@@ -62,7 +63,7 @@ export function useUrlUnfurl({form}: UnfurlFields) {
         }
 
         if (metadata.image) {
-          form.update({ name: 'imageUrl', value: metadata.image })
+          form.update({ name: 'images', value: [{ objectKey: metadata.image }] })
           setPreviewImage(metadata.image)
         }
 

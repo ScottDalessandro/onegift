@@ -29,6 +29,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 					},
 				},
 			},
+			images: true,
 		},
 	})
 

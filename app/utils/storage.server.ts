@@ -9,6 +9,7 @@ const STORAGE_SECRET_KEY = process.env.AWS_SECRET_ACCESS_KEY
 const STORAGE_REGION = process.env.AWS_REGION
 
 async function uploadToStorage(file: File | FileUpload, key: string) {
+	console.log('Starting storage upload:', { key, fileType: file.type })
 	const { url, headers } = getSignedPutRequestInfo(file, key)
 
 	const uploadResponse = await fetch(url, {
@@ -23,6 +24,7 @@ async function uploadToStorage(file: File | FileUpload, key: string) {
 		throw new Error(`Failed to upload object: ${key}`)
 	}
 
+	console.log('Storage upload successful:', { key })
 	return key
 }
 
@@ -46,6 +48,18 @@ export async function uploadNoteImage(
 	const fileExtension = file.name.split('.').pop() || ''
 	const timestamp = Date.now()
 	const key = `users/${userId}/notes/${noteId}/images/${timestamp}-${fileId}.${fileExtension}`
+	return uploadToStorage(file, key)
+}
+
+export async function uploadListItemImage(	
+	listId: string,
+	itemId: string,
+	file: File | FileUpload,
+) {
+	const fileId = createId()
+	const fileExtension = file.name.split('.').pop() || ''
+	const timestamp = Date.now()
+	const key = `lists/${listId}/items/${itemId}/images/${timestamp}-${fileId}.${fileExtension}`
 	return uploadToStorage(file, key)
 }
 

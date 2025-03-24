@@ -8,6 +8,7 @@ export { action } from '../__item-editor.server.tsx'
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const { itemId } = params
+
 	const item = await prisma.listItem.findUnique({
 		where: { id: itemId },
 		include: {
@@ -18,6 +19,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 					owner: { select: { username: true } },
 				},
 			},
+			images: true,
 		},
 	})
 	invariantResponse(item, 'Not found', { status: 404 })
