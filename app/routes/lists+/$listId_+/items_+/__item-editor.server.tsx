@@ -25,7 +25,6 @@ function imageHasId(
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-	console.log('THE ITEM EDITOR/NEW ACTION RAN!!!!')
 	await requireUserId(request)
 	const { listId } = params
 
@@ -48,7 +47,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 	const submission = await parseWithZod(processedFormData, {
 		schema: ListItemSchema.superRefine(async (data, ctx) => {
-			console.log('Form data in the superRefine method:', processedFormData)
 			if (!data.id) return
 
 			const listItem = await prisma.listItem.findUnique({

@@ -84,25 +84,26 @@ function ImageChooser({
 	const [altText, setAltText] = useState(fields.altText.initialValue ?? '')
 
 	return (
-		<fieldset {...getFieldsetProps(meta)}>
-			<div className="flex gap-3">
-				<div className="w-32">
-					<div className="relative h-32 w-32">
+		<fieldset {...getFieldsetProps(meta)} className="space-y-4">
+			<div className="flex flex-col gap-4">
+				<div className="w-full">
+					<div className="relative aspect-square w-full overflow-hidden rounded-lg bg-accent/5">
 						<label
 							htmlFor={fields.file.id}
-							className={cn('group absolute h-32 w-32 rounded-lg', {
-								'bg-accent opacity-40 focus-within:opacity-100 hover:opacity-100':
+							className={cn('group absolute inset-0', {
+								'bg-accent/40 opacity-90 transition-opacity focus-within:opacity-100 hover:opacity-100':
 									!previewImage,
-								'cursor-pointer focus-within:ring-2': !existingImage,
+								'cursor-pointer focus-within:ring-2 focus-within:ring-accent':
+									!existingImage,
 							})}
 						>
 							{previewImage ? (
-								<div className="relative">
+								<div className="relative h-full">
 									{existingImage ? (
 										<Img
 											src={previewImage}
 											alt={altText ?? ''}
-											className="h-32 w-32 rounded-lg object-cover"
+											className="h-full w-full object-cover"
 											width={512}
 											height={512}
 										/>
@@ -110,18 +111,21 @@ function ImageChooser({
 										<img
 											src={previewImage}
 											alt={altText ?? ''}
-											className="h-32 w-32 rounded-lg object-cover"
+											className="h-full w-full object-cover"
 										/>
 									)}
-									{existingImage ? null : (
-										<div className="pointer-events-none absolute -right-0.5 -top-0.5 rotate-12 rounded-sm bg-secondary px-2 py-1 text-xs text-secondary-foreground shadow-md">
+									{!existingImage && (
+										<div className="pointer-events-none absolute right-2 top-2 rounded-md bg-background/90 px-2 py-1 text-xs font-medium text-foreground shadow-sm dark:bg-background/80">
 											new
 										</div>
 									)}
 								</div>
 							) : (
-								<div className="flex h-32 w-32 items-center justify-center rounded-lg border border-muted-foreground text-4xl text-muted-foreground">
-									<Icon name="plus" />
+								<div className="flex h-full w-full items-center justify-center text-muted-foreground">
+									<div className="text-center">
+										<Icon name="camera" className="mx-auto h-8 w-8" />
+										<p className="mt-2 text-sm">Click to upload image</p>
+									</div>
 								</div>
 							)}
 							{existingImage ? (
@@ -129,10 +133,9 @@ function ImageChooser({
 							) : null}
 							<input
 								aria-label="Image"
-								className="absolute left-0 top-0 z-0 h-32 w-32 cursor-pointer opacity-0"
+								className="absolute inset-0 z-0 cursor-pointer opacity-0"
 								onChange={(event) => {
 									const file = event.target.files?.[0]
-
 									if (file) {
 										const reader = new FileReader()
 										reader.onloadend = () => {
@@ -148,17 +151,25 @@ function ImageChooser({
 							/>
 						</label>
 					</div>
-					<div className="min-h-[32px] px-4 pb-3 pt-1">
+					<div className="min-h-[32px] px-1 pt-1">
 						<ErrorList id={fields.file.errorId} errors={fields.file.errors} />
 					</div>
 				</div>
-				<div className="flex-1">
-					<Label htmlFor={fields.altText.id}>Alt Text</Label>
+				<div>
+					<Label
+						htmlFor={fields.altText.id}
+						className="text-sm text-foreground"
+					>
+						Alt Text
+					</Label>
 					<Textarea
 						onChange={(e) => setAltText(e.currentTarget.value)}
 						{...getTextareaProps(fields.altText)}
+						className="mt-1.5 resize-none bg-background text-foreground placeholder:text-muted-foreground"
+						rows={2}
+						placeholder="Describe the image"
 					/>
-					<div className="min-h-[32px] px-4 pb-3 pt-1">
+					<div className="min-h-[32px] px-1 pt-1">
 						<ErrorList
 							id={fields.altText.errorId}
 							errors={fields.altText.errors}
@@ -166,7 +177,7 @@ function ImageChooser({
 					</div>
 				</div>
 			</div>
-			<div className="min-h-[32px] px-4 pb-3 pt-1">
+			<div className="min-h-[32px] px-1">
 				<ErrorList id={meta.errorId} errors={meta.errors} />
 			</div>
 		</fieldset>
@@ -205,83 +216,144 @@ const ItemEditorForm = ({ item }: { item?: Info['loaderData']['item'] }) => {
 	const imageList = fields.images.getFieldList()
 
 	return (
-		<FormProvider context={form.context}>
-			<Form {...getFormProps(form)} method="post" encType="multipart/form-data">
-				<div className="relative">
-					<Label htmlFor="url">
-						URL
-						<Input
-							{...getInputProps(fields.url, { type: 'url' })}
-							aria-describedby="url-error"
-						/>
-					</Label>
-					{fields.url.errors?.length && (
-						<span id="url-error" className="text-red-500">
-							{fields.url.errors}
-						</span>
-					)}
-					<Label htmlFor="name">
-						Name
-						<Input {...getInputProps(fields.name, { type: 'text' })} />
-					</Label>
-					{fields.name.errors?.length && (
-						<span className="text-red-500">{fields.name.errors}</span>
-					)}
-					<Label htmlFor="price">
-						Price
-						<Input
-							{...getInputProps(fields.price, { type: 'number', step: '0.01' })}
-						/>
-					</Label>
-					{fields.price.errors?.length && (
-						<span className="text-red-500">{fields.price.errors}</span>
-					)}
-					<div className="space-y-4">
-						<Label>Images</Label>
-						<ul className="flex flex-col gap-4">
-							{imageList.map((imageMeta, index) => {
-								const image = item?.images?.[index]
-								return (
-									<li
-										key={imageMeta.key}
-										className="relative border-b-2 border-muted-foreground"
-									>
-										<button
-											className="absolute right-0 top-0 text-foreground-destructive"
-											{...form.remove.getButtonProps({
-												name: fields.images.name,
-												index,
-											})}
+		<div className="space-y-8">
+			<h1 className="text-2xl font-semibold tracking-tight text-foreground">
+				Edit Item
+			</h1>
+			<FormProvider context={form.context}>
+				<Form
+					{...getFormProps(form)}
+					method="post"
+					encType="multipart/form-data"
+					className="space-y-8"
+				>
+					<div className="rounded-lg border border-border bg-card p-6 shadow-sm">
+						<div className="space-y-6">
+							<div className="space-y-2">
+								<Label htmlFor="url" className="text-base text-foreground">
+									URL
+								</Label>
+								<Input
+									{...getInputProps(fields.url, { type: 'url' })}
+									aria-describedby="url-error"
+									className="max-w-xl bg-background text-foreground placeholder:text-muted-foreground"
+									placeholder="https://example.com/item"
+								/>
+								{fields.url.errors?.length && (
+									<p id="url-error" className="text-sm text-destructive">
+										{fields.url.errors}
+									</p>
+								)}
+							</div>
+
+							<div className="space-y-2">
+								<Label htmlFor="name" className="text-base text-foreground">
+									Name
+								</Label>
+								<Input
+									{...getInputProps(fields.name, { type: 'text' })}
+									className="max-w-xl bg-background text-foreground placeholder:text-muted-foreground"
+									placeholder="Item name"
+								/>
+								{fields.name.errors?.length && (
+									<p className="text-sm text-destructive">
+										{fields.name.errors}
+									</p>
+								)}
+							</div>
+
+							<div className="space-y-2">
+								<Label htmlFor="price" className="text-base text-foreground">
+									Price
+								</Label>
+								<div className="relative max-w-[200px]">
+									<span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+										$
+									</span>
+									<Input
+										{...getInputProps(fields.price, {
+											type: 'number',
+											step: '0.01',
+										})}
+										className="bg-background pl-7 text-foreground placeholder:text-muted-foreground"
+										placeholder="0.00"
+									/>
+								</div>
+								{fields.price.errors?.length && (
+									<p className="text-sm text-destructive">
+										{fields.price.errors}
+									</p>
+								)}
+							</div>
+						</div>
+					</div>
+
+					<div className="rounded-lg border border-border bg-card p-6 shadow-sm">
+						<div className="space-y-4">
+							<div className="flex items-center justify-between">
+								<Label className="text-lg font-medium text-foreground">
+									Images
+								</Label>
+								<Button
+									variant="outline"
+									size="sm"
+									className="h-8 bg-background hover:bg-accent"
+									{...form.insert.getButtonProps({ name: fields.images.name })}
+								>
+									<Icon name="plus" className="mr-1 h-4 w-4" />
+									Add Image
+								</Button>
+							</div>
+
+							<ul className="grid grid-cols-1 gap-6 md:grid-cols-2">
+								{imageList.map((imageMeta, index) => {
+									const image = item?.images?.[index]
+									return (
+										<li
+											key={imageMeta.key}
+											className="relative rounded-lg border border-border bg-background/50 p-4"
 										>
-											<span aria-hidden>
-												<Icon name="cross-1" />
-											</span>{' '}
-											<span className="sr-only">Remove image {index + 1}</span>
-										</button>
-										<ImageChooser
-											meta={imageMeta}
-											objectKey={image?.objectKey ?? undefined}
-										/>
-									</li>
-								)
-							})}
-						</ul>
+											<button
+												className="absolute right-2 top-2 rounded-full bg-destructive/10 p-1 text-destructive hover:bg-destructive/20"
+												{...form.remove.getButtonProps({
+													name: fields.images.name,
+													index,
+												})}
+											>
+												<span aria-hidden>
+													<Icon name="cross-1" className="h-4 w-4" />
+												</span>
+												<span className="sr-only">
+													Remove image {index + 1}
+												</span>
+											</button>
+											<ImageChooser
+												meta={imageMeta}
+												objectKey={image?.objectKey ?? undefined}
+											/>
+										</li>
+									)
+								})}
+							</ul>
+						</div>
+					</div>
+
+					<div className="flex justify-end space-x-4">
 						<Button
-							className="mt-3"
-							{...form.insert.getButtonProps({ name: fields.images.name })}
+							variant="outline"
+							type="reset"
+							disabled={isPending}
+							className="bg-background hover:bg-accent"
 						>
-							<span aria-hidden>
-								<Icon name="plus">Image</Icon>
-							</span>{' '}
-							<span className="sr-only">Add image</span>
+							Reset
+						</Button>
+						<Button type="submit" disabled={isPending}>
+							{isPending ? 'Saving...' : 'Save Changes'}
 						</Button>
 					</div>
-				</div>
-				<Button type="submit" disabled={isPending}>
-					Submit
-				</Button>
-			</Form>
-		</FormProvider>
+				</Form>
+			</FormProvider>
+		</div>
 	)
 }
 
