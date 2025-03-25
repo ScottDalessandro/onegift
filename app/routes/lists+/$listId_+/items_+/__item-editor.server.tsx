@@ -1,14 +1,16 @@
 import { parseWithZod } from '@conform-to/zod'
-import { validator } from './__item-editor'
 import { parseFormData } from '@mjackson/form-data-parser'
+import { createId as cuid } from '@paralleldrive/cuid2'
 import { type ActionFunctionArgs, data, redirect } from 'react-router'
 import { z } from 'zod'
 import { requireUserId } from '#app/utils/auth.server'
 import { prisma } from '#app/utils/db.server'
-import { ImageFieldset, ListItemSchema, MAX_UPLOAD_SIZE } from './__item-editor'
-import { createId as cuid } from '@paralleldrive/cuid2'
 import { uploadListItemImage } from '#app/utils/storage.server.ts'
-import { validationError } from '@rvf/react-router'
+import {
+	type ImageFieldset,
+	ListItemSchema,
+	MAX_UPLOAD_SIZE,
+} from './__item-editor'
 
 function imageHasFile(
 	image: ImageFieldset,
