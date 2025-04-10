@@ -45,7 +45,7 @@ export function Icon({
 	children,
 	...props
 }: SVGProps<SVGSVGElement> & {
-	name: IconName
+	name: IconName | 'gift'
 	size?: Size
 	title?: string
 }) {
@@ -68,7 +68,11 @@ export function Icon({
 	return (
 		<svg
 			{...props}
-			className={cn(sizeClassName[size], 'inline self-center', className)}
+			className={cn(
+				'inline-block flex-shrink-0',
+				sizeClassName[size],
+				className,
+			)}
 		>
 			{title ? <title>{title}</title> : null}
 			<use href={`${href}#${name}`} />

@@ -1,8 +1,11 @@
 import { Link } from 'react-router'
-import { Button } from '#app/components/ui/button.tsx'
+import { Button } from '#app/components/ui/button'
 import { cn } from '#app/utils/misc.tsx'
-import { type Route } from './+types/index.ts'
+import { type Route } from './+types/index'
 import { useState, useEffect } from 'react'
+import { Icon } from '#app/components/ui/icon'
+import { theme } from '#app/utils/theme'
+import { Gift, Plus } from 'lucide-react'
 // import { ImageAsset } from '#app/components/ImageAsset'
 // import giftPattern from '#app/assets/images/backgrounds/gift-pattern.svg'
 
@@ -14,8 +17,9 @@ const heroSlides = [
 	{
 		image: 'app/assets/images/hero/beckett-birthday-edited.jpg',
 		alt: 'A child celebrating their birthday with mindfully chosen gifts',
-		heading: 'Create Meaningful Gift Experiences',
-		subheading: 'Less clutter. More meaning. Happier children.',
+		heading: 'Meaningful Gifts for Growing Minds',
+		subheading:
+			'Create a registry that focuses on quality, not quantity. Help reduce clutter and create more meaningful gift-giving experiences.',
 	},
 	{
 		image: 'app/assets/images/hero/mikayla-10.jpg',
@@ -45,166 +49,216 @@ export default function Index() {
 	}, [])
 
 	return (
-		<div className="flex min-h-screen flex-col bg-rose-50">
-			{/* Header */}
-			<header className="sticky top-0 z-50 border-b border-rose-200 bg-white/80 backdrop-blur-md">
-				<div className="container mx-auto px-4">
-					<div className="flex h-16 items-center justify-between">
-						<Link to="/" className="text-2xl font-bold text-rose-700">
-							Wish & Well
-						</Link>
-						<nav className="hidden items-center space-x-8 md:flex">
-							<Link to="/about" className="text-rose-700 hover:text-rose-900">
-								About
-							</Link>
-							<Link
-								to="/how-it-works"
-								className="text-rose-700 hover:text-rose-900"
-							>
-								How It Works
-							</Link>
-							<Link to="/contact" className="text-rose-700 hover:text-rose-900">
-								Contact
-							</Link>
-							<Button
-								asChild
-								variant="default"
-								className="bg-rose-600 text-white shadow-lg shadow-rose-600/20 transition-all hover:bg-rose-700 hover:shadow-rose-600/30"
-							>
-								<Link to="/create-gift-list">Create Gift List</Link>
-							</Button>
-						</nav>
-						<Button
-							variant="ghost"
-							className="md:hidden"
-							onClick={() => setIsMenuOpen(!isMenuOpen)}
-						>
-							<svg
-								className="h-6 w-6"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-							>
-								{isMenuOpen ? (
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M6 18L18 6M6 6l12 12"
-									/>
-								) : (
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M4 6h16M4 12h16M4 18h16"
-									/>
-								)}
-							</svg>
-						</Button>
-					</div>
-					{/* Mobile Menu */}
-					<div className={cn('md:hidden', isMenuOpen ? 'block' : 'hidden')}>
-						<div className="space-y-4 py-4">
-							<Link
-								to="/about"
-								className="block text-rose-700 hover:text-rose-900"
-								onClick={() => setIsMenuOpen(false)}
-							>
-								About
-							</Link>
-							<Link
-								to="/how-it-works"
-								className="block text-rose-700 hover:text-rose-900"
-								onClick={() => setIsMenuOpen(false)}
-							>
-								How It Works
-							</Link>
-							<Link
-								to="/contact"
-								className="block text-rose-700 hover:text-rose-900"
-								onClick={() => setIsMenuOpen(false)}
-							>
-								Contact
-							</Link>
-							<Button
-								asChild
-								variant="default"
-								className="w-full bg-rose-600 text-white shadow-lg shadow-rose-600/20 transition-all hover:bg-rose-700 hover:shadow-rose-600/30"
-							>
-								<Link to="/create-gift-list">Create Gift List</Link>
-							</Button>
+		<div className="flex min-h-screen flex-col bg-[#f9f7fe]">
+			<header className="sticky top-0 z-10 border-b bg-white">
+				<div className="container flex h-16 items-center justify-between px-4 md:px-6">
+					<div className="flex items-center gap-2.5">
+						<div className="relative h-8 w-8">
+							<Gift
+								className="relative z-10 h-8 w-8"
+								style={{ color: theme.colors.primary }}
+							/>
 						</div>
+						<h1
+							className="text-[22px] font-bold tracking-tight"
+							style={{
+								backgroundImage: theme.gradients.rainbow,
+								WebkitBackgroundClip: 'text',
+								backgroundClip: 'text',
+								color: 'transparent',
+							}}
+						>
+							Wish & Well
+						</h1>
+					</div>
+					<nav className="hidden gap-8 md:flex">
+						<Link
+							to="/how-it-works"
+							className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
+						>
+							How It Works
+						</Link>
+						<Link
+							to="/about"
+							className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
+						>
+							About Us
+						</Link>
+						<Link
+							to="/blog"
+							className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
+						>
+							Blog
+						</Link>
+					</nav>
+
+					<div className="flex items-center gap-3">
+						<Link to="/login">
+							<Button
+								variant="ghost"
+								size="sm"
+								className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
+							>
+								Log In
+							</Button>
+						</Link>
+						<Link to="/signup">
+							<Button
+								size="sm"
+								className="bg-[#00BFA5] text-[15px] font-medium text-white hover:bg-[#00BFA5]/90"
+							>
+								Sign Up
+							</Button>
+						</Link>
 					</div>
 				</div>
 			</header>
 
 			<main className="flex-1">
-				{/* Hero Section with Image Slider */}
-				<section className="relative py-8 md:py-16">
-					{/* Image Slider */}
+				{/* Hero Section */}
+				<section className="relative bg-[#f9f7fe] py-12">
+					{/* Background Blobs */}
 					<div className="absolute inset-0 overflow-hidden">
-						{heroSlides.map((slide, index) => (
-							<div
-								key={index}
-								className={cn(
-									'absolute inset-0 transition-opacity duration-1000',
-									index === currentSlide ? 'opacity-100' : 'opacity-0',
-								)}
-							>
-								<img
-									src={slide.image}
-									alt={slide.alt}
-									className="h-full w-full object-cover"
-								/>
-								<div className="absolute inset-0 bg-gradient-to-r from-rose-900/70 to-rose-800/50" />
+						{/* Pink blob in top left */}
+						<div className="absolute -left-64 -top-64 h-[800px] w-[800px] rounded-full bg-gradient-to-br from-pink-400/40 via-pink-300/30 to-transparent blur-[120px]" />
+						{/* Blue blob in bottom right */}
+						<div className="absolute -bottom-64 -right-64 h-[800px] w-[800px] rounded-full bg-gradient-to-tl from-blue-400/40 via-blue-300/30 to-transparent blur-[120px]" />
+					</div>
+					<div className="container relative mx-auto grid min-h-[500px] grid-cols-1 items-center gap-12 px-4 md:grid-cols-2">
+						{/* Left Content */}
+						<div className="flex items-center">
+							<div className="max-w-xl">
+								<div className="flex items-center gap-2 text-sm font-medium text-[#00BFA5]">
+									<Plus className="h-5 w-5" />
+									<span>Reimagining Gift Giving</span>
+								</div>
+								<h1 className="mt-4 text-5xl font-extrabold leading-tight tracking-tight text-gray-900 md:text-6xl">
+									THE GIFT REGISTRY PLATFORM BUILT FOR{' '}
+									<span className="bg-gradient-to-r from-[#00BFA5] to-[#3B82F6] bg-clip-text text-transparent">
+										MEANING
+									</span>
+								</h1>
+								<p className="mt-6 text-lg text-gray-600">
+									Create a registry that focuses on quality, not quantity. Help
+									reduce clutter and create more meaningful gift-giving
+									experiences.
+								</p>
+								<div className="mt-8 flex flex-wrap gap-4">
+									<Button
+										asChild
+										className="bg-[#00BFA5] text-white hover:bg-[#00BFA5]/90"
+									>
+										<Link to="/create-gift-list">Create a Registry →</Link>
+									</Button>
+									<Button
+										asChild
+										variant="outline"
+										className="border-gray-200 text-gray-900 hover:bg-gray-50"
+									>
+										<Link to="/learn-more">Learn More</Link>
+									</Button>
+								</div>
 							</div>
-						))}
-					</div>
+						</div>
 
-					{/* Slider Navigation */}
-					<div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 md:bottom-6">
-						{heroSlides.map((_, index) => (
-							<button
-								key={index}
-								onClick={() => setCurrentSlide(index)}
-								className={cn(
-									'h-1.5 rounded-full transition-all md:h-2',
-									index === currentSlide
-										? 'w-6 bg-white md:w-8'
-										: 'w-1.5 bg-white/50 hover:bg-white/75 md:w-2',
-								)}
-								aria-label={`Go to slide ${index + 1}`}
-							/>
-						))}
-					</div>
+						{/* Right Slider */}
+						<div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-2xl md:aspect-[16/10]">
+							{heroSlides.map((slide, index) => (
+								<div
+									key={index}
+									className={cn(
+										'absolute inset-0 transition-opacity duration-1000',
+										index === currentSlide ? 'opacity-100' : 'opacity-0',
+									)}
+								>
+									<img
+										src={slide.image}
+										alt={slide.alt}
+										className="h-full w-full object-cover"
+									/>
+									<div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+									<div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+										<p className="text-lg font-medium">
+											Create joyful memories that last a lifetime
+										</p>
+									</div>
+								</div>
+							))}
 
-					{/* Hero Content */}
-					<div className="relative flex min-h-[50vh] items-center justify-center md:min-h-[60vh]">
-						<div className="container mx-auto px-4 text-center text-white">
-							<h1 className="animate-fade-in text-3xl font-bold leading-tight md:text-4xl lg:text-5xl">
-								{heroSlides[currentSlide]?.heading ||
-									'Mindful Gifting with Wish & Well'}
-							</h1>
-							<p className="mx-auto mt-4 max-w-2xl text-base text-rose-50 md:mt-6 md:text-lg lg:text-xl">
-								{heroSlides[currentSlide]?.subheading ||
-									'Less clutter. More meaning. Happier children.'}
-							</p>
-							<Button
-								asChild
-								variant="default"
-								className="mt-6 bg-white px-4 py-3 text-sm text-rose-700 shadow-xl shadow-rose-900/20 transition-all hover:bg-rose-50 hover:shadow-rose-900/30 md:mt-8 md:px-6 md:py-4 md:text-base"
-							>
-								<Link to="/create-gift-list">Create Your Gift List</Link>
-							</Button>
+							{/* Slider Navigation */}
+							<div className="absolute bottom-16 left-6 flex gap-2">
+								{heroSlides.map((_, index) => (
+									<button
+										key={index}
+										onClick={() => setCurrentSlide(index)}
+										className={cn(
+											'h-2 rounded-full transition-all duration-300',
+											index === currentSlide
+												? 'w-6 bg-white'
+												: 'w-2 bg-white/50 hover:bg-white/75',
+										)}
+										aria-label={`Go to slide ${index + 1}`}
+									/>
+								))}
+							</div>
+						</div>
+					</div>
+				</section>
+
+				{/* How Wish & Well Works - Simple Steps */}
+				<section className="relative bg-gradient-to-br from-[#f9f7fe] to-[#fff5f7] py-16">
+					<div className="container mx-auto px-4">
+						<h2 className="mb-4 text-center text-3xl font-bold text-gray-900 md:text-4xl">
+							How Wish & Well Works
+						</h2>
+						<p className="mx-auto mb-12 max-w-2xl text-center text-lg text-gray-600">
+							Our simple process helps you create meaningful gift experiences
+						</p>
+						<div className="grid gap-8 md:grid-cols-3">
+							<div className="relative flex flex-col items-center rounded-lg bg-white p-6 shadow-lg">
+								<div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#00BFA5]">
+									<Icon name="gift" className="h-8 w-8 text-white" />
+								</div>
+								<h3 className="mb-2 text-xl font-semibold text-gray-900">
+									Create a Registry
+								</h3>
+								<p className="text-center text-gray-600">
+									Choose from our three registry types and add your child's
+									profile information.
+								</p>
+							</div>
+							<div className="relative flex flex-col items-center rounded-lg bg-white p-6 shadow-lg">
+								<div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#00BFA5]">
+									<Icon name="plus" className="h-8 w-8 text-white" />
+								</div>
+								<h3 className="mb-2 text-xl font-semibold text-gray-900">
+									Share with Loved Ones
+								</h3>
+								<p className="text-center text-gray-600">
+									Invite family and friends to contribute to meaningful gifts
+									your child will cherish.
+								</p>
+							</div>
+							<div className="relative flex flex-col items-center rounded-lg bg-white p-6 shadow-lg">
+								<div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#00BFA5]">
+									<Icon name="check" className="h-8 w-8 text-white" />
+								</div>
+								<h3 className="mb-2 text-xl font-semibold text-gray-900">
+									Create Lasting Memories
+								</h3>
+								<p className="text-center text-gray-600">
+									Reduce clutter and create more meaningful gift-giving
+									experiences.
+								</p>
+							</div>
 						</div>
 					</div>
 				</section>
 
 				{/* Why Mindful Gifting Matters */}
-				<section className="py-12 md:py-24">
+				<section className="bg-gray-50 py-16">
 					<div className="container mx-auto px-4">
-						<h2 className="mb-8 text-center text-3xl font-bold text-rose-900 md:mb-16 md:text-4xl lg:text-5xl">
+						<h2 className="mb-8 text-center text-3xl font-bold text-gray-900 md:text-4xl">
 							Why Mindful Gifting Matters
 						</h2>
 						<div className="grid gap-6 md:grid-cols-2 md:gap-8">
