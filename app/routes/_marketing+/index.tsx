@@ -255,489 +255,375 @@ export default function Index() {
 					</div>
 				</section>
 
-				{/* Why Mindful Gifting Matters */}
-				<section className="bg-gray-50 py-16">
+				{/* Everything You Need Section */}
+				<section className="bg-white py-16">
 					<div className="container mx-auto px-4">
-						<h2 className="mb-8 text-center text-3xl font-bold text-gray-900 md:text-4xl">
-							Why Mindful Gifting Matters
+						<h2 className="mb-2 text-center text-4xl font-bold md:text-5xl">
+							EVERYTHING YOU NEED TO
 						</h2>
-						<div className="grid gap-6 md:grid-cols-2 md:gap-8">
-							<div className="group rounded-xl bg-white p-6 shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-6 overflow-hidden rounded-lg">
-									<img
-										src={placeholderImage}
-										alt="A beautifully organized and decluttered children's playroom"
-										className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-									/>
-								</div>
-								<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-100">
-									<svg
-										className="h-6 w-6 text-rose-600"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={1.5}
-											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-										/>
-									</svg>
-								</div>
-								<h3 className="text-2xl font-semibold text-rose-800">
-									Reduce Clutter
-								</h3>
-								<p className="mt-3 text-lg text-rose-700">
-									Say goodbye to unnecessary toys that pile up and hello to a
-									more organized home. Our gift list helps prevent the
-									accumulation of items that quickly lose their appeal.
-								</p>
-							</div>
-
-							<div className="group rounded-xl bg-white p-6 shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-6 overflow-hidden rounded-lg">
-									<img
-										src={placeholderImage}
-										alt="Parents and family members planning gifts together"
-										className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-									/>
-								</div>
-								<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-100">
-									<svg
-										className="h-6 w-6 text-rose-600"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={1.5}
-											d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-										/>
-									</svg>
-								</div>
-								<h3 className="text-2xl font-semibold text-rose-800">
-									Save Time
-								</h3>
-								<p className="mt-3 text-lg text-rose-700">
-									Parents can easily manage gift preferences online, eliminating
-									the stress of last-minute shopping and ensuring children
-									receive gifts they'll truly appreciate.
-								</p>
-							</div>
-
-							<div className="group rounded-xl bg-white p-6 shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-6 overflow-hidden rounded-lg">
-									<img
-										src={placeholderImage}
-										alt="A child happily playing with a thoughtfully chosen gift"
-										className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-									/>
-								</div>
-								<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-100">
-									<svg
-										className="h-6 w-6 text-rose-600"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={1.5}
-											d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-										/>
-									</svg>
-								</div>
-								<h3 className="text-2xl font-semibold text-rose-800">
-									Guilt-Free Giving
-								</h3>
-								<p className="mt-3 text-lg text-rose-700">
-									Gift-givers no longer need to worry about their presents
-									ending up in the trash. Every gift through Wish & Well is
-									pre-approved and genuinely wanted.
-								</p>
-							</div>
-
-							<div className="group rounded-xl bg-white p-6 shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-6 overflow-hidden rounded-lg">
-									<img
-										src={placeholderImage}
-										alt="A child learning and growing through meaningful gifts"
-										className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-									/>
-								</div>
-								<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-100">
-									<svg
-										className="h-6 w-6 text-rose-600"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={1.5}
-											d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-										/>
-									</svg>
-								</div>
-								<h3 className="text-2xl font-semibold text-rose-800">
-									Teach Meaningful Values
-								</h3>
-								<p className="mt-3 text-lg text-rose-700">
-									Help children understand that receiving 100 toys isn't the
-									goal. Our approach teaches that fewer, more purposeful gifts
-									create lasting joy and appreciation.
-								</p>
-							</div>
-						</div>
-						<div className="mt-16 text-center">
-							<p className="mx-auto max-w-3xl text-lg italic text-rose-700">
-								"The greatest gift you can give your children is not more stuff,
-								but the understanding of what truly matters. Wish & Well helps
-								families create celebrations focused on meaning rather than
-								excess."
-							</p>
-							<Button
-								asChild
-								variant="default"
-								className="mt-8 bg-rose-600 text-white shadow-lg shadow-rose-600/20 transition-all hover:bg-rose-700 hover:shadow-rose-600/30"
-							>
-								<Link to="/about">Learn More About Our Approach</Link>
-							</Button>
-						</div>
-					</div>
-				</section>
-
-				{/* How It Works */}
-				<section className="relative overflow-hidden bg-gradient-to-br from-rose-100 to-rose-50 py-12 md:py-24">
-					<div className="pointer-events-none absolute inset-0">
-						<img
-							src="app/assets/images/backgrounds/gift-pattern.svg"
-							alt=""
-							className="h-full w-full object-cover opacity-5"
-						/>
-					</div>
-					<div className="container relative mx-auto px-4">
-						<h2 className="mb-4 text-center text-3xl font-bold text-rose-900 md:text-4xl lg:text-5xl">
-							How Wish & Well Works
+						<h2 className="mb-6 text-center text-4xl font-bold text-[#00BFA5] md:text-5xl">
+							CELEBRATE MEANINGFULLY
 						</h2>
-						<p className="mb-12 text-center text-base text-rose-700 md:mb-16 md:text-lg lg:text-xl">
-							Our simple process helps you create meaningful gift experiences
+						<p className="mb-16 text-center text-lg text-gray-600">
+							No more excessive gifts. No more clutter. Just meaningful
+							celebrations.
 						</p>
-						<div className="grid gap-8 md:grid-cols-3">
-							<div className="group text-center">
-								<div className="mb-6">
-									<div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-rose-600 shadow-lg shadow-rose-600/20 transition-all group-hover:shadow-rose-600/30">
-										<svg
-											className="h-10 w-10 text-white"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={1.5}
-												d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"
-											/>
-										</svg>
+
+						<div className="grid gap-8 md:grid-cols-2">
+							{/* Gift Categories Column */}
+							<div className="rounded-2xl bg-white p-8 shadow-lg">
+								<div className="mb-6 flex items-center gap-4">
+									<div className="rounded-full bg-[#E5F9F6] p-3">
+										<Icon name="gift" className="h-6 w-6 text-[#00BFA5]" />
+									</div>
+									<h3 className="text-2xl font-bold">
+										Meaningful Gift Categories
+									</h3>
+								</div>
+								<p className="mb-8 text-gray-600">
+									Our unique 5-category system ensures children receive a
+									balanced and thoughtful selection of gifts that contribute to
+									their growth and happiness.
+								</p>
+
+								{/* Want Category */}
+								<div className="mb-4 rounded-lg bg-[#E5F9F6] p-4">
+									<div className="mb-2 flex items-center gap-3">
+										<Icon name="gift" className="h-5 w-5 text-[#00BFA5]" />
+										<h4 className="font-semibold">Want</h4>
+									</div>
+									<p className="mb-2 text-gray-600">
+										Something they truly desire that brings joy and excitement.
+									</p>
+									<div className="flex flex-wrap gap-2">
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											LEGO Sets
+										</span>
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Art Supplies
+										</span>
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Favorite Character Toys
+										</span>
 									</div>
 								</div>
-								<h3 className="text-2xl font-semibold text-rose-800">
-									Create a Gift List
-								</h3>
-								<p className="mt-3 text-lg text-rose-700">
-									Choose from our three gift list types and add your child's
-									profile information.
-								</p>
+
+								{/* Need Category */}
+								<div className="mb-4 rounded-lg bg-[#F3F4F6] p-4">
+									<div className="mb-2 flex items-center gap-3">
+										<Icon name="check" className="h-5 w-5 text-[#00BFA5]" />
+										<h4 className="font-semibold">Need</h4>
+									</div>
+									<p className="mb-2 text-gray-600">
+										Practical items that support their daily life and
+										development.
+									</p>
+									<div className="flex flex-wrap gap-2">
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Backpack
+										</span>
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Lunch Box
+										</span>
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Water Bottle
+										</span>
+									</div>
+								</div>
+
+								{/* Experience Category */}
+								<div className="mb-4 rounded-lg bg-[#FFF7ED] p-4">
+									<div className="mb-2 flex items-center gap-3">
+										<Icon name="plus" className="h-5 w-5 text-[#00BFA5]" />
+										<h4 className="font-semibold">Experience</h4>
+									</div>
+									<p className="mb-2 text-gray-600">
+										Activities and adventures that create lasting memories.
+									</p>
+									<div className="flex flex-wrap gap-2">
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Museum Passes
+										</span>
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Zoo Membership
+										</span>
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Swimming Lessons
+										</span>
+									</div>
+								</div>
+
+								{/* Wear Category */}
+								<div className="mb-4 rounded-lg bg-[#FDF2F8] p-4">
+									<div className="mb-2 flex items-center gap-3">
+										<Icon name="avatar" className="h-5 w-5 text-[#00BFA5]" />
+										<h4 className="font-semibold">Wear</h4>
+									</div>
+									<p className="mb-2 text-gray-600">
+										Clothing and accessories that express their personality.
+									</p>
+									<div className="flex flex-wrap gap-2">
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Rain Boots
+										</span>
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Special Occasion Outfit
+										</span>
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Costume
+										</span>
+									</div>
+								</div>
+
+								{/* Learn Category */}
+								<div className="rounded-lg bg-[#F5F3FF] p-4">
+									<div className="mb-2 flex items-center gap-3">
+										<Icon name="file-text" className="h-5 w-5 text-[#00BFA5]" />
+										<h4 className="font-semibold">Learn</h4>
+									</div>
+									<p className="mb-2 text-gray-600">
+										Educational items that spark curiosity and foster growth.
+									</p>
+									<div className="flex flex-wrap gap-2">
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Books
+										</span>
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Science Kits
+										</span>
+										<span className="rounded-full bg-white px-3 py-1 text-sm">
+											Musical Instruments
+										</span>
+									</div>
+								</div>
 							</div>
 
-							<div className="group text-center">
-								<div className="mb-6">
-									<div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-rose-600 shadow-lg shadow-rose-600/20 transition-all group-hover:shadow-rose-600/30">
-										<svg
-											className="h-10 w-10 text-white"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={1.5}
-												d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-											/>
-										</svg>
+							{/* Registry Options Column */}
+							<div className="rounded-2xl bg-white p-8 shadow-lg">
+								<div className="mb-6 flex items-center gap-4">
+									<div className="rounded-full bg-[#EEF2FF] p-3">
+										<Icon name="check" className="h-6 w-6 text-[#00BFA5]" />
 									</div>
+									<h3 className="text-2xl font-bold">Registry Options</h3>
 								</div>
-								<h3 className="text-2xl font-semibold text-rose-800">
-									Share with Loved Ones
-								</h3>
-								<p className="mt-3 text-lg text-rose-700">
-									Invite family and friends to contribute to meaningful gifts
-									your child will cherish.
+								<p className="mb-8 text-gray-600">
+									Choose from three unique registry types to match your family's
+									preferences.
 								</p>
-							</div>
 
-							<div className="group text-center">
-								<div className="mb-6">
-									<div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-rose-600 shadow-lg shadow-rose-600/20 transition-all group-hover:shadow-rose-600/30">
-										<svg
-											className="h-10 w-10 text-white"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={1.5}
-												d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-											/>
-										</svg>
+								{/* Standard Registry */}
+								<div className="mb-6 rounded-lg bg-[#F3F4F6] p-6">
+									<div className="mb-3 flex items-center gap-3">
+										<Icon name="check" className="h-6 w-6 text-[#00BFA5]" />
+										<h4 className="text-xl font-semibold">
+											Balanced Wishes Registry
+										</h4>
 									</div>
+									<p className="mb-2 text-gray-700">
+										The classic 5-category approach that ensures a balanced
+										selection of gifts across all categories.
+									</p>
+									<p className="text-sm text-gray-500">
+										Perfect for birthdays, holidays, and special occasions when
+										you want variety.
+									</p>
 								</div>
-								<h3 className="text-2xl font-semibold text-rose-800">
-									Create Lasting Memories
-								</h3>
-								<p className="mt-3 text-lg text-rose-700">
-									Watch as your child receives gifts that truly matter and
-									create precious memories that last a lifetime.
+
+								{/* OneGift Registry */}
+								<div className="mb-6 rounded-lg bg-[#F3F4F6] p-6">
+									<div className="mb-3 flex items-center gap-3">
+										<Icon name="gift" className="h-6 w-6 text-[#00BFA5]" />
+										<h4 className="text-xl font-semibold">OneGift Registry</h4>
+									</div>
+									<p className="mb-2 text-gray-700">
+										Everyone contributes to one special gift that might
+										otherwise be out of reach.
+									</p>
+									<p className="text-sm text-gray-500">
+										Ideal for bigger items like bicycles, playsets, or special
+										experiences.
+									</p>
+								</div>
+
+								{/* Reverse Gift Registry */}
+								<div className="mb-6 rounded-lg bg-[#F3F4F6] p-6">
+									<div className="mb-3 flex items-center gap-3">
+										<Icon name="plus" className="h-6 w-6 text-[#00BFA5]" />
+										<h4 className="text-xl font-semibold">
+											Reverse Gift Registry
+										</h4>
+									</div>
+									<p className="mb-2 text-gray-700">
+										Guests suggest gifts for your approval, bringing their
+										unique ideas to the celebration.
+									</p>
+									<p className="text-sm text-gray-500">
+										Great when you want to be surprised but still maintain some
+										guidance.
+									</p>
+								</div>
+
+								<p className="text-center text-sm text-gray-600">
+									All registry types include our special interactive features
+									and memory collection.
 								</p>
 							</div>
 						</div>
 					</div>
 				</section>
 
-				{/* Gift Categories */}
-				<section className="py-12 md:py-24">
+				{/* Interactive Features Section */}
+				<section className="bg-[#f9f7fe] py-16">
 					<div className="container mx-auto px-4">
-						<h2 className="mb-4 text-center text-3xl font-bold text-rose-900 md:text-4xl lg:text-5xl">
-							The 5 Gift Categories
-						</h2>
-						<p className="mb-12 text-center text-base text-rose-700 md:mb-16 md:text-lg lg:text-xl">
-							Our thoughtful approach to gift-giving ensures every present
-							serves a purpose
-						</p>
-						<div className="grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-							<div className="group rounded-xl bg-white p-6 shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-100">
-									<svg
-										className="h-6 w-6 text-rose-600"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={1.5}
-											d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"
+						<div className="grid gap-8 md:grid-cols-2">
+							{/* Interactive Giving Card */}
+							<div className="rounded-2xl border border-orange-100 bg-white p-8 shadow-lg">
+								<div className="mb-6 flex items-center gap-4">
+									<div className="rounded-full bg-orange-50 p-3">
+										<Icon
+											name="envelope-closed"
+											className="h-6 w-6 text-orange-400"
 										/>
-									</svg>
+									</div>
+									<h3 className="text-2xl font-bold">Interactive Giving</h3>
 								</div>
-								<h3 className="text-xl font-semibold text-rose-800">
-									Something They Want
-								</h3>
-								<p className="mt-2 text-rose-700">
-									A special toy or item they've been wishing for, chosen with
-									care
+								<p className="mb-8 text-gray-600">
+									Contributors don't just give gifts—they share personal
+									messages, photos, videos, and audio recordings.
 								</p>
-							</div>
 
-							<div className="group rounded-xl bg-white p-6 shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-100">
-									<svg
-										className="h-6 w-6 text-rose-600"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={1.5}
-											d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+								<div className="grid grid-cols-2 gap-4">
+									{/* Text Prompts */}
+									<div className="rounded-lg bg-orange-50 p-4">
+										<Icon
+											name="envelope-closed"
+											className="mb-3 h-5 w-5 text-orange-400"
 										/>
-									</svg>
-								</div>
-								<h3 className="text-xl font-semibold text-rose-800">
-									Something They Need
-								</h3>
-								<p className="mt-2 text-rose-700">
-									Practical items useful in daily life, chosen with purpose
-								</p>
-							</div>
+										<h4 className="mb-2 font-semibold">Text Prompts</h4>
+										<p className="mb-2 text-sm text-gray-600">
+											Share personal stories and memories in writing.
+										</p>
+										<p className="text-sm italic text-gray-500">
+											"What was your favorite toy as a kid?"
+										</p>
+									</div>
 
-							<div className="group rounded-xl bg-white p-6 shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-100">
-									<svg
-										className="h-6 w-6 text-rose-600"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={1.5}
-											d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+									{/* Photo Booth */}
+									<div className="rounded-lg bg-orange-50 p-4">
+										<Icon
+											name="camera"
+											className="mb-3 h-5 w-5 text-orange-400"
 										/>
-									</svg>
-								</div>
-								<h3 className="text-xl font-semibold text-rose-800">
-									An Experience
-								</h3>
-								<p className="mt-2 text-rose-700">
-									Activities that create lasting memories and learning
-									opportunities
-								</p>
-							</div>
+										<h4 className="mb-2 font-semibold">Photo Booth</h4>
+										<p className="mb-2 text-sm text-gray-600">
+											Capture fun moments with our built-in photo booth.
+										</p>
+										<p className="text-sm italic text-gray-500">
+											"Strike a silly pose to make Emma laugh!"
+										</p>
+									</div>
 
-							<div className="group rounded-xl bg-white p-6 shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-100">
-									<svg
-										className="h-6 w-6 text-rose-600"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={1.5}
-											d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+									{/* Video Messages */}
+									<div className="rounded-lg bg-orange-50 p-4">
+										<Icon
+											name="camera"
+											className="mb-3 h-5 w-5 text-orange-400"
 										/>
-									</svg>
-								</div>
-								<h3 className="text-xl font-semibold text-rose-800">
-									Something to Wear
-								</h3>
-								<p className="mt-2 text-rose-700">
-									Clothing that expresses their personality and fits their style
-								</p>
-							</div>
+										<h4 className="mb-2 font-semibold">Video Messages</h4>
+										<p className="mb-2 text-sm text-gray-600">
+											Record personalized video messages and challenges.
+										</p>
+										<p className="text-sm italic text-gray-500">
+											"Eat 5 crackers and try to whistle!"
+										</p>
+									</div>
 
-							<div className="group rounded-xl bg-white p-6 shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-100">
-									<svg
-										className="h-6 w-6 text-rose-600"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={1.5}
-											d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+									{/* Audio Recordings */}
+									<div className="rounded-lg bg-orange-50 p-4">
+										<Icon
+											name="plus"
+											className="mb-3 h-5 w-5 text-orange-400"
 										/>
-									</svg>
-								</div>
-								<h3 className="text-xl font-semibold text-rose-800">
-									Something to Learn
-								</h3>
-								<p className="mt-2 text-rose-700">
-									Books or educational items that help them grow and develop
-								</p>
-							</div>
-						</div>
-					</div>
-				</section>
-
-				{/* Gift Options */}
-				<section className="relative overflow-hidden bg-gradient-to-br from-rose-100 to-rose-50 py-12 md:py-24">
-					<div className="pointer-events-none absolute inset-0">
-						<img
-							src="app/assets/images/backgrounds/gift-pattern.svg"
-							alt=""
-							className="h-full w-full object-cover opacity-5"
-						/>
-					</div>
-					<div className="container relative mx-auto px-4">
-						<h2 className="mb-12 text-center text-3xl font-bold text-rose-900 md:mb-16 md:text-4xl lg:text-5xl">
-							Our Gifting Options
-						</h2>
-						<div className="grid gap-6 md:grid-cols-3 md:gap-8">
-							<div className="group rounded-xl bg-white p-6 text-center shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-4">
-									<div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-rose-100">
-										<svg
-											className="h-8 w-8 text-rose-600"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={1.5}
-												d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"
-											/>
-										</svg>
+										<h4 className="mb-2 font-semibold">Audio Recordings</h4>
+										<p className="mb-2 text-sm text-gray-600">
+											Share songs, stories, or special messages.
+										</p>
+										<p className="text-sm italic text-gray-500">
+											"Sing your favorite childhood song!"
+										</p>
 									</div>
 								</div>
-								<h3 className="text-xl font-semibold text-rose-800">
-									Standard Gift List
-								</h3>
-								<p className="mt-2 text-rose-700">
-									Curate gifts across five mindful categories
+
+								<p className="mt-8 text-center text-sm text-gray-600">
+									All these interactive elements become treasured memories that
+									last far longer than physical gifts.
 								</p>
 							</div>
 
-							<div className="group rounded-xl bg-white p-6 text-center shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-4">
-									<div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-rose-100">
-										<svg
-											className="h-8 w-8 text-rose-600"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={1.5}
-												d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-											/>
-										</svg>
+							{/* Child Profiles Card */}
+							<div className="rounded-2xl border border-red-100 bg-white p-8 shadow-lg">
+								<div className="mb-6 flex items-center gap-4">
+									<div className="rounded-full bg-red-50 p-3">
+										<Icon name="avatar" className="h-6 w-6 text-red-400" />
 									</div>
+									<h3 className="text-2xl font-bold">Child Profiles</h3>
 								</div>
-								<h3 className="text-xl font-semibold text-rose-800">OneGift</h3>
-								<p className="mt-2 text-rose-700">
-									Everyone contributes to one significant gift that will be
-									treasured for years
+								<p className="mb-8 text-gray-600">
+									Each child's profile showcases their personality,
+									achievements, and aspirations.
 								</p>
-							</div>
 
-							<div className="group rounded-xl bg-white p-6 text-center shadow-lg transition-all hover:shadow-xl md:p-8">
-								<div className="mb-4">
-									<div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-rose-100">
-										<svg
-											className="h-8 w-8 text-rose-600"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={1.5}
-												d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-											/>
-										</svg>
+								{/* Past Year Achievements */}
+								<div className="mb-6 rounded-lg bg-red-50 p-6">
+									<div className="mb-3 flex items-center gap-3">
+										<Icon name="check" className="h-6 w-6 text-red-400" />
+										<h4 className="text-xl font-semibold">
+											Past Year Achievements
+										</h4>
 									</div>
+									<p className="mb-2 text-gray-700">
+										Celebrate milestones like learning to swim, riding a bike,
+										or reading independently.
+									</p>
+									<p className="text-sm text-gray-500">
+										Helps gift-givers understand what matters to your child.
+									</p>
 								</div>
-								<h3 className="text-xl font-semibold text-rose-800">
-									Reverse Gift List
-								</h3>
-								<p className="mt-2 text-rose-700">
-									Suggest gifts and let the recipient choose what truly
-									resonates
+
+								{/* Memory Gallery */}
+								<div className="mb-6 rounded-lg bg-red-50 p-6">
+									<div className="mb-3 flex items-center gap-3">
+										<Icon name="camera" className="h-6 w-6 text-red-400" />
+										<h4 className="text-xl font-semibold">Memory Gallery</h4>
+									</div>
+									<p className="mb-2 text-gray-700">
+										Share favorite photos and moments from the past year in a
+										beautiful gallery.
+									</p>
+									<p className="text-sm text-gray-500">
+										Creates a visual timeline of your child's growth and
+										experiences.
+									</p>
+								</div>
+
+								{/* Future Goals */}
+								<div className="mb-6 rounded-lg bg-red-50 p-6">
+									<div className="mb-3 flex items-center gap-3">
+										<Icon name="plus" className="h-6 w-6 text-red-400" />
+										<h4 className="text-xl font-semibold">Future Goals</h4>
+									</div>
+									<p className="mb-2 text-gray-700">
+										Highlight what they're looking forward to learning or
+										experiencing.
+									</p>
+									<p className="text-sm text-gray-500">
+										Inspires gifts that support their dreams and aspirations.
+									</p>
+								</div>
+
+								<p className="text-center text-sm text-gray-600">
+									Profiles help gift-givers connect with your child on a deeper
+									level, leading to more meaningful gifts.
 								</p>
 							</div>
 						</div>
@@ -745,111 +631,132 @@ export default function Index() {
 				</section>
 
 				{/* CTA Section */}
-				<section className="relative overflow-hidden bg-gradient-to-br from-rose-600 to-rose-500 py-12 md:py-24">
-					<div className="pointer-events-none absolute inset-0">
-						<div className="absolute inset-0 bg-[url('/images/backgrounds/gift-pattern.svg')] opacity-10" />
-					</div>
-					<div className="container relative mx-auto px-4 text-center">
-						<h2 className="text-3xl font-bold leading-tight text-white md:text-4xl lg:text-5xl">
-							Ready to Change How You Gift?
+				<section className="bg-[#00BFA5] py-24 text-center">
+					<div className="container mx-auto px-4">
+						<h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
+							READY TO CREATE MORE
+							<br />
+							MEANINGFUL CELEBRATIONS?
 						</h2>
-						<p className="mx-auto mt-4 max-w-2xl text-base text-rose-50 md:mt-6 md:text-lg lg:text-xl">
-							Create a gift list that focuses on what truly matters. Less
-							clutter, more meaning, happier children.
+						<p className="mb-8 text-xl text-white">
+							Join thousands of families who are changing how we give gifts.
 						</p>
-						<Button
-							asChild
-							variant="default"
-							className="mt-6 bg-white px-6 py-4 text-base text-rose-700 shadow-xl shadow-rose-900/20 transition-all hover:bg-rose-50 hover:shadow-rose-900/30 md:mt-10 md:px-8 md:py-6 md:text-lg"
+						<Link
+							to="/create-gift-list"
+							className="inline-block rounded-full bg-white px-8 py-4 font-semibold text-[#00BFA5] transition-all hover:bg-opacity-90"
 						>
-							<Link to="/create-gift-list">Create Your Gift List</Link>
-						</Button>
+							Start Your Registry →
+						</Link>
+						<div className="mt-8 flex items-center justify-center gap-8">
+							<div className="flex items-center gap-2 text-white">
+								<Icon name="check" className="h-5 w-5" />
+								<span>No credit card required</span>
+							</div>
+							<div className="flex items-center gap-2 text-white">
+								<Icon name="check" className="h-5 w-5" />
+								<span>30-day free trial</span>
+							</div>
+							<div className="flex items-center gap-2 text-white">
+								<Icon name="check" className="h-5 w-5" />
+								<span>Cancel anytime</span>
+							</div>
+						</div>
 					</div>
 				</section>
-			</main>
 
-			{/* Footer */}
-			<footer className="border-t border-rose-200 bg-white py-12 md:py-16">
-				<div className="container mx-auto px-4">
-					<div className="grid gap-8 md:grid-cols-4 md:gap-12">
-						<div>
-							<h3 className="text-lg font-semibold text-rose-800">
-								Wish & Well
-							</h3>
-							<p className="mt-3 text-rose-700">
-								Mindful gifting for meaningful moments.
+				{/* Footer */}
+				<footer className="bg-white py-16">
+					<div className="container mx-auto px-4">
+						<div className="mb-8 grid grid-cols-4 gap-8">
+							{/* Column 1 - Wish & Well */}
+							<div>
+								<h3 className="mb-4 font-bold">Wish & Well</h3>
+								<div className="mb-2 flex items-center gap-2">
+									<Icon name="gift" className="h-5 w-5 text-[#00BFA5]" />
+									<span className="font-bold">Wish & Well</span>
+								</div>
+								<p className="text-gray-600">
+									Meaningful gifts for growing minds.
+								</p>
+							</div>
+
+							{/* Column 2 - Registry Types */}
+							<div>
+								<h3 className="mb-4 font-bold">Registry Types</h3>
+								<ul className="space-y-2 text-gray-600">
+									<li>
+										<Link to="/standard-registry">Standard Registry</Link>
+									</li>
+									<li>
+										<Link to="/onegift">OneGift</Link>
+									</li>
+									<li>
+										<Link to="/reverse-gift-list">Reverse Gift List</Link>
+									</li>
+								</ul>
+							</div>
+
+							{/* Column 3 - Company */}
+							<div>
+								<h3 className="mb-4 font-bold">Company</h3>
+								<ul className="space-y-2 text-gray-600">
+									<li>
+										<Link to="/about">About Us</Link>
+									</li>
+									<li>
+										<Link to="/blog">Blog</Link>
+									</li>
+									<li>
+										<Link to="/careers">Careers</Link>
+									</li>
+								</ul>
+							</div>
+
+							{/* Column 4 - Legal */}
+							<div>
+								<h3 className="mb-4 font-bold">Legal</h3>
+								<ul className="space-y-2 text-gray-600">
+									<li>
+										<Link to="/terms">Terms</Link>
+									</li>
+									<li>
+										<Link to="/privacy">Privacy</Link>
+									</li>
+									<li>
+										<Link to="/cookies">Cookies</Link>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+						<div className="flex items-center justify-between border-t border-gray-200 pt-8">
+							<p className="text-gray-600">
+								© 2025 Wish & Well. All rights reserved.
 							</p>
-						</div>
-						<div>
-							<h3 className="text-lg font-semibold text-rose-800">
-								Gift Options
-							</h3>
-							<ul className="mt-3 space-y-3 text-rose-700">
-								<li>
-									<Link
-										to="/standard-gift-list"
-										className="hover:text-rose-900"
-									>
-										Standard Gift List
-									</Link>
-								</li>
-								<li>
-									<Link to="/onegift" className="hover:text-rose-900">
-										OneGift
-									</Link>
-								</li>
-								<li>
-									<Link to="/reverse-gift-list" className="hover:text-rose-900">
-										Reverse Gift List
-									</Link>
-								</li>
-							</ul>
-						</div>
-						<div>
-							<h3 className="text-lg font-semibold text-rose-800">Company</h3>
-							<ul className="mt-3 space-y-3 text-rose-700">
-								<li>
-									<Link to="/about" className="hover:text-rose-900">
-										About Us
-									</Link>
-								</li>
-								<li>
-									<Link to="/how-it-works" className="hover:text-rose-900">
-										How It Works
-									</Link>
-								</li>
-								<li>
-									<Link to="/contact" className="hover:text-rose-900">
-										Contact
-									</Link>
-								</li>
-							</ul>
-						</div>
-						<div>
-							<h3 className="text-lg font-semibold text-rose-800">
-								Our Mission
-							</h3>
-							<p className="mt-3 text-rose-700">
-								We're dedicated to transforming gift-giving into a more
-								meaningful, sustainable, and joyful experience for families. By
-								reducing clutter and emphasizing purpose, we help create
-								celebrations that matter.
-							</p>
+							<div className="flex items-center gap-4">
+								<Link
+									to="https://facebook.com"
+									className="text-gray-400 hover:text-gray-600"
+								>
+									<Icon name="plus" className="h-5 w-5" />
+								</Link>
+								<Link
+									to="https://instagram.com"
+									className="text-gray-400 hover:text-gray-600"
+								>
+									<Icon name="camera" className="h-5 w-5" />
+								</Link>
+								<Link
+									to="https://twitter.com"
+									className="text-gray-400 hover:text-gray-600"
+								>
+									<Icon name="plus" className="h-5 w-5" />
+								</Link>
+							</div>
 						</div>
 					</div>
-					<div className="mt-8 border-t border-rose-200 pt-6 text-center text-sm text-rose-700 md:mt-12 md:pt-8 md:text-base">
-						<p>© 2024 Wish & Well. All rights reserved.</p>
-						<div className="mt-3 space-x-6">
-							<Link to="/privacy" className="hover:text-rose-900">
-								Privacy Policy
-							</Link>
-							<Link to="/terms" className="hover:text-rose-900">
-								Terms of Service
-							</Link>
-						</div>
-					</div>
-				</div>
-			</footer>
+				</footer>
+			</main>
 		</div>
 	)
 }
