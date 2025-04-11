@@ -1,3 +1,4 @@
+import { Gift } from 'lucide-react'
 import { OpenImgContextProvider } from 'openimg/react'
 import {
 	data,
@@ -11,13 +12,13 @@ import {
 	useMatches,
 } from 'react-router'
 import { HoneypotProvider } from 'remix-utils/honeypot/react'
+import { theme } from '#app/utils/theme'
 import { type Route } from './+types/root.ts'
 
 import appleTouchIconAssetUrl from './assets/favicons/apple-touch-icon.png'
 import faviconAssetUrl from './assets/favicons/favicon.svg'
 import { GeneralErrorBoundary } from './components/error-boundary.tsx'
 import { EpicProgress } from './components/progress-bar.tsx'
-import { SearchBar } from './components/search-bar.tsx'
 import { useToast } from './components/toaster.tsx'
 import { Button } from './components/ui/button.tsx'
 import { href as iconsHref } from './components/ui/icon.tsx'
@@ -191,8 +192,7 @@ function App() {
 	const user = useOptionalUser()
 	const theme = useTheme()
 	const matches = useMatches()
-	const isOnSearchPage = matches.find((m) => m.id === 'routes/users+/index')
-	const searchBar = isOnSearchPage ? null : <SearchBar status="idle" />
+
 	useToast(data.toast)
 
 	return (
@@ -202,22 +202,52 @@ function App() {
 		>
 			<div className="flex min-h-screen flex-col justify-between">
 				<header className="container py-6">
-					<nav className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
+					<div className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
 						<Logo />
-						<div className="ml-auto hidden max-w-sm flex-1 sm:block">
-							{searchBar}
-						</div>
-						<div className="flex items-center gap-10">
+						<nav className="hidden gap-8 md:flex">
+							<Link
+								to="/how-it-works"
+								className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
+							>
+								How It Works
+							</Link>
+							<Link
+								to="/about"
+								className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
+							>
+								About Us
+							</Link>
+							<Link
+								to="/blog"
+								className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
+							>
+								Blog
+							</Link>
+						</nav>
+						<div className="flex items-center gap-3">
 							{user ? (
 								<UserDropdown />
 							) : (
-								<Button asChild variant="default" size="lg">
-									<Link to="/login">Log In</Link>
-								</Button>
+								<Link to="/login">
+									<Button
+										variant="ghost"
+										size="sm"
+										className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
+									>
+										Log In
+									</Button>
+								</Link>
 							)}
+							<Link to="/signup">
+								<Button
+									size="sm"
+									className="bg-[#00BFA5] text-[15px] font-medium text-white hover:bg-[#00BFA5]/90"
+								>
+									Sign Up
+								</Button>
+							</Link>
 						</div>
-						<div className="block w-full sm:hidden">{searchBar}</div>
-					</nav>
+					</div>
 				</header>
 
 				<div className="flex flex-1 flex-col">
@@ -238,12 +268,25 @@ function App() {
 function Logo() {
 	return (
 		<Link to="/" className="group grid leading-snug">
-			<span className="font-light transition group-hover:-translate-x-1">
-				epic
-			</span>
-			<span className="font-bold transition group-hover:translate-x-1">
-				notes
-			</span>
+			<div className="flex items-center gap-2.5">
+				<div className="relative h-8 w-8">
+					<Gift
+						className="relative z-10 h-8 w-8"
+						style={{ color: theme.colors.primary }}
+					/>
+				</div>
+				<h1
+					className="text-[22px] font-bold tracking-tight"
+					style={{
+						backgroundImage: theme.gradients.rainbow,
+						WebkitBackgroundClip: 'text',
+						backgroundClip: 'text',
+						color: 'transparent',
+					}}
+				>
+					Wish & Well
+				</h1>
+			</div>
 		</Link>
 	)
 }

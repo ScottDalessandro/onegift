@@ -50,70 +50,6 @@ export default function Index() {
 
 	return (
 		<div className="flex min-h-screen flex-col bg-[#f9f7fe]">
-			<header className="sticky top-0 z-10 border-b bg-white">
-				<div className="container flex h-16 items-center justify-between px-4 md:px-6">
-					<div className="flex items-center gap-2.5">
-						<div className="relative h-8 w-8">
-							<Gift
-								className="relative z-10 h-8 w-8"
-								style={{ color: theme.colors.primary }}
-							/>
-						</div>
-						<h1
-							className="text-[22px] font-bold tracking-tight"
-							style={{
-								backgroundImage: theme.gradients.rainbow,
-								WebkitBackgroundClip: 'text',
-								backgroundClip: 'text',
-								color: 'transparent',
-							}}
-						>
-							Wish & Well
-						</h1>
-					</div>
-					<nav className="hidden gap-8 md:flex">
-						<Link
-							to="/how-it-works"
-							className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
-						>
-							How It Works
-						</Link>
-						<Link
-							to="/about"
-							className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
-						>
-							About Us
-						</Link>
-						<Link
-							to="/blog"
-							className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
-						>
-							Blog
-						</Link>
-					</nav>
-
-					<div className="flex items-center gap-3">
-						<Link to="/login">
-							<Button
-								variant="ghost"
-								size="sm"
-								className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
-							>
-								Log In
-							</Button>
-						</Link>
-						<Link to="/signup">
-							<Button
-								size="sm"
-								className="bg-[#00BFA5] text-[15px] font-medium text-white hover:bg-[#00BFA5]/90"
-							>
-								Sign Up
-							</Button>
-						</Link>
-					</div>
-				</div>
-			</header>
-
 			<main className="flex-1">
 				{/* Hero Section */}
 				<section className="relative bg-[#f9f7fe] py-12">
@@ -177,11 +113,11 @@ export default function Index() {
 										className="h-full w-full object-cover"
 									/>
 									<div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-									<div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+									{/* <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
 										<p className="text-lg font-medium">
 											Create joyful memories that last a lifetime
 										</p>
-									</div>
+									</div> */}
 								</div>
 							))}
 
@@ -206,7 +142,7 @@ export default function Index() {
 				</section>
 
 				{/* How Wish & Well Works - Simple Steps */}
-				<section className="relative bg-gradient-to-br from-[#f9f7fe] to-[#fff5f7] py-16">
+				<section className="relative py-16">
 					<div className="container mx-auto px-4">
 						<h2 className="mb-4 text-center text-3xl font-bold text-gray-900 md:text-4xl">
 							How Wish & Well Works
