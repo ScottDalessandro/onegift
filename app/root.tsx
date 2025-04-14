@@ -204,23 +204,20 @@ function App() {
 				<header className="container py-6">
 					<div className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
 						<Logo />
-						<nav className="hidden gap-8 md:flex">
-							<Link
-								to="/how-it-works"
-								className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
-							>
+						<nav className="hidden items-center gap-6 md:flex">
+							<Link to="#how-it-works" className="text-sm font-medium">
 								How It Works
 							</Link>
-							<Link
-								to="/about"
-								className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
-							>
+							<Link to="#registries" className="text-sm font-medium">
+								Registries
+							</Link>
+							<Link to="#memories" className="text-sm font-medium">
+								Digital Memories
+							</Link>
+							<Link to="#about" className="text-sm font-medium">
 								About Us
 							</Link>
-							<Link
-								to="/blog"
-								className="text-[15px] font-medium text-gray-700 hover:text-gray-900"
-							>
+							<Link to="#blog" className="text-sm font-medium">
 								Blog
 							</Link>
 						</nav>

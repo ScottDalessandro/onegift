@@ -1,11 +1,36 @@
 import { Link } from 'react-router'
 import { Button } from '#app/components/ui/button'
+import { Img } from 'openimg/react'
 import { cn } from '#app/utils/misc.tsx'
 import { type Route } from './+types/index'
 import { useState, useEffect } from 'react'
 import { Icon } from '#app/components/ui/icon'
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from '#app/components/ui/card'
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '#app/components/ui/tabs'
 import { theme } from '#app/utils/theme'
-import { Gift, Plus } from 'lucide-react'
+import {
+	ArrowRight,
+	Check,
+	Gift,
+	Heart,
+	MessageCircle,
+	Play,
+	Plus,
+	User,
+} from 'lucide-react'
+
+import cameraIcon from '../../assets/images/features/classic-camera-icon.png'
+import audioIcon from '../../assets/images/features/simple-audio-icon.png'
 // import { ImageAsset } from '#app/components/ImageAsset'
 // import giftPattern from '#app/assets/images/backgrounds/gift-pattern.svg'
 
@@ -40,6 +65,7 @@ export const meta: Route.MetaFunction = () => [{ title: 'Wish & Well' }]
 export default function Index() {
 	const [currentSlide, setCurrentSlide] = useState(0)
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
+	const [activeRegistry, setActiveRegistry] = useState('balanced')
 
 	useEffect(() => {
 		const timer = setInterval(() => {
@@ -123,7 +149,7 @@ export default function Index() {
 
 							{/* Slider Navigation */}
 							<div className="absolute bottom-16 left-6 flex gap-2">
-								{heroSlides.map((_, index) => (
+								{heroSlides.map((slide, index) => (
 									<button
 										key={index}
 										onClick={() => setCurrentSlide(index)}
@@ -142,427 +168,644 @@ export default function Index() {
 				</section>
 
 				{/* How Wish & Well Works - Simple Steps */}
-				<section className="relative py-16">
-					<div className="container mx-auto px-4">
-						<h2 className="mb-4 text-center text-3xl font-bold text-gray-900 md:text-4xl">
-							How Wish & Well Works
-						</h2>
-						<p className="mx-auto mb-12 max-w-2xl text-center text-lg text-gray-600">
-							Our simple process helps you create meaningful gift experiences
-						</p>
-						<div className="grid gap-8 md:grid-cols-3">
-							<div className="relative flex flex-col items-center rounded-lg bg-white p-6 shadow-lg">
-								<div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#00BFA5]">
-									<Icon name="gift" className="h-8 w-8 text-white" />
-								</div>
-								<h3 className="mb-2 text-xl font-semibold text-gray-900">
-									Create a Registry
-								</h3>
-								<p className="text-center text-gray-600">
-									Choose from our three registry types and add your child's
-									profile information.
-								</p>
-							</div>
-							<div className="relative flex flex-col items-center rounded-lg bg-white p-6 shadow-lg">
-								<div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#00BFA5]">
-									<Icon name="plus" className="h-8 w-8 text-white" />
-								</div>
-								<h3 className="mb-2 text-xl font-semibold text-gray-900">
-									Share with Loved Ones
-								</h3>
-								<p className="text-center text-gray-600">
-									Invite family and friends to contribute to meaningful gifts
-									your child will cherish.
-								</p>
-							</div>
-							<div className="relative flex flex-col items-center rounded-lg bg-white p-6 shadow-lg">
-								<div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#00BFA5]">
-									<Icon name="check" className="h-8 w-8 text-white" />
-								</div>
-								<h3 className="mb-2 text-xl font-semibold text-gray-900">
-									Create Lasting Memories
-								</h3>
-								<p className="text-center text-gray-600">
-									Reduce clutter and create more meaningful gift-giving
-									experiences.
-								</p>
-							</div>
+				<section
+					id="how-it-works"
+					className="bg-gray-50 py-12 md:py-24 lg:py-32"
+				>
+					<div className="container px-4 md:px-6">
+						<div className="flex flex-col items-center justify-center space-y-4 text-center">
+							<h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+								How Wish & Well Works
+							</h2>
+							<p className="max-w-[700px] text-gray-500 md:text-xl">
+								Our simple process helps you create meaningful gift experiences
+								and preserve precious memories
+							</p>
+						</div>
+						<div className="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+							<Card className="border-none shadow-md">
+								<CardHeader className="pb-2">
+									<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
+										<Gift className="h-6 w-6 text-teal-700" />
+									</div>
+									<CardTitle>Create a Registry</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<p className="text-sm text-gray-500">
+										Choose from our three unique registry types and add your
+										child's profile information.
+									</p>
+								</CardContent>
+							</Card>
+							<Card className="border-none shadow-md">
+								<CardHeader className="pb-2">
+									<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
+										<Heart className="h-6 w-6 text-teal-700" />
+									</div>
+									<CardTitle>Share with Loved Ones</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<p className="text-sm text-gray-500">
+										Invite family and friends to contribute to meaningful gifts
+										your child will cherish.
+									</p>
+								</CardContent>
+							</Card>
+							<Card className="border-none shadow-md">
+								<CardHeader className="pb-2">
+									<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
+										<MessageCircle className="h-6 w-6 text-teal-700" />
+									</div>
+									<CardTitle>Create Fun Digital Memories</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<p className="text-sm text-gray-500">
+										Contributors share playful challenges, photo booth pics, mix
+										tapes, and friendly competitions alongside their gifts.
+									</p>
+								</CardContent>
+							</Card>
+							<Card className="border-none shadow-md">
+								<CardHeader className="pb-2">
+									<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
+										<Play className="h-6 w-6 text-teal-700" />
+									</div>
+									<CardTitle>Treasure Forever</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<p className="text-sm text-gray-500">
+										Access your digital memory collection anytime, creating a
+										lasting emotional keepsake beyond physical gifts.
+									</p>
+								</CardContent>
+							</Card>
 						</div>
 					</div>
 				</section>
 
-				{/* Everything You Need Section */}
-				<section className="bg-white py-16">
-					<div className="container mx-auto px-4">
-						<h2 className="mb-2 text-center text-4xl font-bold md:text-5xl">
-							EVERYTHING YOU NEED TO
-						</h2>
-						<h2 className="mb-6 text-center text-4xl font-bold text-[#00BFA5] md:text-5xl">
-							CELEBRATE MEANINGFULLY
-						</h2>
-						<p className="mb-16 text-center text-lg text-gray-600">
-							No more excessive gifts. No more clutter. Just meaningful
-							celebrations.
-						</p>
-
-						<div className="grid gap-8 md:grid-cols-2">
-							{/* Gift Categories Column */}
-							<div className="rounded-2xl bg-white p-8 shadow-lg">
-								<div className="mb-6 flex items-center gap-4">
-									<div className="rounded-full bg-[#E5F9F6] p-3">
-										<Icon name="gift" className="h-6 w-6 text-[#00BFA5]" />
-									</div>
-									<h3 className="text-2xl font-bold">
-										Meaningful Gift Categories
-									</h3>
-								</div>
-								<p className="mb-8 text-gray-600">
-									Our unique 5-category system ensures children receive a
-									balanced and thoughtful selection of gifts that contribute to
-									their growth and happiness.
-								</p>
-
-								{/* Want Category */}
-								<div className="mb-4 rounded-lg bg-[#E5F9F6] p-4">
-									<div className="mb-2 flex items-center gap-3">
-										<Icon name="gift" className="h-5 w-5 text-[#00BFA5]" />
-										<h4 className="font-semibold">Want</h4>
-									</div>
-									<p className="mb-2 text-gray-600">
-										Something they truly desire that brings joy and excitement.
-									</p>
-									<div className="flex flex-wrap gap-2">
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											LEGO Sets
-										</span>
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Art Supplies
-										</span>
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Favorite Character Toys
-										</span>
-									</div>
-								</div>
-
-								{/* Need Category */}
-								<div className="mb-4 rounded-lg bg-[#F3F4F6] p-4">
-									<div className="mb-2 flex items-center gap-3">
-										<Icon name="check" className="h-5 w-5 text-[#00BFA5]" />
-										<h4 className="font-semibold">Need</h4>
-									</div>
-									<p className="mb-2 text-gray-600">
-										Practical items that support their daily life and
-										development.
-									</p>
-									<div className="flex flex-wrap gap-2">
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Backpack
-										</span>
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Lunch Box
-										</span>
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Water Bottle
-										</span>
-									</div>
-								</div>
-
-								{/* Experience Category */}
-								<div className="mb-4 rounded-lg bg-[#FFF7ED] p-4">
-									<div className="mb-2 flex items-center gap-3">
-										<Icon name="plus" className="h-5 w-5 text-[#00BFA5]" />
-										<h4 className="font-semibold">Experience</h4>
-									</div>
-									<p className="mb-2 text-gray-600">
-										Activities and adventures that create lasting memories.
-									</p>
-									<div className="flex flex-wrap gap-2">
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Museum Passes
-										</span>
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Zoo Membership
-										</span>
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Swimming Lessons
-										</span>
-									</div>
-								</div>
-
-								{/* Wear Category */}
-								<div className="mb-4 rounded-lg bg-[#FDF2F8] p-4">
-									<div className="mb-2 flex items-center gap-3">
-										<Icon name="avatar" className="h-5 w-5 text-[#00BFA5]" />
-										<h4 className="font-semibold">Wear</h4>
-									</div>
-									<p className="mb-2 text-gray-600">
-										Clothing and accessories that express their personality.
-									</p>
-									<div className="flex flex-wrap gap-2">
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Rain Boots
-										</span>
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Special Occasion Outfit
-										</span>
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Costume
-										</span>
-									</div>
-								</div>
-
-								{/* Learn Category */}
-								<div className="rounded-lg bg-[#F5F3FF] p-4">
-									<div className="mb-2 flex items-center gap-3">
-										<Icon name="file-text" className="h-5 w-5 text-[#00BFA5]" />
-										<h4 className="font-semibold">Learn</h4>
-									</div>
-									<p className="mb-2 text-gray-600">
-										Educational items that spark curiosity and foster growth.
-									</p>
-									<div className="flex flex-wrap gap-2">
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Books
-										</span>
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Science Kits
-										</span>
-										<span className="rounded-full bg-white px-3 py-1 text-sm">
-											Musical Instruments
-										</span>
-									</div>
-								</div>
-							</div>
-
-							{/* Registry Options Column */}
-							<div className="rounded-2xl bg-white p-8 shadow-lg">
-								<div className="mb-6 flex items-center gap-4">
-									<div className="rounded-full bg-[#EEF2FF] p-3">
-										<Icon name="check" className="h-6 w-6 text-[#00BFA5]" />
-									</div>
-									<h3 className="text-2xl font-bold">Registry Options</h3>
-								</div>
-								<p className="mb-8 text-gray-600">
-									Choose from three unique registry types to match your family's
-									preferences.
-								</p>
-
-								{/* Standard Registry */}
-								<div className="mb-6 rounded-lg bg-[#F3F4F6] p-6">
-									<div className="mb-3 flex items-center gap-3">
-										<Icon name="check" className="h-6 w-6 text-[#00BFA5]" />
-										<h4 className="text-xl font-semibold">
-											Balanced Wishes Registry
-										</h4>
-									</div>
-									<p className="mb-2 text-gray-700">
-										The classic 5-category approach that ensures a balanced
-										selection of gifts across all categories.
-									</p>
-									<p className="text-sm text-gray-500">
-										Perfect for birthdays, holidays, and special occasions when
-										you want variety.
-									</p>
-								</div>
-
-								{/* OneGift Registry */}
-								<div className="mb-6 rounded-lg bg-[#F3F4F6] p-6">
-									<div className="mb-3 flex items-center gap-3">
-										<Icon name="gift" className="h-6 w-6 text-[#00BFA5]" />
-										<h4 className="text-xl font-semibold">OneGift Registry</h4>
-									</div>
-									<p className="mb-2 text-gray-700">
-										Everyone contributes to one special gift that might
-										otherwise be out of reach.
-									</p>
-									<p className="text-sm text-gray-500">
-										Ideal for bigger items like bicycles, playsets, or special
-										experiences.
-									</p>
-								</div>
-
-								{/* Reverse Gift Registry */}
-								<div className="mb-6 rounded-lg bg-[#F3F4F6] p-6">
-									<div className="mb-3 flex items-center gap-3">
-										<Icon name="plus" className="h-6 w-6 text-[#00BFA5]" />
-										<h4 className="text-xl font-semibold">
-											Reverse Gift Registry
-										</h4>
-									</div>
-									<p className="mb-2 text-gray-700">
-										Guests suggest gifts for your approval, bringing their
-										unique ideas to the celebration.
-									</p>
-									<p className="text-sm text-gray-500">
-										Great when you want to be surprised but still maintain some
-										guidance.
-									</p>
-								</div>
-
-								<p className="text-center text-sm text-gray-600">
-									All registry types include our special interactive features
-									and memory collection.
-								</p>
-							</div>
+				<section id="our-products" className="py-12 md:py-24 lg:py-32">
+					<div className="container px-4 md:px-6">
+						<div className="flex flex-col items-center justify-center space-y-4 text-center">
+							<h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+								EVERYTHING YOU NEED TO{' '}
+								<span className="text-teal-500">CELEBRATE MEANINGFULLY</span>
+							</h2>
+							<p className="max-w-[700px] text-gray-500 md:text-xl">
+								No more excessive gifts. No more clutter. Just meaningful
+								celebrations.
+							</p>
 						</div>
-					</div>
-				</section>
 
-				{/* Interactive Features Section */}
-				<section className="bg-[#f9f7fe] py-16">
-					<div className="container mx-auto px-4">
-						<div className="grid gap-8 md:grid-cols-2">
-							{/* Interactive Giving Card */}
-							<div className="rounded-2xl border border-orange-100 bg-white p-8 shadow-lg">
-								<div className="mb-6 flex items-center gap-4">
-									<div className="rounded-full bg-orange-50 p-3">
-										<Icon
-											name="envelope-closed"
-											className="h-6 w-6 text-orange-400"
+						<Tabs defaultValue="registries" className="mt-12">
+							<TabsList className="mb-8 grid w-full grid-cols-2">
+								<TabsTrigger value="registries" className="text-lg">
+									Registry Options
+								</TabsTrigger>
+								<TabsTrigger value="memories" className="text-lg">
+									Digital Memories
+								</TabsTrigger>
+							</TabsList>
+
+							<TabsContent value="registries" className="space-y-8">
+								<div id="registries">
+									<div className="grid gap-6 md:grid-cols-3">
+										<button
+											onClick={() => setActiveRegistry('balanced')}
+											className={`relative overflow-hidden rounded-xl border-2 transition-all duration-200 ${
+												activeRegistry === 'balanced'
+													? 'border-teal-500 shadow-lg'
+													: 'border-gray-200'
+											}`}
+										>
+											<div className="p-6">
+												<div className="mb-3 flex items-center gap-2">
+													<Check
+														className={`h-5 w-5 ${activeRegistry === 'balanced' ? 'text-teal-500' : 'text-gray-400'}`}
+													/>
+													<h3 className="text-lg font-medium">
+														Balanced Wishes Registry
+													</h3>
+												</div>
+												<p className="text-left text-sm text-gray-600">
+													The classic 5-category approach that ensures a
+													balanced selection of gifts.
+												</p>
+											</div>
+											{activeRegistry === 'balanced' && (
+												<div className="absolute bottom-0 left-0 right-0 h-1 bg-teal-500"></div>
+											)}
+										</button>
+
+										<button
+											onClick={() => setActiveRegistry('onegift')}
+											className={`relative overflow-hidden rounded-xl border-2 transition-all duration-200 ${
+												activeRegistry === 'onegift'
+													? 'border-teal-500 shadow-lg'
+													: 'border-gray-200'
+											}`}
+										>
+											<div className="p-6">
+												<div className="mb-3 flex items-center gap-2">
+													<Check
+														className={`h-5 w-5 ${activeRegistry === 'onegift' ? 'text-teal-500' : 'text-gray-400'}`}
+													/>
+													<h3 className="text-lg font-medium">
+														OneGift Registry
+													</h3>
+												</div>
+												<p className="text-left text-sm text-gray-600">
+													Everyone contributes to one special gift that might
+													otherwise be out of reach.
+												</p>
+											</div>
+											{activeRegistry === 'onegift' && (
+												<div className="absolute bottom-0 left-0 right-0 h-1 bg-teal-500"></div>
+											)}
+										</button>
+
+										<button
+											onClick={() => setActiveRegistry('reverse')}
+											className={`relative overflow-hidden rounded-xl border-2 transition-all duration-200 ${
+												activeRegistry === 'reverse'
+													? 'border-teal-500 shadow-lg'
+													: 'border-gray-200'
+											}`}
+										>
+											<div className="p-6">
+												<div className="mb-3 flex items-center gap-2">
+													<Plus
+														className={`h-5 w-5 ${activeRegistry === 'reverse' ? 'text-teal-500' : 'text-gray-400'}`}
+													/>
+													<h3 className="text-lg font-medium">
+														Reverse Gift Registry
+													</h3>
+												</div>
+												<p className="text-left text-sm text-gray-600">
+													Guests suggest gifts for your approval, bringing their
+													unique ideas to the celebration.
+												</p>
+											</div>
+											{activeRegistry === 'reverse' && (
+												<div className="absolute bottom-0 left-0 right-0 h-1 bg-teal-500"></div>
+											)}
+										</button>
+									</div>
+
+									<div className="mt-8 rounded-xl bg-gray-50 p-8">
+										{activeRegistry === 'balanced' && (
+											<div className="grid gap-8 md:grid-cols-2">
+												<div className="space-y-4">
+													<h3 className="text-2xl font-bold">
+														Balanced Wishes Registry
+													</h3>
+													<p className="text-gray-600">
+														The classic 5-category approach that ensures a
+														balanced selection of gifts across all categories.
+													</p>
+													<p className="text-gray-500">
+														Perfect for birthdays, holidays, and special
+														occasions when you want variety.
+													</p>
+													<div className="space-y-2">
+														<h4 className="font-medium">Key Benefits:</h4>
+														<ul className="space-y-2">
+															<li className="flex items-start gap-2">
+																<Check className="mt-0.5 h-5 w-5 shrink-0 text-teal-500" />
+																<span className="text-gray-600">
+																	Ensures children receive a thoughtful mix of
+																	gifts across all 5 categories
+																</span>
+															</li>
+															<li className="flex items-start gap-2">
+																<Check className="mt-0.5 h-5 w-5 shrink-0 text-teal-500" />
+																<span className="text-gray-600">
+																	Prevents gift overload in any single category
+																</span>
+															</li>
+															<li className="flex items-start gap-2">
+																<Check className="mt-0.5 h-5 w-5 shrink-0 text-teal-500" />
+																<span className="text-gray-600">
+																	Gives gift-givers clear guidance while still
+																	offering plenty of choices
+																</span>
+															</li>
+														</ul>
+													</div>
+													<Button className="mt-4 bg-teal-500 hover:bg-teal-600">
+														Create Balanced Registry
+													</Button>
+												</div>
+												<div className="relative h-[300px] overflow-hidden rounded-xl">
+													<Img
+														src="/placeholder.svg?key=balanced-registry"
+														alt="Balanced Wishes Registry example"
+														width={600}
+														height={300}
+														className="h-full w-full object-cover"
+													/>
+												</div>
+											</div>
+										)}
+
+										{activeRegistry === 'onegift' && (
+											<div className="grid gap-8 md:grid-cols-2">
+												<div className="space-y-4">
+													<h3 className="text-2xl font-bold">
+														OneGift Registry
+													</h3>
+													<p className="text-gray-600">
+														Everyone contributes to one special gift that might
+														otherwise be out of reach.
+													</p>
+													<p className="text-gray-500">
+														Ideal for bigger items like bicycles, playsets, or
+														special experiences.
+													</p>
+													<div className="space-y-2">
+														<h4 className="font-medium">Perfect For:</h4>
+														<ul className="space-y-2">
+															<li className="flex items-start gap-2">
+																<Check className="mt-0.5 h-5 w-5 shrink-0 text-teal-500" />
+																<span className="text-gray-600">
+																	Big-ticket items like bicycles, playsets, or
+																	electronics
+																</span>
+															</li>
+															<li className="flex items-start gap-2">
+																<Check className="mt-0.5 h-5 w-5 shrink-0 text-teal-500" />
+																<span className="text-gray-600">
+																	Special experiences like museum memberships or
+																	classes
+																</span>
+															</li>
+															<li className="flex items-start gap-2">
+																<Check className="mt-0.5 h-5 w-5 shrink-0 text-teal-500" />
+																<span className="text-gray-600">
+																	Families who want to minimize physical gifts
+																	but maximize impact
+																</span>
+															</li>
+														</ul>
+													</div>
+													<Button className="mt-4 bg-teal-500 hover:bg-teal-600">
+														Create OneGift Registry
+													</Button>
+												</div>
+												<div className="relative h-[300px] overflow-hidden rounded-xl">
+													<Img
+														src="/placeholder.svg?key=onegift-registry"
+														alt="OneGift Registry example"
+														width={600}
+														height={300}
+														className="h-full w-full object-cover"
+													/>
+												</div>
+											</div>
+										)}
+
+										{activeRegistry === 'reverse' && (
+											<div className="grid gap-8 md:grid-cols-2">
+												<div className="space-y-4">
+													<h3 className="text-2xl font-bold">
+														Reverse Gift Registry
+													</h3>
+													<p className="text-gray-600">
+														Guests suggest gifts for your approval, bringing
+														their unique ideas to the celebration.
+													</p>
+													<p className="text-gray-500">
+														Great when you want to be surprised but still
+														maintain some guidance.
+													</p>
+													<div className="space-y-2">
+														<h4 className="font-medium">How It Works:</h4>
+														<ul className="space-y-2">
+															<li className="flex items-start gap-2">
+																<Check className="mt-0.5 h-5 w-5 shrink-0 text-teal-500" />
+																<span className="text-gray-600">
+																	Guests suggest gift ideas based on their
+																	knowledge of your child
+																</span>
+															</li>
+															<li className="flex items-start gap-2">
+																<Check className="mt-0.5 h-5 w-5 shrink-0 text-teal-500" />
+																<span className="text-gray-600">
+																	You review and approve suggestions before they
+																	become visible to others
+																</span>
+															</li>
+															<li className="flex items-start gap-2">
+																<Check className="mt-0.5 h-5 w-5 shrink-0 text-teal-500" />
+																<span className="text-gray-600">
+																	Discover unique gift ideas you might not have
+																	thought of yourself
+																</span>
+															</li>
+														</ul>
+													</div>
+													<Button className="mt-4 bg-teal-500 hover:bg-teal-600">
+														Create Reverse Registry
+													</Button>
+												</div>
+												<div className="relative h-[300px] overflow-hidden rounded-xl">
+													<Img
+														src="/placeholder.svg?key=reverse-registry"
+														alt="Reverse Gift Registry example"
+														width={600}
+														height={300}
+														className="h-full w-full object-cover"
+													/>
+												</div>
+											</div>
+										)}
+									</div>
+
+									<div className="mt-8 rounded-xl border border-gray-100 bg-white p-6">
+										<h3 className="mb-4 text-xl font-medium">
+											Meaningful Gift Categories
+										</h3>
+										<div className="grid gap-6 md:grid-cols-5">
+											<div>
+												<h4 className="mb-2 font-medium">Want</h4>
+												<p className="text-sm text-gray-500">
+													Something they truly desire that brings joy and
+													excitement.
+												</p>
+											</div>
+											<div>
+												<h4 className="mb-2 font-medium">Need</h4>
+												<p className="text-sm text-gray-500">
+													Practical items that support their daily life and
+													development.
+												</p>
+											</div>
+											<div>
+												<h4 className="mb-2 font-medium">Experience</h4>
+												<p className="text-sm text-gray-500">
+													Activities and adventures that create lasting
+													memories.
+												</p>
+											</div>
+											<div>
+												<h4 className="mb-2 font-medium">Wear</h4>
+												<p className="text-sm text-gray-500">
+													Clothing and accessories that express their
+													personality.
+												</p>
+											</div>
+											<div>
+												<h4 className="mb-2 font-medium">Learn</h4>
+												<p className="text-sm text-gray-500">
+													Educational items that spark curiosity and foster
+													growth.
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</TabsContent>
+
+							<TabsContent value="memories" className="space-y-8">
+								<div className="mb-8 rounded-xl bg-teal-50 p-8">
+									<div className="mx-auto max-w-3xl text-center">
+										<h3 className="mb-4 text-2xl font-bold">
+											Digital Memories: The Fun Part!
+										</h3>
+										<p className="mb-6 text-gray-700">
+											Our Digital Memories collection turns gift-giving into an
+											interactive experience. It's like having a photo booth,
+											mix tape creator, and friendly competition platform all in
+											one place!
+										</p>
+									</div>
+								</div>
+
+								<div id="memories" className="grid gap-8 md:grid-cols-2">
+									<Card className="overflow-hidden border-2 border-teal-100 shadow-md">
+										<CardHeader className="bg-teal-50 pb-2">
+											<CardTitle className="flex items-center gap-2">
+												<Img
+													src="app/assets/images/features/classic-camera-icon.png"
+													alt="Camera icon"
+													width={24}
+													height={24}
+												/>
+												Photo Booth Fun
+											</CardTitle>
+										</CardHeader>
+										<CardContent className="pt-6">
+											<div className="space-y-4">
+												<p className="text-sm">
+													Strike silly poses, use digital props, and create
+													memorable moments!
+												</p>
+												<div className="rounded-lg bg-gray-50 p-4">
+													<p className="text-sm font-medium">
+														Challenge Ideas:
+													</p>
+													<ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-600">
+														<li>
+															"Make your goofiest face to make the birthday girl
+															laugh"
+														</li>
+														<li>"Show us your best superhero pose"</li>
+														<li>
+															"Take a family photo where everyone is upside
+															down"
+														</li>
+													</ul>
+												</div>
+											</div>
+										</CardContent>
+									</Card>
+
+									<Card className="overflow-hidden border-2 border-teal-100 shadow-md">
+										<CardHeader className="bg-teal-50 pb-2">
+											<CardTitle className="flex items-center gap-2">
+												<Img
+													src={audioIcon}
+													alt="Audio icon"
+													width={24}
+													height={24}
+												/>
+												Mix Tape Creator
+											</CardTitle>
+										</CardHeader>
+										<CardContent className="pt-6">
+											<div className="space-y-4">
+												<p className="text-sm">
+													Send songs, create playlists, and share the soundtrack
+													of your memories!
+												</p>
+												<div className="rounded-lg bg-gray-50 p-4">
+													<p className="text-sm font-medium">Fun Ideas:</p>
+													<ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-600">
+														<li>
+															"Everyone add a song that reminds you of Emma"
+														</li>
+														<li>
+															"Create a birthday morning playlist to wake up to"
+														</li>
+														<li>
+															"Record yourself singing happy birthday (no matter
+															how off-key!)"
+														</li>
+													</ul>
+												</div>
+											</div>
+										</CardContent>
+									</Card>
+
+									<Card className="overflow-hidden border-2 border-teal-100 shadow-md">
+										<CardHeader className="bg-teal-50 pb-2">
+											<CardTitle className="flex items-center gap-2">
+												<MessageCircle className="h-5 w-5 text-teal-500" />
+												Family Challenges
+											</CardTitle>
+										</CardHeader>
+										<CardContent className="pt-6">
+											<div className="space-y-4">
+												<p className="text-sm">
+													Create friendly competitions between family members!
+												</p>
+												<div className="rounded-lg bg-gray-50 p-4">
+													<p className="text-sm font-medium">
+														Challenge Examples:
+													</p>
+													<ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-600">
+														<li>
+															"Who can score better on an SAT math test, Aunt
+															Lanna or Uncle Brendan?"
+														</li>
+														<li>
+															"Grandma vs. Grandpa: Who knows the birthday boy
+															better?"
+														</li>
+														<li>
+															"Cousins challenge: Who can do the most jumping
+															jacks in 30 seconds?"
+														</li>
+													</ul>
+												</div>
+											</div>
+										</CardContent>
+									</Card>
+
+									<Card className="overflow-hidden border-2 border-teal-100 shadow-md">
+										<CardHeader className="bg-teal-50 pb-2">
+											<CardTitle className="flex items-center gap-2">
+												<Play className="h-5 w-5 text-teal-500" />
+												Video Time Capsules
+											</CardTitle>
+										</CardHeader>
+										<CardContent className="pt-6">
+											<div className="space-y-4">
+												<p className="text-sm">
+													Record special messages, challenges, and predictions
+													for the future!
+												</p>
+												<div className="rounded-lg bg-gray-50 p-4">
+													<p className="text-sm font-medium">Prompt Ideas:</p>
+													<ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-600">
+														<li>
+															"Record your prediction: What will Noah be when he
+															grows up?"
+														</li>
+														<li>
+															"Show and tell: Share something special from your
+															childhood"
+														</li>
+														<li>
+															"Eat 5 crackers and try to whistle the happy
+															birthday song!"
+														</li>
+													</ul>
+												</div>
+											</div>
+										</CardContent>
+									</Card>
+								</div>
+
+								<div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-teal-500 to-teal-400 p-8 md:p-10">
+									<div className="relative z-10 mx-auto max-w-3xl text-center">
+										<h3 className="mb-4 text-2xl font-bold text-white">
+											More Than Just Gifts
+										</h3>
+										<p className="mb-6 text-white">
+											Digital Memories turn ordinary gift-giving into
+											extraordinary experiences. Long after the toys are
+											outgrown and the clothes don't fit, these playful
+											interactions become treasured keepsakes that capture
+											personalities, relationships, and special moments in time.
+										</p>
+										<Button className="bg-white text-teal-500 hover:bg-gray-100">
+											Create Your Memory Collection
+										</Button>
+									</div>
+									<div className="absolute inset-0 opacity-10">
+										<Img
+											src="/polaroid-background.png"
+											alt="Background pattern"
+											width={1200}
+											height={600}
+											className="h-full w-full object-cover"
 										/>
 									</div>
-									<h3 className="text-2xl font-bold">Interactive Giving</h3>
 								</div>
-								<p className="mb-8 text-gray-600">
-									Contributors don't just give gifts—they share personal
-									messages, photos, videos, and audio recordings.
-								</p>
 
-								<div className="grid grid-cols-2 gap-4">
-									{/* Text Prompts */}
-									<div className="rounded-lg bg-orange-50 p-4">
-										<Icon
-											name="envelope-closed"
-											className="mb-3 h-5 w-5 text-orange-400"
-										/>
-										<h4 className="mb-2 font-semibold">Text Prompts</h4>
-										<p className="mb-2 text-sm text-gray-600">
-											Share personal stories and memories in writing.
-										</p>
-										<p className="text-sm italic text-gray-500">
-											"What was your favorite toy as a kid?"
+								<div className="grid gap-6 md:grid-cols-3">
+									<div className="rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
+										<div className="mb-4 flex justify-center">
+											<div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
+												<Gift className="h-6 w-6 text-teal-600" />
+											</div>
+										</div>
+										<h3 className="mb-2 text-center font-medium">
+											Alongside Gifts
+										</h3>
+										<p className="text-center text-sm text-gray-500">
+											Add fun digital memories to complement physical gifts in
+											any registry.
 										</p>
 									</div>
 
-									{/* Photo Booth */}
-									<div className="rounded-lg bg-orange-50 p-4">
-										<Icon
-											name="camera"
-											className="mb-3 h-5 w-5 text-orange-400"
-										/>
-										<h4 className="mb-2 font-semibold">Photo Booth</h4>
-										<p className="mb-2 text-sm text-gray-600">
-											Capture fun moments with our built-in photo booth.
-										</p>
-										<p className="text-sm italic text-gray-500">
-											"Strike a silly pose to make Emma laugh!"
-										</p>
-									</div>
-
-									{/* Video Messages */}
-									<div className="rounded-lg bg-orange-50 p-4">
-										<Icon
-											name="camera"
-											className="mb-3 h-5 w-5 text-orange-400"
-										/>
-										<h4 className="mb-2 font-semibold">Video Messages</h4>
-										<p className="mb-2 text-sm text-gray-600">
-											Record personalized video messages and challenges.
-										</p>
-										<p className="text-sm italic text-gray-500">
-											"Eat 5 crackers and try to whistle!"
+									<div className="rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
+										<div className="mb-4 flex justify-center">
+											<div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
+												<Img
+													src="../../assets/images/featuresimple-audio-icon.png"
+													alt="Audio icon"
+													width={24}
+													height={24}
+												/>
+											</div>
+										</div>
+										<h3 className="mb-2 text-center font-medium">
+											As a Standalone
+										</h3>
+										<p className="text-center text-sm text-gray-500">
+											Create a digital-only collection for distant relatives or
+											no-gift celebrations.
 										</p>
 									</div>
 
-									{/* Audio Recordings */}
-									<div className="rounded-lg bg-orange-50 p-4">
-										<Icon
-											name="plus"
-											className="mb-3 h-5 w-5 text-orange-400"
-										/>
-										<h4 className="mb-2 font-semibold">Audio Recordings</h4>
-										<p className="mb-2 text-sm text-gray-600">
-											Share songs, stories, or special messages.
-										</p>
-										<p className="text-sm italic text-gray-500">
-											"Sing your favorite childhood song!"
+									<div className="rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
+										<div className="mb-4 flex justify-center">
+											<div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
+												<Heart className="h-6 w-6 text-teal-600" />
+											</div>
+										</div>
+										<h3 className="mb-2 text-center font-medium">
+											For Any Occasion
+										</h3>
+										<p className="text-center text-sm text-gray-500">
+											Birthdays, graduations, holidays, or just because—digital
+											memories fit every celebration.
 										</p>
 									</div>
 								</div>
-
-								<p className="mt-8 text-center text-sm text-gray-600">
-									All these interactive elements become treasured memories that
-									last far longer than physical gifts.
-								</p>
-							</div>
-
-							{/* Child Profiles Card */}
-							<div className="rounded-2xl border border-red-100 bg-white p-8 shadow-lg">
-								<div className="mb-6 flex items-center gap-4">
-									<div className="rounded-full bg-red-50 p-3">
-										<Icon name="avatar" className="h-6 w-6 text-red-400" />
-									</div>
-									<h3 className="text-2xl font-bold">Child Profiles</h3>
-								</div>
-								<p className="mb-8 text-gray-600">
-									Each child's profile showcases their personality,
-									achievements, and aspirations.
-								</p>
-
-								{/* Past Year Achievements */}
-								<div className="mb-6 rounded-lg bg-red-50 p-6">
-									<div className="mb-3 flex items-center gap-3">
-										<Icon name="check" className="h-6 w-6 text-red-400" />
-										<h4 className="text-xl font-semibold">
-											Past Year Achievements
-										</h4>
-									</div>
-									<p className="mb-2 text-gray-700">
-										Celebrate milestones like learning to swim, riding a bike,
-										or reading independently.
-									</p>
-									<p className="text-sm text-gray-500">
-										Helps gift-givers understand what matters to your child.
-									</p>
-								</div>
-
-								{/* Memory Gallery */}
-								<div className="mb-6 rounded-lg bg-red-50 p-6">
-									<div className="mb-3 flex items-center gap-3">
-										<Icon name="camera" className="h-6 w-6 text-red-400" />
-										<h4 className="text-xl font-semibold">Memory Gallery</h4>
-									</div>
-									<p className="mb-2 text-gray-700">
-										Share favorite photos and moments from the past year in a
-										beautiful gallery.
-									</p>
-									<p className="text-sm text-gray-500">
-										Creates a visual timeline of your child's growth and
-										experiences.
-									</p>
-								</div>
-
-								{/* Future Goals */}
-								<div className="mb-6 rounded-lg bg-red-50 p-6">
-									<div className="mb-3 flex items-center gap-3">
-										<Icon name="plus" className="h-6 w-6 text-red-400" />
-										<h4 className="text-xl font-semibold">Future Goals</h4>
-									</div>
-									<p className="mb-2 text-gray-700">
-										Highlight what they're looking forward to learning or
-										experiencing.
-									</p>
-									<p className="text-sm text-gray-500">
-										Inspires gifts that support their dreams and aspirations.
-									</p>
-								</div>
-
-								<p className="text-center text-sm text-gray-600">
-									Profiles help gift-givers connect with your child on a deeper
-									level, leading to more meaningful gifts.
-								</p>
-							</div>
-						</div>
+							</TabsContent>
+						</Tabs>
 					</div>
 				</section>
 
