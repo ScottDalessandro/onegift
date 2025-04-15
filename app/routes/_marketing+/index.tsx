@@ -1,23 +1,3 @@
-import { Link } from 'react-router'
-import { Button } from '#app/components/ui/button'
-import { Img } from 'openimg/react'
-import { cn } from '#app/utils/misc.tsx'
-import { type Route } from './+types/index'
-import { useState, useEffect } from 'react'
-import { Icon } from '#app/components/ui/icon'
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from '#app/components/ui/card'
-import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from '#app/components/ui/tabs'
-import { theme } from '#app/utils/theme'
 import {
 	ArrowRight,
 	Check,
@@ -28,26 +8,42 @@ import {
 	Plus,
 	User,
 } from 'lucide-react'
-
-import cameraIcon from '../../assets/images/features/classic-camera-icon.png'
-import audioIcon from '../../assets/images/features/simple-audio-icon.png'
-// import { ImageAsset } from '#app/components/ImageAsset'
-// import giftPattern from '#app/assets/images/backgrounds/gift-pattern.svg'
-
+import { Img } from 'openimg/react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router'
+import { Button } from '#app/components/ui/button'
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from '#app/components/ui/card'
+import { Icon } from '#app/components/ui/icon'
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '#app/components/ui/tabs'
+import { cn } from '#app/utils/misc.tsx'
+import { theme } from '#app/utils/theme'
+import { type Route } from './+types/index'
+import beckettImage from '#app/assets/images/hero/beckett-birthday-edited.jpg'
+import mikaylaImage from '#app/assets/images/hero/mikayla-10.jpg'
 // Temporary placeholder image URL
 const placeholderImage =
 	'https://placehold.co/800x600/rose/white/png?text=Coming+Soon'
 
 const heroSlides = [
 	{
-		image: 'app/assets/images/hero/beckett-birthday-edited.jpg',
+		image: '/img/hero/beckett-birthday-edited.jpg',
 		alt: 'A child celebrating their birthday with mindfully chosen gifts',
 		heading: 'Meaningful Gifts for Growing Minds',
 		subheading:
 			'Create a registry that focuses on quality, not quantity. Help reduce clutter and create more meaningful gift-giving experiences.',
 	},
 	{
-		image: 'app/assets/images/hero/mikayla-10.jpg',
+		image: '/img/hero/mikayla-10.jpg',
 		alt: 'A child engaged in an experiential gift activity',
 		heading: 'Give the Gift of Experience',
 		subheading: 'Create lasting memories through thoughtful experiences',
@@ -125,27 +121,32 @@ export default function Index() {
 
 						{/* Right Slider */}
 						<div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-2xl md:aspect-[16/10]">
-							{heroSlides.map((slide, index) => (
-								<div
-									key={index}
-									className={cn(
-										'absolute inset-0 transition-opacity duration-1000',
-										index === currentSlide ? 'opacity-100' : 'opacity-0',
-									)}
-								>
-									<img
-										src={slide.image}
-										alt={slide.alt}
-										className="h-full w-full object-cover"
-									/>
-									<div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-									{/* <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-										<p className="text-lg font-medium">
-											Create joyful memories that last a lifetime
-										</p>
-									</div> */}
-								</div>
-							))}
+							{heroSlides.map((slide, index) => {
+								console.log('slide', slide)
+								return (
+									<div
+										key={index}
+										className={cn(
+											'absolute inset-0 transition-opacity duration-1000',
+											index === currentSlide ? 'opacity-100' : 'opacity-0',
+										)}
+									>
+										<Img
+											src={slide.image}
+											alt={slide.alt}
+											className="h-full w-full object-cover"
+											width={1000}
+											height={1000}
+										/>
+										<div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+										{/* <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <p className="text-lg font-medium">
+                    Create joyful memories that last a lifetime
+                </p>
+            </div> */}
+									</div>
+								)
+							})}
 
 							{/* Slider Navigation */}
 							<div className="absolute bottom-16 left-6 flex gap-2">
@@ -584,7 +585,7 @@ export default function Index() {
 									<Card className="overflow-hidden border-2 border-teal-100 shadow-md">
 										<CardHeader className="bg-teal-50 pb-2">
 											<CardTitle className="flex items-center gap-2">
-												<Img
+												<img
 													src="app/assets/images/features/classic-camera-icon.png"
 													alt="Camera icon"
 													width={24}
@@ -623,7 +624,7 @@ export default function Index() {
 										<CardHeader className="bg-teal-50 pb-2">
 											<CardTitle className="flex items-center gap-2">
 												<Img
-													src={audioIcon}
+													src="app/assets/images/features/simple-audio-icon.png"
 													alt="Audio icon"
 													width={24}
 													height={24}
