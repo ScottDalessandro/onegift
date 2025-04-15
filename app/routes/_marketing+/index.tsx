@@ -28,8 +28,7 @@ import {
 import { cn } from '#app/utils/misc.tsx'
 import { theme } from '#app/utils/theme'
 import { type Route } from './+types/index'
-import beckettImage from '#app/assets/images/hero/beckett-birthday-edited.jpg'
-import mikaylaImage from '#app/assets/images/hero/mikayla-10.jpg'
+
 // Temporary placeholder image URL
 const placeholderImage =
 	'https://placehold.co/800x600/rose/white/png?text=Coming+Soon'
