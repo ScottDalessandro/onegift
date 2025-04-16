@@ -28,6 +28,8 @@ import {
 import { cn } from '#app/utils/misc.tsx'
 import { theme } from '#app/utils/theme'
 import { type Route } from './+types/index'
+import cameraIcon from '#app/assets/images/features/classic-camera-icon.png'
+import audioIcon from '#app/assets/images/features/simple-audio-icon.png'
 
 // Temporary placeholder image URL
 const placeholderImage =
@@ -73,7 +75,7 @@ export default function Index() {
 		<div className="flex min-h-screen flex-col bg-[#f9f7fe]">
 			<main className="flex-1">
 				{/* Hero Section */}
-				<section className="relative bg-[#f9f7fe] py-12">
+				<section className="relative bg-[#f9f7fe] py-12 md:py-24 lg:py-32 xl:py-36">
 					{/* Background Blobs */}
 					<div className="absolute inset-0 overflow-hidden">
 						{/* Pink blob in top left */}
@@ -585,7 +587,7 @@ export default function Index() {
 										<CardHeader className="bg-teal-50 pb-2">
 											<CardTitle className="flex items-center gap-2">
 												<img
-													src="app/assets/images/features/classic-camera-icon.png"
+													src={cameraIcon}
 													alt="Camera icon"
 													width={24}
 													height={24}
@@ -622,8 +624,8 @@ export default function Index() {
 									<Card className="overflow-hidden border-2 border-teal-100 shadow-md">
 										<CardHeader className="bg-teal-50 pb-2">
 											<CardTitle className="flex items-center gap-2">
-												<Img
-													src="app/assets/images/features/simple-audio-icon.png"
+												<img
+													src={audioIcon}
 													alt="Audio icon"
 													width={24}
 													height={24}
@@ -772,8 +774,8 @@ export default function Index() {
 									<div className="rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
 										<div className="mb-4 flex justify-center">
 											<div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
-												<Img
-													src="../../assets/images/featuresimple-audio-icon.png"
+												<img
+													src={audioIcon}
 													alt="Audio icon"
 													width={24}
 													height={24}
