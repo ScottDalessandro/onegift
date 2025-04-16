@@ -329,7 +329,7 @@ test('login as existing user', async ({ page, insertNewUser }) => {
 	await page.goto('/login')
 	await page.getByRole('textbox', { name: /username/i }).fill(user.username)
 	await page.getByLabel(/^password$/i).fill(password)
-	await page.getByRole('button', { name: /log in/i }).click()
+	await page.getByRole('button', { name: /log in/i, exact: true }).filter({ hasText: 'Log in' }).click()
 	await expect(page).toHaveURL(`/`)
 
 	await expect(page.getByRole('link', { name: user.name })).toBeVisible()
@@ -377,12 +377,12 @@ test('reset password with a link', async ({ page, insertNewUser }) => {
 	await expect(page).toHaveURL('/login')
 	await page.getByRole('textbox', { name: /username/i }).fill(user.username)
 	await page.getByLabel(/^password$/i).fill(originalPassword)
-	await page.getByRole('button', { name: /log in/i }).click()
+	await page.getByRole('button', { name: /log in/i, exact: true }).filter({ hasText: 'Log in' }).click()
 
 	await expect(page.getByText(/invalid username or password/i)).toBeVisible()
 
 	await page.getByLabel(/^password$/i).fill(newPassword)
-	await page.getByRole('button', { name: /log in/i }).click()
+	await page.getByRole('button', { name: /log in/i, exact: true }).filter({ hasText: 'Log in' }).click()
 
 	await expect(page).toHaveURL(`/`)
 
