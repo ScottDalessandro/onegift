@@ -27,14 +27,6 @@ import { UserDropdown } from './components/user-dropdown.tsx'
 
 import tailwindStyleSheetUrl from './styles/tailwind.css?url'
 import { getUserId, logout } from './utils/auth.server.ts'
-
-import {
-
-	useOptionalTheme,
-
-} from './routes/resources+/theme-switch.tsx'
-import tailwindStyleSheetUrl from './styles/tailwind.css?url'
-import { getUserId, logout } from './utils/auth.server.ts'
 // import { ClientHintCheck, getHints } from './utils/client-hints.tsx'
 
 import { prisma } from './utils/db.server.ts'
