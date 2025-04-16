@@ -28,7 +28,7 @@ async function getCacheDir() {
 export async function loader({ request }: Route.LoaderArgs) {
 	const url = new URL(request.url)
 	const searchParams = url.searchParams
-
+	console.log('searchParams', searchParams)
 	const headers = new Headers()
 	headers.set('Cache-Control', 'public, max-age=31536000, immutable')
 
@@ -53,6 +53,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 			}
 
 			const src = searchParams.get('src')
+			console.log('src', src)
 			invariantResponse(src, 'src query parameter is required', { status: 400 })
 
 			if (URL.canParse(src)) {
@@ -65,6 +66,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 			// Retrieve image from filesystem (public folder)
 			if (src.startsWith('/assets')) {
 				// Files managed by Vite
+				console.log('vite')
 				return {
 					type: 'fs',
 					path: '.' + src,

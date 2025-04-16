@@ -9,7 +9,7 @@ import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { CheckboxField, ErrorList, Field } from '#app/components/forms.tsx'
 import { Spacer } from '#app/components/spacer.tsx'
-import { Icon } from '#app/components/ui/icon.tsx'
+import { Key } from 'lucide-react'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
 import { login, requireAnonymous } from '#app/utils/auth.server.ts'
 import {
@@ -287,7 +287,7 @@ function PasskeyLogin({
 				disabled={isPending}
 			>
 				<span className="inline-flex items-center gap-1.5">
-					<Icon name="passkey" />
+					<Key className="h-5 w-5" />
 					<span>{passkeyMessage}</span>
 				</span>
 			</StatusButton>

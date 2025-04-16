@@ -1,3 +1,32 @@
 // This file is a fallback until you run npm run build:icons
 
-export type IconName = string
+export type IconName =
+  | 'arrow-left'
+  | 'arrow-right'
+  | 'avatar'
+  | 'camera'
+  | 'check'
+  | 'clock'
+  | 'cross-1'
+  | 'dots-horizontal'
+  | 'download'
+  | 'envelope-closed'
+  | 'exit'
+  | 'file-text'
+  | 'gift'
+  | 'github-logo'
+  | 'laptop'
+  | 'link-2'
+  | 'lock-closed'
+  | 'lock-open-1'
+  | 'magnifying-glass'
+  | 'moon'
+  | 'passkey'
+  | 'pencil-1'
+  | 'pencil-2'
+  | 'plus'
+  | 'question-mark-circled'
+  | 'reset'
+  | 'sun'
+  | 'trash'
+  | 'update';
