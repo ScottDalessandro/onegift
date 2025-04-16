@@ -1,5 +1,4 @@
 import {
-	ArrowRight,
 	Check,
 	Gift,
 	Heart,
@@ -11,6 +10,8 @@ import {
 import { Img } from 'openimg/react'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router'
+import cameraIcon from '#app/assets/images/features/classic-camera-icon.png'
+import audioIcon from '#app/assets/images/features/simple-audio-icon.png'
 import { Button } from '#app/components/ui/button'
 import {
 	Card,
@@ -26,10 +27,7 @@ import {
 	TabsTrigger,
 } from '#app/components/ui/tabs'
 import { cn } from '#app/utils/misc.tsx'
-import { theme } from '#app/utils/theme'
 import { type Route } from './+types/index'
-import cameraIcon from '#app/assets/images/features/classic-camera-icon.png'
-import audioIcon from '#app/assets/images/features/simple-audio-icon.png'
 
 // Temporary placeholder image URL
 const placeholderImage =
@@ -123,7 +121,6 @@ export default function Index() {
 						{/* Right Slider */}
 						<div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-2xl md:aspect-[16/10]">
 							{heroSlides.map((slide, index) => {
-								console.log('slide', slide)
 								return (
 									<div
 										key={index}
