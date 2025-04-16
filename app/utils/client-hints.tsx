@@ -10,7 +10,7 @@ import {
 import { clientHint as timeZoneHint } from '@epic-web/client-hints/time-zone'
 import * as React from 'react'
 import { useRevalidator } from 'react-router'
-import { useOptionalRequestInfo, useRequestInfo } from './request-info.ts'
+// import { useOptionalRequestInfo, useRequestInfo } from './request-info.ts'
 
 const hintsUtils = getHintUtils({
 	theme: colorSchemeHint,
@@ -23,15 +23,15 @@ export const { getHints } = hintsUtils
 /**
  * @returns an object with the client hints and their values
  */
-export function useHints() {
-	const requestInfo = useRequestInfo()
-	return requestInfo.hints
-}
+// export function useHints() {
+// 	const requestInfo = useRequestInfo()
+// 	return requestInfo.hints
+// }
 
-export function useOptionalHints() {
-	const requestInfo = useOptionalRequestInfo()
-	return requestInfo?.hints
-}
+// export function useOptionalHints() {
+// 	const requestInfo = useOptionalRequestInfo()
+// 	return requestInfo?.hints
+// }
 
 /**
  * @returns inline script element that checks for client hints and sets cookies
