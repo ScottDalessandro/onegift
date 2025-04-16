@@ -45,6 +45,7 @@ test('Users can add 2FA to their account and use it when logging in', async ({
 	await page.getByRole('textbox', { name: /username/i }).fill(user.username)
 	await page.getByLabel(/^password$/i).fill(password)
 	await page.getByRole('button', { name: /log in/i, exact: true }).first().click()
+	await page.waitForURL('/login/2fa')
 
 	await page.getByRole('textbox', { name: /code/i }).fill(
 		(
