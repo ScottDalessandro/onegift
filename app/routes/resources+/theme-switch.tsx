@@ -5,9 +5,9 @@ import { data, redirect, useFetcher, useFetchers } from 'react-router'
 import { ServerOnly } from 'remix-utils/server-only'
 import { z } from 'zod'
 import { Icon } from '#app/components/ui/icon.tsx'
-import { useHints, useOptionalHints } from '#app/utils/client-hints.tsx'
+// import { useHints, useOptionalHints } from '#app/utils/client-hints.tsx'
 import {
-	useOptionalRequestInfo,
+	// useOptionalRequestInfo,
 	useRequestInfo,
 } from '#app/utils/request-info.ts'
 import { type Theme, setTheme } from '#app/utils/theme.server.ts'
@@ -122,22 +122,22 @@ export function useOptimisticThemeMode() {
  * @returns the user's theme preference, or the client hint theme if the user
  * has not set a preference.
  */
-export function useTheme() {
-	const hints = useHints()
-	const requestInfo = useRequestInfo()
-	const optimisticMode = useOptimisticThemeMode()
-	if (optimisticMode) {
-		return optimisticMode === 'system' ? hints.theme : optimisticMode
-	}
-	return requestInfo.userPrefs.theme ?? hints.theme
-}
+// export function useTheme() {
+// 	const hints = useHints()
+// 	const requestInfo = useRequestInfo()
+// 	const optimisticMode = useOptimisticThemeMode()
+// 	if (optimisticMode) {
+// 		return optimisticMode === 'system' ? hints.theme : optimisticMode
+// 	}
+// 	return requestInfo.userPrefs.theme ?? hints.theme
+// }
 
-export function useOptionalTheme() {
-	const optionalHints = useOptionalHints()
-	const optionalRequestInfo = useOptionalRequestInfo()
-	const optimisticMode = useOptimisticThemeMode()
-	if (optimisticMode) {
-		return optimisticMode === 'system' ? optionalHints?.theme : optimisticMode
-	}
-	return optionalRequestInfo?.userPrefs.theme ?? optionalHints?.theme
-}
+// export function useOptionalTheme() {
+// 	const optionalHints = useOptionalHints()
+// 	const optionalRequestInfo = useOptionalRequestInfo()
+// 	const optimisticMode = useOptimisticThemeMode()
+// 	if (optimisticMode) {
+// 		return optimisticMode === 'system' ? optionalHints?.theme : optimisticMode
+// 	}
+// 	return optionalRequestInfo?.userPrefs.theme ?? optionalHints?.theme
+// }
