@@ -25,13 +25,13 @@ import { href as iconsHref } from './components/ui/icon.tsx'
 import { EpicToaster } from './components/ui/sonner.tsx'
 import { UserDropdown } from './components/user-dropdown.tsx'
 import {
-	ThemeSwitch,
+	// ThemeSwitch,
 	useOptionalTheme,
-	useTheme,
+	// useTheme,
 } from './routes/resources+/theme-switch.tsx'
 import tailwindStyleSheetUrl from './styles/tailwind.css?url'
 import { getUserId, logout } from './utils/auth.server.ts'
-import { ClientHintCheck, getHints } from './utils/client-hints.tsx'
+// import { ClientHintCheck, getHints } from './utils/client-hints.tsx'
 import { prisma } from './utils/db.server.ts'
 import { getEnv } from './utils/env.server.ts'
 import { pipeHeaders } from './utils/headers.server.ts'
@@ -114,7 +114,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 		{
 			user,
 			requestInfo: {
-				hints: getHints(request),
+				// hints: getHints(request),
 				origin: getDomainUrl(request),
 				path: new URL(request.url).pathname,
 				userPrefs: {
@@ -151,7 +151,7 @@ function Document({
 	return (
 		<html lang="en" className={`${theme} h-full overflow-x-hidden`}>
 			<head>
-				<ClientHintCheck nonce={nonce} />
+				{/* <ClientHintCheck nonce={nonce} /> */}
 				<Meta />
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -190,7 +190,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 function App() {
 	const data = useLoaderData<typeof loader>()
 	const user = useOptionalUser()
-	const theme = useTheme()
+	// const theme = useTheme()
 	const matches = useMatches()
 
 	useToast(data.toast)
@@ -256,7 +256,8 @@ function App() {
 					<ThemeSwitch userPreference={data.requestInfo.userPrefs.theme} />
 				</div> */}
 			</div>
-			<EpicToaster closeButton position="top-center" theme={theme} />
+			{/* <EpicToaster closeButton position="top-center" theme={theme} /> */}
+			<EpicToaster closeButton position="top-center" theme="light" />
 			<EpicProgress />
 		</OpenImgContextProvider>
 	)
