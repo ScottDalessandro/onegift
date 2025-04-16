@@ -134,8 +134,8 @@ export default function Index() {
 											src={slide.image}
 											alt={slide.alt}
 											className="h-full w-full object-cover"
-											width={1000}
-											height={1000}
+											width={1200}
+											height={1200}
 										/>
 										<div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
 										{/* <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -243,7 +243,7 @@ export default function Index() {
 					</div>
 				</section>
 
-				<section id="our-products" className="py-12 md:py-24 lg:py-32">
+				<section id="our-products" className="bg-white py-12 md:py-24 lg:py-32">
 					<div className="container px-4 md:px-6">
 						<div className="flex flex-col items-center justify-center space-y-4 text-center">
 							<h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -809,6 +809,73 @@ export default function Index() {
 					</div>
 				</section>
 
+				<section
+					id="child-profiles"
+					className="bg-gray-50 py-12 md:py-24 lg:py-32"
+				>
+					<div className="container px-4 md:px-6">
+						<div className="grid gap-12 lg:grid-cols-2">
+							<div className="flex flex-col justify-center space-y-4">
+								<div className="flex items-center gap-2">
+									<User className="h-6 w-6 text-teal-500" />
+									<h2 className="text-2xl font-bold">Child Profiles</h2>
+								</div>
+								<p className="text-gray-500">
+									Each child's profile showcases their personality,
+									achievements, and aspirations.
+								</p>
+								<ul className="space-y-4">
+									<li className="flex items-start gap-2">
+										<Check className="mt-0.5 h-5 w-5 text-teal-500" />
+										<div>
+											<h3 className="font-medium">Past Year Achievements</h3>
+											<p className="text-sm text-gray-500">
+												Celebrate milestones like learning to swim, riding a
+												bike, or reading independently.
+											</p>
+										</div>
+									</li>
+									<li className="flex items-start gap-2">
+										<Check className="mt-0.5 h-5 w-5 text-teal-500" />
+										<div>
+											<h3 className="font-medium">Memory Gallery</h3>
+											<p className="text-sm text-gray-500">
+												Share favorite photos and moments from the past year in
+												a beautiful gallery.
+											</p>
+										</div>
+									</li>
+									<li className="flex items-start gap-2">
+										<Check className="mt-0.5 h-5 w-5 text-teal-500" />
+										<div>
+											<h3 className="font-medium">Future Goals</h3>
+											<p className="text-sm text-gray-500">
+												Highlight what they're looking forward to learning or
+												experiencing.
+											</p>
+										</div>
+									</li>
+								</ul>
+								<p className="text-sm text-gray-500">
+									Profiles help gift-givers connect with your child on a deeper
+									level, leading to more meaningful gifts.
+								</p>
+							</div>
+							<div className="flex items-center justify-center">
+								<div className="relative h-[400px] w-full">
+									<Img
+										src="/img/child-achievement-collage.png"
+										alt="Child profile with achievements and memories"
+										width={400}
+										height={400}
+										className="rounded-xl object-cover"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
 				{/* CTA Section */}
 				<section className="bg-[#00BFA5] py-24 text-center">
 					<div className="container mx-auto px-4">
@@ -842,100 +909,90 @@ export default function Index() {
 						</div>
 					</div>
 				</section>
-
-				{/* Footer */}
-				<footer className="bg-white py-16">
-					<div className="container mx-auto px-4">
-						<div className="mb-8 grid grid-cols-4 gap-8">
-							{/* Column 1 - Wish & Well */}
-							<div>
-								<h3 className="mb-4 font-bold">Wish & Well</h3>
-								<div className="mb-2 flex items-center gap-2">
-									<Icon name="gift" className="h-5 w-5 text-[#00BFA5]" />
-									<span className="font-bold">Wish & Well</span>
-								</div>
-								<p className="text-gray-600">
-									Meaningful gifts for growing minds.
-								</p>
+			</main>
+			{/* Footer */}
+			<footer className="border-t bg-background">
+				<div className="container px-4 py-12 md:px-6">
+					<div className="grid gap-8 lg:grid-cols-4">
+						<div className="space-y-4">
+							<div className="flex items-center gap-2">
+								<Gift className="h-6 w-6 text-teal-500" />
+								<span className="text-xl font-bold">
+									Wish <span className="text-teal-500">&</span> Well
+								</span>
 							</div>
-
-							{/* Column 2 - Registry Types */}
-							<div>
-								<h3 className="mb-4 font-bold">Registry Types</h3>
-								<ul className="space-y-2 text-gray-600">
-									<li>
-										<Link to="/standard-registry">Standard Registry</Link>
-									</li>
-									<li>
-										<Link to="/onegift">OneGift</Link>
-									</li>
-									<li>
-										<Link to="/reverse-gift-list">Reverse Gift List</Link>
-									</li>
-								</ul>
-							</div>
-
-							{/* Column 3 - Company */}
-							<div>
-								<h3 className="mb-4 font-bold">Company</h3>
-								<ul className="space-y-2 text-gray-600">
-									<li>
-										<Link to="/about">About Us</Link>
-									</li>
-									<li>
-										<Link to="/blog">Blog</Link>
-									</li>
-									<li>
-										<Link to="/careers">Careers</Link>
-									</li>
-								</ul>
-							</div>
-
-							{/* Column 4 - Legal */}
-							<div>
-								<h3 className="mb-4 font-bold">Legal</h3>
-								<ul className="space-y-2 text-gray-600">
-									<li>
-										<Link to="/terms">Terms</Link>
-									</li>
-									<li>
-										<Link to="/privacy">Privacy</Link>
-									</li>
-									<li>
-										<Link to="/cookies">Cookies</Link>
-									</li>
-								</ul>
-							</div>
-						</div>
-
-						<div className="flex items-center justify-between border-t border-gray-200 pt-8">
-							<p className="text-gray-600">
-								© 2025 Wish & Well. All rights reserved.
+							<p className="text-sm text-gray-500">
+								Meaningful gifts for growing minds.
 							</p>
-							<div className="flex items-center gap-4">
-								<Link
-									to="https://facebook.com"
-									className="text-gray-400 hover:text-gray-600"
-								>
-									<Icon name="plus" className="h-5 w-5" />
-								</Link>
-								<Link
-									to="https://instagram.com"
-									className="text-gray-400 hover:text-gray-600"
-								>
-									<Icon name="camera" className="h-5 w-5" />
-								</Link>
-								<Link
-									to="https://twitter.com"
-									className="text-gray-400 hover:text-gray-600"
-								>
-									<Icon name="plus" className="h-5 w-5" />
-								</Link>
-							</div>
+						</div>
+						<div className="space-y-4">
+							<h3 className="text-lg font-medium">Registry Types</h3>
+							<ul className="space-y-2 text-sm text-gray-500">
+								<li>
+									<Link to="#" className="hover:text-teal-500">
+										Balanced Wishes Registry
+									</Link>
+								</li>
+								<li>
+									<Link to="#" className="hover:text-teal-500">
+										OneGift
+									</Link>
+								</li>
+								<li>
+									<Link to="#" className="hover:text-teal-500">
+										Reverse Gift List
+									</Link>
+								</li>
+							</ul>
+						</div>
+						<div className="space-y-4">
+							<h3 className="text-lg font-medium">Company</h3>
+							<ul className="space-y-2 text-sm text-gray-500">
+								<li>
+									<Link to="#" className="hover:text-teal-500">
+										About Us
+									</Link>
+								</li>
+								<li>
+									<Link to="#" className="hover:text-teal-500">
+										Blog
+									</Link>
+								</li>
+								<li>
+									<Link to="#" className="hover:text-teal-500">
+										Careers
+									</Link>
+								</li>
+							</ul>
+						</div>
+						<div className="space-y-4">
+							<h3 className="text-lg font-medium">Legal</h3>
+							<ul className="space-y-2 text-sm text-gray-500">
+								<li>
+									<Link to="#" className="hover:text-teal-500">
+										Terms
+									</Link>
+								</li>
+								<li>
+									<Link to="#" className="hover:text-teal-500">
+										Privacy
+									</Link>
+								</li>
+								<li>
+									<Link to="#" className="hover:text-teal-500">
+										Cookies
+									</Link>
+								</li>
+							</ul>
 						</div>
 					</div>
-				</footer>
-			</main>
+					<div className="mt-12 border-t pt-6">
+						<p className="text-center text-sm text-gray-500">
+							© 2025 Wish & Well. All rights reserved.
+						</p>
+					</div>
+				</div>
+			</footer>
 		</div>
 	)
 }
