@@ -1,4 +1,4 @@
-import { Link } from 'react-router'
+import { Link, useLoaderData } from 'react-router'
 import {
 	Card,
 	CardContent,
@@ -6,38 +6,132 @@ import {
 	CardTitle,
 } from '#app/components/ui/card'
 import { Progress } from '#app/components/ui/progress'
+import { type Route } from './+types/index'
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
 } from '#app/components/ui/tabs'
+import { prisma } from '#app/utils/db.server'
+import { requireUserId } from '#app/utils/auth.server'
+import {
+	getActiveRegistriesCount,
+	getMostRecentRegistry,
+	calculateRegistryCompletion,
+} from '#app/models/registry.server'
+import { getDigitalMemoriesCount } from '#app/models/memories.server'
+import { getRegistryVisitorsCount } from '#app/models/visitors.server'
+import { calculatePercentageChange } from '#app/utils/metrics.server'
+import { NotFoundError } from '#app/utils/errors.server'
 
-export default function DashboardIndex() {
-	// This would come from your data loader in a real app
-	const dashboardData = {
+export type DashboardData = {
+	activeRegistries: {
+		count: number
+		change: number
+	}
+	digitalMemories: {
+		count: number
+		change: number
+	}
+	registryVisitors: {
+		count: number
+		change: number
+	}
+	recentActivity: {
+		title: string
+		date: string
+		progress: number
+		remainingSteps: string[]
+	}
+}
+
+export async function loader({ request }: Route.LoaderArgs) {
+	const userId = await requireUserId(request)
+
+	// Calculate dates for comparison
+	const currentDate = new Date()
+	const thirtyDaysAgo = new Date(
+		currentDate.getTime() - 30 * 24 * 60 * 60 * 1000,
+	)
+
+	// Fetch all current and previous counts in parallel
+	const [
+		currentRegistriesCount,
+		previousRegistriesCount,
+		currentMemoriesCount,
+		previousMemoriesCount,
+		currentVisitorsCount,
+		previousVisitorsCount,
+	] = await Promise.all([
+		getActiveRegistriesCount(userId),
+		getActiveRegistriesCount(userId, thirtyDaysAgo),
+		getDigitalMemoriesCount(userId),
+		getDigitalMemoriesCount(userId, thirtyDaysAgo),
+		getRegistryVisitorsCount(userId),
+		getRegistryVisitorsCount(userId, thirtyDaysAgo),
+	])
+
+	// Try to get the most recent registry, but handle the case when there are none
+	let mostRecentRegistry = null
+	try {
+		mostRecentRegistry = await getMostRecentRegistry(userId)
+	} catch (error) {
+		// If it's a NotFoundError, that's expected when there are no registries
+		if (error instanceof NotFoundError) {
+			mostRecentRegistry = null
+		} else {
+			// Re-throw other errors
+			throw error
+		}
+	}
+
+	// Calculate completion status
+	const { progress, remainingSteps } =
+		calculateRegistryCompletion(mostRecentRegistry)
+
+	const dashboardData: DashboardData = {
 		activeRegistries: {
-			count: 1,
-			change: '+0%',
-			period: 'from last month',
+			count: currentRegistriesCount,
+			change: calculatePercentageChange(
+				currentRegistriesCount,
+				previousRegistriesCount,
+			),
 		},
 		digitalMemories: {
-			count: 0,
-			change: '+0%',
-			period: 'from last month',
+			count: currentMemoriesCount,
+			change: calculatePercentageChange(
+				currentMemoriesCount,
+				previousMemoriesCount,
+			),
 		},
 		registryVisitors: {
-			count: 0,
-			change: '+0%',
-			period: 'from last month',
+			count: currentVisitorsCount,
+			change: calculatePercentageChange(
+				currentVisitorsCount,
+				previousVisitorsCount,
+			),
 		},
-		recentActivity: {
-			registryName: "Emma's 5th Birthday",
-			createdDate: 'April 17, 2025',
-			completion: 35,
-			remainingSteps: 4,
-		},
+		recentActivity: mostRecentRegistry
+			? {
+					title: mostRecentRegistry.title,
+					date: mostRecentRegistry.updatedAt.toLocaleDateString(),
+					progress,
+					remainingSteps,
+				}
+			: {
+					title: 'No active registries',
+					date: new Date().toLocaleDateString(),
+					progress: 0,
+					remainingSteps: ['Create your first registry'],
+				},
 	}
+
+	return { dashboardData }
+}
+
+export default function DashboardIndex() {
+	const { dashboardData } = useLoaderData<typeof loader>()
 
 	return (
 		<div className="container py-8">
@@ -68,8 +162,7 @@ export default function DashboardIndex() {
 							{dashboardData.activeRegistries.count}
 						</div>
 						<p className="text-xs text-muted-foreground">
-							{dashboardData.activeRegistries.change}{' '}
-							{dashboardData.activeRegistries.period}
+							{dashboardData.activeRegistries.change}% from last month
 						</p>
 						<Link
 							to="/registries"
@@ -103,8 +196,7 @@ export default function DashboardIndex() {
 							{dashboardData.digitalMemories.count}
 						</div>
 						<p className="text-xs text-muted-foreground">
-							{dashboardData.digitalMemories.change}{' '}
-							{dashboardData.digitalMemories.period}
+							{dashboardData.digitalMemories.change}% from last month
 						</p>
 						<Link
 							to="/memories"
@@ -140,8 +232,7 @@ export default function DashboardIndex() {
 							{dashboardData.registryVisitors.count}
 						</div>
 						<p className="text-xs text-muted-foreground">
-							{dashboardData.registryVisitors.change}{' '}
-							{dashboardData.registryVisitors.period}
+							{dashboardData.registryVisitors.change}% from last month
 						</p>
 						<Link
 							to="/analytics"
@@ -163,10 +254,10 @@ export default function DashboardIndex() {
 							to={`/dashboard/lists/1`}
 							className="mb-2 text-lg font-semibold hover:text-teal-700"
 						>
-							{dashboardData.recentActivity.registryName}
+							{dashboardData.recentActivity.title}
 						</Link>
 						<p className="mb-4 text-sm text-gray-500">
-							Created on {dashboardData.recentActivity.createdDate}
+							Last updated on {dashboardData.recentActivity.date}
 						</p>
 
 						<div className="space-y-4">
@@ -174,15 +265,15 @@ export default function DashboardIndex() {
 								<h3 className="mb-2 font-medium">Registry Completion</h3>
 								<div className="mb-2 flex items-center gap-2">
 									<Progress
-										value={dashboardData.recentActivity.completion}
+										value={dashboardData.recentActivity.progress}
 										className="h-2"
 									/>
 									<span className="text-sm font-medium">
-										{dashboardData.recentActivity.completion}%
+										{dashboardData.recentActivity.progress}%
 									</span>
 								</div>
 								<p className="text-sm text-gray-600">
-									{dashboardData.recentActivity.remainingSteps} steps remaining
+									{dashboardData.recentActivity.remainingSteps.join(', ')}
 								</p>
 							</div>
 
