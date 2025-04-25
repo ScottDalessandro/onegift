@@ -71,6 +71,7 @@
     "@sentry/node": "^9.2.0",
     "@sentry/profiling-node": "^9.2.0",
     "@sentry/react": "^9.2.0",
+    "@sentry/remix": "^9.14.0",
     "@simplewebauthn/browser": "^13.1.0",
     "@simplewebauthn/server": "^13.1.1",
     "@tusbar/cache-control": "1.0.2",

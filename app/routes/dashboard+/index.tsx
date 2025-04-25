@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/node'
 import { Link, useLoaderData } from 'react-router'
 import {
 	Card,
@@ -6,24 +7,17 @@ import {
 	CardTitle,
 } from '#app/components/ui/card'
 import { Progress } from '#app/components/ui/progress'
-import { type Route } from './+types/index'
-import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from '#app/components/ui/tabs'
-import { prisma } from '#app/utils/db.server'
-import { requireUserId } from '#app/utils/auth.server'
+import { getDigitalMemoriesCount } from '#app/models/memories.server'
 import {
 	getActiveRegistriesCount,
 	getMostRecentRegistry,
 	calculateRegistryCompletion,
 } from '#app/models/registry.server'
-import { getDigitalMemoriesCount } from '#app/models/memories.server'
 import { getRegistryVisitorsCount } from '#app/models/visitors.server'
-import { calculatePercentageChange } from '#app/utils/metrics.server'
+import { requireUserId } from '#app/utils/auth.server'
 import { NotFoundError } from '#app/utils/errors.server'
+import { calculatePercentageChange } from '#app/utils/metrics.server'
+import { type Route } from './+types/index'
 
 export type DashboardData = {
 	activeRegistries: {
@@ -55,15 +49,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 		currentDate.getTime() - 30 * 24 * 60 * 60 * 1000,
 	)
 
-	// Fetch all current and previous counts in parallel
-	const [
-		currentRegistriesCount,
-		previousRegistriesCount,
-		currentMemoriesCount,
-		previousMemoriesCount,
-		currentVisitorsCount,
-		previousVisitorsCount,
-	] = await Promise.all([
+	// Fetch all counts in parallel with individual error handling
+	const results = await Promise.allSettled([
 		getActiveRegistriesCount(userId),
 		getActiveRegistriesCount(userId, thirtyDaysAgo),
 		getDigitalMemoriesCount(userId),
@@ -71,6 +58,62 @@ export async function loader({ request }: Route.LoaderArgs) {
 		getRegistryVisitorsCount(userId),
 		getRegistryVisitorsCount(userId, thirtyDaysAgo),
 	])
+
+	// Log any errors to Sentry with context
+	results.forEach((result, index) => {
+		if (result.status === 'rejected') {
+			const queryType = [
+				'current registries',
+				'previous registries',
+				'current memories',
+				'previous memories',
+				'current visitors',
+				'previous visitors',
+			][index]
+
+			try {
+				captureException(result.reason, {
+					tags: {
+						queryType,
+						userId,
+						isHistorical: index % 2 === 1, // odd indices are historical queries
+					},
+					extra: {
+						error: result.reason,
+						queryIndex: index,
+						timestamp: new Date().toISOString(),
+					},
+				})
+			} catch (sentryError) {
+				// Fallback to console.error if Sentry fails
+				console.error('Failed to log to Sentry:', sentryError)
+				console.error('Original error:', {
+					queryType,
+					error: result.reason,
+					queryIndex: index,
+					timestamp: new Date().toISOString(),
+				})
+			}
+		}
+	})
+
+	// Extract values, filtering out rejected promises
+	const fulfilledResults = results
+		.filter(
+			(result): result is PromiseFulfilledResult<number> =>
+				result.status === 'fulfilled',
+		)
+		.map((result) => result.value)
+
+	// Ensure we have all required values, defaulting to 0 for any missing ones
+	const [
+		currentRegistriesCount = 0,
+		previousRegistriesCount = 0,
+		currentMemoriesCount = 0,
+		previousMemoriesCount = 0,
+		currentVisitorsCount = 0,
+		previousVisitorsCount = 0,
+	] = fulfilledResults
 
 	// Try to get the most recent registry, but handle the case when there are none
 	let mostRecentRegistry = null
