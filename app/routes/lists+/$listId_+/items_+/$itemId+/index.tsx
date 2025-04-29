@@ -26,12 +26,17 @@ export default function ItemDetailsRoute() {
 					</Button>
 				</div>
 
-				{item.imageUrl && (
-					<img
-						src={item.imageUrl}
-						alt={item.name}
-						className="mb-6 h-64 w-full rounded-lg object-cover"
-					/>
+				{item.images && item.images.length > 0 && (
+					<div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+						{item.images.map((image, index) => (
+							<img
+								key={image.id}
+								src={image.url}
+								alt={image.altText || item.name}
+								className="h-64 w-full rounded-lg object-cover"
+							/>
+						))}
+					</div>
 				)}
 
 				<div className="space-y-4">

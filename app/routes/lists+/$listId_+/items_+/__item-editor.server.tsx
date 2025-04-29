@@ -37,15 +37,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
 		)
 	}
 
-	console.log(submission.value)
-
 	const {
 		id: itemId,
 		name,
 		price,
 		url,
 		description,
-		imageUrl,
+		images,
 		category,
 	} = submission.value
 
@@ -61,16 +59,31 @@ export async function action({ request, params }: ActionFunctionArgs) {
 			price,
 			url,
 			description,
-			imageUrl,
 			category,
+			images: {
+				create:
+					images?.map((image) => ({
+						url: image.url,
+						objectKey: image.objectKey,
+						altText: image.altText,
+					})) ?? [],
+			},
 		},
 		update: {
 			name,
 			price,
 			url,
 			description,
-			imageUrl,
 			category,
+			images: {
+				deleteMany: {},
+				create:
+					images?.map((image) => ({
+						url: image.url,
+						objectKey: image.objectKey,
+						altText: image.altText,
+					})) ?? [],
+			},
 		},
 	})
 	return redirect(

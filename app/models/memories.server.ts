@@ -8,9 +8,14 @@ export async function getDigitalMemoriesCount(userId: string, beforeDate?: Date)
     return await prisma.profilePhoto.count({
       where: {
         profile: {
-          list: {
-            ownerId: userId,
-            ...(beforeDate && { updatedAt: { lt: beforeDate } })
+          listId: {
+            in: await prisma.list.findMany({
+              where: {
+                ownerId: userId,
+                ...(beforeDate && { updatedAt: { lt: beforeDate } })
+              },
+              select: { id: true }
+            }).then(lists => lists.map(list => list.id))
           }
         }
       }
