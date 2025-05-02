@@ -7,6 +7,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		include: {
 			items: {
 				orderBy: { createdAt: 'desc' },
+				include: {
+					images: true,
+				},
 			},
 		},
 	})
@@ -68,9 +71,9 @@ export default function ListRoute() {
 									key={item.id}
 									className="rounded-lg border p-4 shadow-sm transition hover:shadow-md"
 								>
-									{item.imageUrl && (
+									{item.images[0] && (
 										<img
-											src={item.imageUrl}
+											src={item.images[0].url}
 											alt={item.name}
 											className="mb-3 h-48 w-full rounded-md object-cover"
 										/>

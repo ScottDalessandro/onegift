@@ -5,6 +5,8 @@ import {
 	Form,
 	Link,
 	useLoaderData,
+	useRouteError,
+	isRouteErrorResponse,
 } from 'react-router'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { Spacer } from '#app/components/spacer.tsx'
@@ -71,7 +73,7 @@ export default function ProfileRoute() {
 					</p>
 					{isLoggedInUser ? (
 						<Form action="/logout" method="POST" className="mt-3">
-							<Button type="submit" variant="link" size="pill">
+							<Button type="submit" variant="link" size="default">
 								<Icon name="exit" className="scale-125 max-md:scale-150">
 									Logout
 								</Icon>
@@ -118,13 +120,13 @@ export const meta: Route.MetaFunction = ({ data, params }) => {
 }
 
 export function ErrorBoundary() {
-	return (
-		<GeneralErrorBoundary
-			statusHandlers={{
-				404: ({ params }) => (
-					<p>No user with the username "{params.username}" exists</p>
-				),
-			}}
-		/>
-	)
+	const error = useRouteError()
+	if (isRouteErrorResponse(error) && error.status === 404) {
+		return (
+			<div className="flex min-h-[400px] flex-col items-center justify-center px-4 text-center">
+				<p>No user with the username "{error.data?.username}" exists</p>
+			</div>
+		)
+	}
+	return <GeneralErrorBoundary />
 }

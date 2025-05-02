@@ -1,17 +1,39 @@
 import { faker } from '@faker-js/faker'
 import { prisma } from '#app/utils/db.server.ts'
-import { MOCK_CODE_GITHUB } from '#app/utils/providers/constants'
+// import { MOCK_CODE_GITHUB } from '#app/utils/providers/constants'
 import {
 	createPassword,
 	createUser,
 	getNoteImages,
 	getUserImages,
 } from '#tests/db-utils.ts'
-import { insertGitHubUser } from '#tests/mocks/github.ts'
+// import { insertGitHubUser } from '#tests/mocks/github.ts'
 
 async function seed() {
 	console.log('🌱 Seeding...')
 	console.time(`🌱 Database has been seeded`)
+
+	// Create roles first
+	console.time('👑 Creating roles')
+	const roles = [
+		{
+			name: 'admin',
+			description: 'Administrator with full access',
+		},
+		{
+			name: 'user',
+			description: 'Regular user',
+		},
+	]
+
+	for (const role of roles) {
+		await prisma.role.upsert({
+			where: { name: role.name },
+			update: {},
+			create: role,
+		})
+	}
+	console.timeEnd('👑 Creating roles')
 
 	const totalUsers = 5
 	console.time(`👤 Created ${totalUsers} users...`)
@@ -106,7 +128,7 @@ async function seed() {
 		},
 	}
 
-	const githubUser = await insertGitHubUser(MOCK_CODE_GITHUB)
+	// const githubUser = await insertGitHubUser(MOCK_CODE_GITHUB)
 
 	const kody = await prisma.user.create({
 		select: { id: true },
@@ -116,10 +138,10 @@ async function seed() {
 			name: 'Kody',
 			password: { create: createPassword('kodylovesyou') },
 			connections: {
-				create: {
-					providerName: 'github',
-					providerId: String(githubUser.profile.id),
-				},
+				// create: {
+				// 	providerName: 'github',
+				// 	providerId: String(githubUser.profile.id),
+				// },
 			},
 			roles: { connect: [{ name: 'admin' }, { name: 'user' }] },
 		},

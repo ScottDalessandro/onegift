@@ -260,7 +260,7 @@ function UpdateProfile({ loaderData }: { loaderData: Info['loaderData'] }) {
 			<div className="mt-8 flex justify-center">
 				<StatusButton
 					type="submit"
-					size="wide"
+					size="lg"
 					name="intent"
 					value={profileUpdateActionIntent}
 					status={

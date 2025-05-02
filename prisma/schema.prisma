@@ -164,7 +164,7 @@ model List {
   status        String         @default("draft")
   planType      String         @default("free")
   ownerId       String
-  ChildProfile  ChildProfile?
+  PersonalProfile  PersonalProfile?
   contributions Contribution[]
   owner         User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   items         ListItem[]
@@ -174,19 +174,32 @@ model List {
 }
 
 model ListItem {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String         @id @default(cuid())
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
   name        String
   description String?
   price       Decimal
   url         String?
-  imageUrl    String?
   category    String?
   listId      String
-  list        List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+  list        List          @relation(fields: [listId], references: [id], onDelete: Cascade)
+  images      ListItemImage[]
 
   @@index([listId])
+}
+
+model ListItemImage {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  url         String
+  objectKey   String?
+  altText     String?
+  listItemId  String
+  listItem    ListItem @relation(fields: [listItemId], references: [id], onDelete: Cascade)
+
+  @@index([listItemId])
 }
 
 model Contribution {
@@ -214,7 +227,7 @@ model Withdrawal {
   @@index([listId])
 }
 
-model ChildProfile {
+model PersonalProfile {
   id                 String         @id @default(cuid())
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
@@ -231,24 +244,24 @@ model ChildProfile {
 }
 
 model Milestone {
-  id          String       @id @default(cuid())
+  id          String         @id @default(cuid())
   date        DateTime
   title       String
   description String
   profileId   String
-  profile     ChildProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile     PersonalProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@index([profileId])
 }
 
 model ProfilePhoto {
-  id        String       @id @default(cuid())
+  id        String         @id @default(cuid())
   url       String
   altText   String
   category  String
   caption   String?
   profileId String
-  profile   ChildProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile   PersonalProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@index([profileId])
 }

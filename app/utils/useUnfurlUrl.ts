@@ -12,10 +12,10 @@ interface UnfurlFields {
   name: FieldMetadata<string>
   description: FieldMetadata<string | undefined>
   price: FieldMetadata<number>
-  imageUrl: FieldMetadata<string | undefined>
+  images: FieldMetadata<Array<{ url: string; altText?: string }> | undefined>
 }
   
-export function useUrlUnfurl({form}: UnfurlFields) {
+export function useUrlUnfurl({form, url, name, description, price, images}: UnfurlFields) {
   const fetcher = useFetcher()
   const lastUrlRef = useRef<string | undefined>(undefined)
   const updatedRef = useRef(false)
@@ -62,7 +62,10 @@ export function useUrlUnfurl({form}: UnfurlFields) {
         }
 
         if (metadata.image) {
-          form.update({ name: 'imageUrl', value: metadata.image })
+          form.update({ 
+            name: 'images', 
+            value: [{ url: metadata.image }]
+          })
           setPreviewImage(metadata.image)
         }
 
