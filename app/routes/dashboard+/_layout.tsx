@@ -42,14 +42,14 @@ export default function DashboardLayout() {
 			<aside className="w-64 border-r bg-gray-50">
 				<div className="flex h-full flex-col">
 					{/* Logo */}
-					{/* <div className="border-b p-4">
+					<div className="border-b p-4">
 						<Link to="/" className="flex items-center gap-2 text-xl font-bold">
 							<Icon name="gift" className="h-6 w-6 text-teal-500" />
 							<span>
 								Wish <span className="text-teal-500">&</span> Well
 							</span>
 						</Link>
-					</div> */}
+					</div>
 
 					{/* Navigation */}
 					<nav className="flex-1 space-y-1 p-4">

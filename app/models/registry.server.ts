@@ -3,9 +3,6 @@ import type { List } from '@prisma/client'
 import { DatabaseError, NotFoundError, ValidationError, handlePrismaError } from '#app/utils/errors.server'
 
 export type RegistryWithDetails = List & {
-  ChildProfile?: {
-    photos: Array<{ id: string }>
-  }
   items: Array<{ id: string }>
 }
 
@@ -36,11 +33,6 @@ export async function getMostRecentRegistry(userId: string) {
       },
       orderBy: { updatedAt: 'desc' },
       include: {
-        ChildProfile: {
-          include: {
-            photos: true,
-          },
-        },
         items: true,
       },
     }) as RegistryWithDetails | null
@@ -65,30 +57,24 @@ export function calculateRegistryCompletion(registry: RegistryWithDetails | null
   }
 
   const remainingSteps: string[] = []
-  let progress = 20 // Start with 20% for having a registry
-
-  if (!registry.ChildProfile) {
-    remainingSteps.push("Complete child's profile")
-  } else {
-    progress += 20
-  }
+  let progress = 25 // Start with 25% for having a registry
 
   if (registry.items.length < 5) {
     remainingSteps.push('Add at least 5 items to your registry')
   } else {
-    progress += 20
+    progress += 25
   }
 
-  if (!registry.ChildProfile?.photos.length) {
-    remainingSteps.push('Add digital memories')
+  if (!registry.description) {
+    remainingSteps.push('Add a description to your registry')
   } else {
-    progress += 20
+    progress += 25
   }
 
-  if (registry.planType === 'free') {
-    remainingSteps.push('Connect your Stripe account')
+  if (registry.status === 'draft') {
+    remainingSteps.push('Publish your registry')
   } else {
-    progress += 20
+    progress += 25
   }
 
   return { progress, remainingSteps }
