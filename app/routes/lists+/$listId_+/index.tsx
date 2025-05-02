@@ -47,8 +47,8 @@ export function ErrorBoundary() {
 	return (
 		<GeneralErrorBoundary
 			statusHandlers={{
-				404: ({ params }) => (
-					<p>No list with the id "{params.listId}" exists</p>
+				404: ({ error }) => (
+					<p>No list with the id "{error?.data?.listId}" exists</p>
 				),
 			}}
 		/>

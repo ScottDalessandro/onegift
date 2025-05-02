@@ -1,11 +1,14 @@
-import { useParams, useLoaderData } from '@remix-run/react'
-import { json, LoaderFunctionArgs } from '@remix-run/node'
+import { useLoaderData, LoaderFunctionArgs } from 'react-router'
 
 interface ListItem {
 	id: number
 	name: string
 	price: number
 	priority: string
+}
+
+interface LoaderData {
+	items: ListItem[]
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -18,11 +21,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		{ id: 2, name: 'Item 2', price: 19.99, priority: 'Medium' },
 	]
 
-	return json({ items })
+	return Response.json({ items })
 }
 
 export default function ListItems() {
-	const { items } = useLoaderData<typeof loader>()
+	const { items } = useLoaderData<LoaderData>()
 
 	return (
 		<div className="p-6">
@@ -44,7 +47,7 @@ export default function ListItems() {
 						</tr>
 					</thead>
 					<tbody>
-						{items.map((item: ListItem) => (
+						{items.map((item) => (
 							<tr key={item.id} className="border-b">
 								<td className="p-4">{item.name}</td>
 								<td className="p-4">${item.price}</td>

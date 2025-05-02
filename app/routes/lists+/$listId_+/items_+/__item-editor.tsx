@@ -29,10 +29,13 @@ const separateKey = <T extends { key?: string }>(props: T) => {
 type ImageInputType = 'url' | 'file'
 
 export const ListItemSchema = z.object({
+	id: z.string().optional(),
+	listId: z.string(),
 	name: z.string().min(1, 'Name is required'),
 	description: z.string().optional(),
 	url: z.string().url('Must be a valid URL').optional(),
 	price: z.coerce.number().min(0, 'Price must be positive'),
+	category: z.string().optional(),
 	images: z
 		.array(
 			z.object({

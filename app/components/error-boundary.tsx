@@ -13,7 +13,7 @@ import type {
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { Button } from './ui/button'
 
-function getErrorComponent(error: unknown) {
+function getErrorComponent(error: unknown, statusHandlers?: StatusHandlers) {
 	// Log error to console in development
 	if (process.env.NODE_ENV === 'development') {
 		console.error('Error caught by error boundary:', error)
@@ -21,6 +21,10 @@ function getErrorComponent(error: unknown) {
 
 	// Handle React Router errors
 	if (isRouteErrorResponse(error)) {
+		const handler = statusHandlers?.[error.status]
+		if (handler) {
+			return handler({ error })
+		}
 		if (error.status === 404) {
 			return (
 				<div className="flex min-h-[400px] flex-col items-center justify-center px-4 text-center">
@@ -198,7 +202,17 @@ function getErrorComponent(error: unknown) {
 	)
 }
 
-export function GeneralErrorBoundary() {
+interface StatusHandlers {
+	[statusCode: number]: (props: { error?: any }) => React.ReactElement
+}
+
+interface GeneralErrorBoundaryProps {
+	statusHandlers?: StatusHandlers
+}
+
+export function GeneralErrorBoundary({
+	statusHandlers,
+}: GeneralErrorBoundaryProps) {
 	const error = useRouteError()
 
 	useEffect(() => {
@@ -209,5 +223,5 @@ export function GeneralErrorBoundary() {
 		}
 	}, [error])
 
-	return getErrorComponent(error)
+	return getErrorComponent(error, statusHandlers)
 }

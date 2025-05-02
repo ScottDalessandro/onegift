@@ -21,7 +21,15 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		},
 	})
 	invariantResponse(item, 'Not found', { status: 404 })
-	return { item }
+	return {
+		item: {
+			...item,
+			price: Number(item.price),
+			description: item.description ?? undefined,
+			url: item.url ?? undefined,
+			category: item.category ?? undefined,
+		},
+	}
 }
 
 export default function ItemEditRoute() {
@@ -31,7 +39,7 @@ export default function ItemEditRoute() {
 	return (
 		<div>
 			<h1 className="mb-8 text-2xl font-bold">Edit Item</h1>
-			<ItemEditor item={item} />
+			<ItemEditor item={item} listId={item.listId} mode="edit" />
 		</div>
 	)
 }
@@ -40,9 +48,7 @@ export function ErrorBoundary() {
 	return (
 		<GeneralErrorBoundary
 			statusHandlers={{
-				404: ({ params }) => (
-					<p>No Item with the id "{params.itemId}" exists</p>
-				),
+				404: () => <p>No Item with the id exists</p>,
 			}}
 		/>
 	)
