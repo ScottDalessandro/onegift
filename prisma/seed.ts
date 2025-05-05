@@ -130,9 +130,10 @@ async function seed() {
 
 	// const githubUser = await insertGitHubUser(MOCK_CODE_GITHUB)
 
-	const kody = await prisma.user.create({
-		select: { id: true },
-		data: {
+	const kody = await prisma.user.upsert({
+		where: { username: 'kody' },
+		update: {},
+		create: {
 			email: 'kody@kcd.dev',
 			username: 'kody',
 			name: 'Kody',
@@ -147,8 +148,10 @@ async function seed() {
 		},
 	})
 
-	await prisma.userImage.create({
-		data: {
+	await prisma.userImage.upsert({
+		where: { userId: kody.id },
+		update: {},
+		create: {
 			userId: kody.id,
 			objectKey: kodyImages.kodyUser.objectKey,
 		},
@@ -243,14 +246,24 @@ async function seed() {
 	]
 
 	for (const noteData of kodyNotes) {
-		const note = await prisma.note.create({
-			select: { id: true },
-			data: {
+		const note = await prisma.note.upsert({
+			where: { id: noteData.id },
+			update: {
+				title: noteData.title,
+				content: noteData.content,
+				ownerId: kody.id,
+			},
+			create: {
 				id: noteData.id,
 				title: noteData.title,
 				content: noteData.content,
 				ownerId: kody.id,
 			},
+		})
+
+		// Delete existing images for this note before creating new ones
+		await prisma.noteImage.deleteMany({
+			where: { noteId: note.id },
 		})
 
 		for (const image of noteData.images) {

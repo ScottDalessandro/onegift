@@ -21,6 +21,10 @@ export const RegistryFormSchema = z.object({
 		.refine((str) => !isNaN(Date.parse(str)), {
 			message: 'Invalid date format',
 		}),
+	eventTime: z
+		.string()
+		.regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:mm)')
+		.optional(),
 	eventType: z.enum(eventTypes, {
 		errorMap: () => ({ message: 'Please select an event type' }),
 	}),
@@ -106,6 +110,24 @@ export function RegistryForm() {
 								<div className="min-h-[20px] px-4 pt-1">
 									{fields.eventDate.errors && (
 										<ErrorList errors={fields.eventDate.errors} />
+									)}
+								</div>
+							</div>
+
+							<div>
+								<label
+									htmlFor={fields.eventTime.id}
+									className="mb-1 block text-sm font-medium text-gray-700"
+								>
+									Event Time (Optional)
+								</label>
+								<input
+									{...getInputProps(fields.eventTime, { type: 'time' })}
+									className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+								/>
+								<div className="min-h-[20px] px-4 pt-1">
+									{fields.eventTime.errors && (
+										<ErrorList errors={fields.eventTime.errors} />
 									)}
 								</div>
 							</div>

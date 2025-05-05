@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useLoaderData, type LoaderFunctionArgs } from 'react-router'
+import { requireUserId } from '#app/utils/auth.server.ts'
+import { prisma } from '#app/utils/db.server.ts'
 import {
 	Card,
 	CardContent,
@@ -13,20 +15,105 @@ import {
 	TabsList,
 	TabsTrigger,
 } from '#app/components/ui/tabs'
+import { formatDateUTC } from '#app/utils/date.ts'
+
+type ListItem = {
+	id: string
+	name: string
+	price: number
+	category: string | null
+	description: string | null
+	url: string | null
+	images: Array<{ id: string; url: string; altText: string | null }>
+}
+
+type PersonalProfile = {
+	id: string
+	name: string
+	birthdate: Date
+	interests: string[]
+	dreams: string[]
+	currentActivities: string[]
+	upcomingActivities: string[]
+	photos: Array<{
+		id: string
+		url: string
+		altText: string
+		category: string
+		caption: string | null
+	}>
+}
+
+type List = {
+	id: string
+	title: string
+	eventDate: Date
+	description: string | null
+	items: ListItem[]
+	PersonalProfile: PersonalProfile | null
+	eventTime?: string
+	createdAt: Date
+}
+
+export async function loader({ request, params }: LoaderFunctionArgs) {
+	const userId = await requireUserId(request)
+	const listId = params.id
+
+	if (!listId) {
+		throw new Response('List ID is required', { status: 400 })
+	}
+
+	const list = (await prisma.list.findFirst({
+		where: {
+			id: listId,
+			ownerId: userId,
+		},
+		include: {
+			items: {
+				include: {
+					images: true,
+				},
+			},
+			PersonalProfile: {
+				include: {
+					photos: true,
+				},
+			},
+		},
+	})) as List | null
+
+	if (!list) {
+		throw new Response('List not found', { status: 404 })
+	}
+
+	// Calculate progress and other metrics
+	const totalItems = list.items.length
+	const categories = {
+		filled: new Set(list.items.map((item) => item.category).filter(Boolean))
+			.size,
+		total: 5, // Assuming 5 categories: Want, Need, Experience, Wear, Learn
+	}
+
+	// Calculate overall progress (example calculation)
+	const progress = Math.round((totalItems / 10) * 100) // Assuming 10 items is 100%
+
+	return {
+		list,
+		progress,
+		categories,
+	}
+}
 
 export default function RegistryDetails() {
+	const { list, progress, categories } = useLoaderData<typeof loader>()
 	const [isCompletionExpanded, setIsCompletionExpanded] = useState(true)
 
-	// This would come from your data loader in a real app
 	const registryData = {
-		title: "Emma's 5th Birthday",
-		date: new Date('2023-06-14'),
-		progress: 35,
-		items: 2,
-		categories: {
-			filled: 2,
-			total: 5,
-		},
+		title: list.title,
+		date: list.eventDate,
+		progress,
+		items: list.items.length,
+		categories,
 		nextStep: {
 			title: 'Add Items (min. 5)',
 			description: 'Helps friends find perfect gifts for your child',
@@ -54,32 +141,17 @@ export default function RegistryDetails() {
 				description: "Registry name, child's name, event date and type",
 			},
 		],
-		registryItems: [
-			{
-				id: 1,
-				name: 'LEGO Friends Heartlake City School',
-				price: 59.99,
-				category: 'Want',
-				description: 'Emma loves building and creating stories with LEGO sets.',
-				imageUrl: '/images/lego-school.jpg',
-			},
-			{
-				id: 2,
-				name: 'Art Supplies Set',
-				price: 29.99,
-				category: 'Need',
-				description: 'Emma is getting into drawing and painting.',
-				imageUrl: '/images/art-supplies.jpg',
-			},
-		],
-		childProfile: {
-			name: 'Emma',
-			age: 5,
-			interests: ['Art', 'Music'],
-			achievements: ['Learned to ride a bike'],
-			lookingForwardTo: ['Starting kindergarten'],
-			photos: [{ id: 1, url: '/images/emma-profile.jpg' }],
+		registryItems: list.items,
+		childProfile: list.PersonalProfile || {
+			name: list.title,
+			birthdate: new Date(),
+			interests: [],
+			dreams: [],
+			currentActivities: [],
+			upcomingActivities: [],
+			photos: [],
 		},
+		createdAt: list.createdAt,
 	}
 
 	return (
@@ -89,12 +161,7 @@ export default function RegistryDetails() {
 					<div>
 						<h1 className="text-2xl font-bold">{registryData.title}</h1>
 						<p className="text-sm text-gray-500">
-							{registryData.date.toLocaleDateString('en-US', {
-								weekday: 'long',
-								year: 'numeric',
-								month: 'long',
-								day: 'numeric',
-							})}
+							{formatDateUTC(registryData.date)}
 						</p>
 					</div>
 					<button className="rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700">
@@ -143,7 +210,7 @@ export default function RegistryDetails() {
 					<div className="flex items-center gap-2">
 						<h2 className="text-lg font-semibold">Registry Completion</h2>
 						<span className="rounded-full bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-800">
-							35% Complete
+							{registryData.progress}% Complete
 						</span>
 					</div>
 					<svg
@@ -351,7 +418,12 @@ export default function RegistryDetails() {
 											Event Date
 										</dt>
 										<dd className="text-lg">
-											{registryData.date.toLocaleDateString()}
+											{formatDateUTC(registryData.date)}
+											{list.eventTime && (
+												<span className="ml-2 text-gray-600">
+													at {list.eventTime}
+												</span>
+											)}
 										</dd>
 									</div>
 									<div>
@@ -364,7 +436,9 @@ export default function RegistryDetails() {
 										<dt className="text-sm font-medium text-gray-500">
 											Created
 										</dt>
-										<dd className="text-lg">4/30/2023</dd>
+										<dd className="text-lg">
+											{formatDateUTC(registryData.createdAt)}
+										</dd>
 									</div>
 									<div>
 										<dt className="text-sm font-medium text-gray-500">
@@ -524,7 +598,7 @@ export default function RegistryDetails() {
 							</CardHeader>
 							<CardContent>
 								<p className="mb-4 text-gray-600">
-									{registryData.childProfile.age} years old
+									{formatDateUTC(registryData.childProfile.birthdate)}
 								</p>
 
 								<div className="mb-6">
@@ -542,27 +616,29 @@ export default function RegistryDetails() {
 								</div>
 
 								<div className="mb-6">
-									<h4 className="mb-2 font-medium">Recent Achievements</h4>
-									{registryData.childProfile.achievements.map((achievement) => (
+									<h4 className="mb-2 font-medium">Recent Dreams</h4>
+									{registryData.childProfile.dreams.map((dream) => (
 										<div
-											key={achievement}
+											key={dream}
 											className="mb-2 rounded-lg bg-yellow-50 p-2 text-sm text-yellow-800"
 										>
-											{achievement}
+											{dream}
 										</div>
 									))}
 								</div>
 
 								<div>
-									<h4 className="mb-2 font-medium">Looking Forward To</h4>
-									{registryData.childProfile.lookingForwardTo.map((item) => (
-										<div
-											key={item}
-											className="mb-2 rounded-lg bg-purple-50 p-2 text-sm text-purple-800"
-										>
-											{item}
-										</div>
-									))}
+									<h4 className="mb-2 font-medium">Current Activities</h4>
+									{registryData.childProfile.currentActivities.map(
+										(activity) => (
+											<div
+												key={activity}
+												className="mb-2 rounded-lg bg-purple-50 p-2 text-sm text-purple-800"
+											>
+												{activity}
+											</div>
+										),
+									)}
 								</div>
 							</CardContent>
 						</Card>

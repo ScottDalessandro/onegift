@@ -17,7 +17,8 @@ export async function action({ request }: Route.ActionArgs) {
 		return submission
 	}
 
-	const { registryName, childName, eventDate, eventType } = submission.value
+	const { registryName, childName, eventDate, eventTime, eventType } =
+		submission.value
 
 	try {
 		// Use a transaction to ensure both operations succeed or fail together
@@ -27,7 +28,8 @@ export async function action({ request }: Route.ActionArgs) {
 				data: {
 					title: registryName,
 					eventType,
-					eventDate: new Date(eventDate),
+					eventDate: new Date(eventDate + 'T00:00:00Z'),
+					eventTime: eventTime || null,
 					ownerId: userId,
 					status: 'draft',
 					planType: 'free',
@@ -38,7 +40,7 @@ export async function action({ request }: Route.ActionArgs) {
 			await tx.personalProfile.create({
 				data: {
 					name: childName,
-					birthdate: new Date(eventDate),
+					birthdate: new Date(eventDate + 'T00:00:00Z'),
 					listId: list.id,
 				},
 			})

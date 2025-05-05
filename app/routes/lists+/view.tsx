@@ -2,6 +2,7 @@ import { useLoaderData, type LoaderFunctionArgs } from 'react-router'
 import { prisma } from '#app/utils/db.server.ts'
 
 export async function loader({ params }: LoaderFunctionArgs) {
+	console.log('WHAT ARE THE params', params)
 	const list = await prisma.list.findUnique({
 		where: { id: params.listId },
 		include: {
@@ -13,6 +14,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			},
 		},
 	})
+
+	console.log('list', list)
 
 	if (!list) {
 		throw new Response('Not found', { status: 404 })

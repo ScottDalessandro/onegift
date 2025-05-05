@@ -48,6 +48,32 @@ export async function getMostRecentRegistry(userId: string) {
   }
 }
 
+export async function getMostRecentDraftRegistry(userId: string) {
+  if (!userId) throw new ValidationError('User ID is required')
+
+  try {
+    const registry = await prisma.list.findFirst({
+      where: {
+        ownerId: userId,
+        status: 'draft',
+      },
+      orderBy: { updatedAt: 'desc' },
+      include: {
+        items: true,
+      },
+    }) as RegistryWithDetails | null
+
+    if (!registry) {
+      throw new NotFoundError('No draft registry found', 'registry')
+    }
+
+    return registry
+  } catch (error) {
+    if (error instanceof NotFoundError) throw error
+    throw handlePrismaError(error)
+  }
+}
+
 export function calculateRegistryCompletion(registry: RegistryWithDetails | null) {
   if (!registry) {
     return {

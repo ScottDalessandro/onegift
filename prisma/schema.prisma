@@ -160,6 +160,7 @@ model List {
   title         String
   eventType     String
   eventDate     DateTime
+  eventTime     String?        // Optional time in HH:mm format
   description   String?
   status        String         @default("draft")
   planType      String         @default("free")

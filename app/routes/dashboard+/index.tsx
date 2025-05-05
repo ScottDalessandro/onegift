@@ -11,6 +11,7 @@ import { getDigitalMemoriesCount } from '#app/models/memories.server'
 import {
 	getActiveRegistriesCount,
 	getMostRecentRegistry,
+	getMostRecentDraftRegistry,
 	calculateRegistryCompletion,
 } from '#app/models/registry.server'
 import { getRegistryVisitorsCount } from '#app/models/visitors.server'
@@ -38,6 +39,9 @@ export type DashboardData = {
 		progress: number
 		remainingSteps: string[]
 	}
+	mostRecentRegistry: {
+		id: string
+	} | null
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -120,9 +124,17 @@ export async function loader({ request }: Route.LoaderArgs) {
 	try {
 		mostRecentRegistry = await getMostRecentRegistry(userId)
 	} catch (error) {
-		// If it's a NotFoundError, that's expected when there are no registries
+		// If it's a NotFoundError, try to get the most recent draft registry
 		if (error instanceof NotFoundError) {
-			mostRecentRegistry = null
+			try {
+				mostRecentRegistry = await getMostRecentDraftRegistry(userId)
+			} catch (draftError) {
+				if (draftError instanceof NotFoundError) {
+					mostRecentRegistry = null
+				} else {
+					throw draftError
+				}
+			}
 		} else {
 			// Re-throw other errors
 			throw error
@@ -168,6 +180,9 @@ export async function loader({ request }: Route.LoaderArgs) {
 					progress: 0,
 					remainingSteps: ['Create your first registry'],
 				},
+		mostRecentRegistry: mostRecentRegistry
+			? { id: mostRecentRegistry.id }
+			: null,
 	}
 
 	return { dashboardData }
@@ -294,7 +309,11 @@ export default function DashboardIndex() {
 				<Card className="max-w-2xl">
 					<CardContent className="pt-6">
 						<Link
-							to={`/dashboard/lists/1`}
+							to={
+								dashboardData.mostRecentRegistry
+									? `/dashboard/lists/${dashboardData.mostRecentRegistry.id}`
+									: '/dashboard/lists/new'
+							}
 							className="mb-2 text-lg font-semibold hover:text-teal-700"
 						>
 							{dashboardData.recentActivity.title}
@@ -321,37 +340,20 @@ export default function DashboardIndex() {
 							</div>
 
 							<Link
-								to={`/dashboard/lists/1`}
+								to={
+									dashboardData.mostRecentRegistry
+										? `/dashboard/lists/${dashboardData.mostRecentRegistry.id}`
+										: '/dashboard/lists/new'
+								}
 								className="inline-flex items-center rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
 							>
-								Continue Setup
+								{dashboardData.mostRecentRegistry
+									? 'Continue Setup'
+									: 'Create New Registry'}
 							</Link>
 						</div>
 					</CardContent>
 				</Card>
-
-				<div className="mt-8 text-center">
-					<button
-						className="inline-flex items-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-						onClick={() => {
-							// Handle creating new registry
-						}}
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							className="h-4 w-4"
-						>
-							<path d="M12 5v14M5 12h14" />
-						</svg>
-						Create New Registry
-					</button>
-				</div>
 			</div>
 		</div>
 	)
