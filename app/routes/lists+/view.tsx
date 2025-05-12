@@ -12,6 +12,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 					images: true,
 				},
 			},
+			event: true,
 		},
 	})
 
@@ -49,7 +50,10 @@ export default function ListRoute() {
 			<div className="mb-8 text-center">
 				<h1 className="text-3xl font-bold">{list.title}</h1>
 				<p className="mt-2 text-gray-600">
-					Event Date: {new Date(list.eventDate).toLocaleDateString()}
+					Event Date:{' '}
+					{list.event
+						? new Date(list.event.date).toLocaleDateString()
+						: 'No event date set'}
 				</p>
 			</div>
 

@@ -13,13 +13,12 @@ export async function loader({ params }: Route.LoaderArgs) {
 				id: true,
 				title: true,
 				description: true,
-				dueDate: true,
+				contributionDate: true,
 				listTypeId: true,
 				event: {
 					select: {
 						id: true,
 						name: true,
-						type: true,
 						date: true,
 						description: true,
 					},
