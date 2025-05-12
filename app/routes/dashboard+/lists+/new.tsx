@@ -17,44 +17,54 @@ export async function action({ request }: Route.ActionArgs) {
 		return submission
 	}
 
-	const { registryName, childName, eventDate, eventTime, eventType } =
-		submission.value
+	const {
+		title,
+		description,
+		contributionDate,
+		listTypeId,
+		eventName,
+		eventDate,
+		eventStartTime,
+		eventEndTime,
+		eventLocation,
+		eventDescription,
+		addEvent,
+	} = submission.value
 
 	try {
-		// Use a transaction to ensure both operations succeed or fail together
 		const result = await prisma.$transaction(async (tx) => {
-			// Create the new list
+			let eventId = null
+			if (addEvent) {
+				const eventData: any = {
+					name: eventName || '',
+					startTime: eventStartTime || null,
+					endTime: eventEndTime || null,
+					location: eventLocation || null,
+					description: eventDescription || null,
+				}
+				if (eventDate) {
+					eventData.date = new Date(eventDate)
+				}
+				const event = await tx.event.create({
+					data: eventData,
+				})
+				eventId = event.id
+			}
 			const list = await tx.list.create({
 				data: {
-					title: registryName,
-					eventType,
-					eventDate: new Date(eventDate + 'T00:00:00Z'),
-					eventTime: eventTime || null,
+					title,
+					description: description || null,
+					contributionDate: new Date(contributionDate),
+					listTypeId,
+					eventId,
 					ownerId: userId,
-					status: 'draft',
-					planType: 'free',
 				},
 			})
-
-			// Create the personal profile
-			await tx.personalProfile.create({
-				data: {
-					name: childName,
-					birthdate: new Date(eventDate + 'T00:00:00Z'),
-					listId: list.id,
-				},
-			})
-
 			return list
 		})
-
-		// If we get here, both operations succeeded
 		return redirect(`/dashboard/lists/${result.id}`)
 	} catch (error) {
-		// Log the error for debugging
 		console.error('Failed to create registry:', error)
-
-		// Return a user-friendly error message
 		return Response.json(
 			{
 				error: 'Failed to create registry. Please try again.',

@@ -9,34 +9,67 @@ import { Form } from 'react-router'
 import { z } from 'zod'
 import { Card } from '#app/components/ui/card'
 import { ErrorList } from '#app/components/forms'
+import { useState } from 'react'
 
-const eventTypes = ['Birthday', 'Holiday', 'Graduation', 'Other'] as const
+const listTypes = ['birthday', 'wedding', 'baby-shower', 'other'] as const
 
-export const RegistryFormSchema = z.object({
-	registryName: z.string().min(1, 'Registry name is required'),
-	childName: z.string().min(1, "Child's name is required"),
-	eventDate: z
-		.string()
-		.min(1, 'Event date is required')
-		.refine((str) => !isNaN(Date.parse(str)), {
-			message: 'Invalid date format',
+export const RegistryFormSchema = z
+	.object({
+		title: z.string().min(1, 'Registry name is required'),
+		description: z.string().optional(),
+		contributionDate: z
+			.string()
+			.min(1, 'Contribution deadline is required')
+			.refine((str) => !isNaN(Date.parse(str)), {
+				message: 'Invalid date format',
+			}),
+		listTypeId: z.enum(listTypes, {
+			errorMap: () => ({ message: 'Please select a list type' }),
 		}),
-	eventTime: z
-		.string()
-		.regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:mm)')
-		.optional(),
-	eventType: z.enum(eventTypes, {
-		errorMap: () => ({ message: 'Please select an event type' }),
-	}),
-})
+		eventName: z.string().optional(),
+		eventDate: z.string().optional(),
+		eventStartTime: z.string().optional(),
+		eventEndTime: z.string().optional(),
+		eventLocation: z.string().optional(),
+		eventDescription: z.string().optional(),
+		invitees: z
+			.array(
+				z.object({
+					name: z.string().min(1, 'Name is required'),
+					email: z.string().email('Invalid email address'),
+				}),
+			)
+			.optional(),
+		addEvent: z.boolean().optional(),
+	})
+	.superRefine((data, ctx) => {
+		if (data.addEvent) {
+			if (!data.eventName || data.eventName.trim() === '') {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					path: ['eventName'],
+					message: 'Event name is required',
+				})
+			}
+			if (!data.eventDate || isNaN(Date.parse(data.eventDate))) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					path: ['eventDate'],
+					message: 'Event date is required',
+				})
+			}
+		}
+	})
 
 export function RegistryForm() {
+	const [showEvent, setShowEvent] = useState(false)
 	const [form, fields] = useForm({
 		id: 'registry-form',
 		constraint: getZodConstraint(RegistryFormSchema),
 		onValidate({ formData }) {
 			return parseWithZod(formData, { schema: RegistryFormSchema })
 		},
+		defaultValue: { addEvent: false },
 	})
 
 	return (
@@ -60,94 +93,65 @@ export function RegistryForm() {
 						<div className="space-y-4">
 							<div>
 								<label
-									htmlFor={fields.registryName.id}
+									htmlFor={fields.title.id}
 									className="mb-1 block text-sm font-medium text-gray-700"
 								>
 									Registry Name
 								</label>
 								<input
-									{...getInputProps(fields.registryName, { type: 'text' })}
+									{...getInputProps(fields.title, { type: 'text' })}
 									placeholder="e.g., Emma's 5th Birthday"
 									className="w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
 								/>
 								<div className="min-h-[20px] px-4 pt-1">
-									{fields.registryName.errors && (
-										<ErrorList errors={fields.registryName.errors} />
+									{fields.title.errors && (
+										<ErrorList errors={fields.title.errors} />
 									)}
 								</div>
 							</div>
 
 							<div>
 								<label
-									htmlFor={fields.childName.id}
+									htmlFor={fields.description.id}
 									className="mb-1 block text-sm font-medium text-gray-700"
 								>
-									Child's Name
+									Description (Optional)
 								</label>
-								<input
-									{...getInputProps(fields.childName, { type: 'text' })}
-									placeholder="e.g., Emma"
+								<textarea
+									{...getInputProps(fields.description, { type: 'text' })}
+									placeholder="Tell us about your registry..."
 									className="w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+									rows={3}
 								/>
 								<div className="min-h-[20px] px-4 pt-1">
-									{fields.childName.errors && (
-										<ErrorList errors={fields.childName.errors} />
+									{fields.description.errors && (
+										<ErrorList errors={fields.description.errors} />
 									)}
 								</div>
 							</div>
 
 							<div>
 								<label
-									htmlFor={fields.eventDate.id}
+									htmlFor={fields.listTypeId.id}
 									className="mb-1 block text-sm font-medium text-gray-700"
 								>
-									Event Date
-								</label>
-								<input
-									{...getInputProps(fields.eventDate, { type: 'date' })}
-									className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
-								/>
-								<div className="min-h-[20px] px-4 pt-1">
-									{fields.eventDate.errors && (
-										<ErrorList errors={fields.eventDate.errors} />
-									)}
-								</div>
-							</div>
-
-							<div>
-								<label
-									htmlFor={fields.eventTime.id}
-									className="mb-1 block text-sm font-medium text-gray-700"
-								>
-									Event Time (Optional)
-								</label>
-								<input
-									{...getInputProps(fields.eventTime, { type: 'time' })}
-									className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
-								/>
-								<div className="min-h-[20px] px-4 pt-1">
-									{fields.eventTime.errors && (
-										<ErrorList errors={fields.eventTime.errors} />
-									)}
-								</div>
-							</div>
-
-							<div>
-								<label
-									htmlFor={fields.eventType.id}
-									className="mb-1 block text-sm font-medium text-gray-700"
-								>
-									Event Type
+									Registry Type
 								</label>
 								<div className="relative">
 									<select
-										{...getSelectProps(fields.eventType)}
+										{...getSelectProps(fields.listTypeId)}
 										className="w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
 									>
-										<option value="">Select event type</option>
-										{eventTypes.map((type) => (
+										<option value="">Select registry type</option>
+										{listTypes.map((type) => (
 											<option key={type} value={type}>
-												{type}
+												{type
+													.split('-')
+													.map(
+														(word) =>
+															word.charAt(0).toUpperCase() + word.slice(1),
+													)
+													.join(' ')}
 											</option>
 										))}
 									</select>
@@ -167,13 +171,174 @@ export function RegistryForm() {
 										</svg>
 									</div>
 									<div className="min-h-[20px] px-4 pt-1">
-										{fields.eventType.errors && (
-											<ErrorList errors={fields.eventType.errors} />
+										{fields.listTypeId.errors && (
+											<ErrorList errors={fields.listTypeId.errors} />
 										)}
 									</div>
 								</div>
 							</div>
+
+							<div>
+								<label
+									htmlFor={fields.contributionDate.id}
+									className="mb-1 block text-sm font-medium text-gray-700"
+								>
+									Contribution Deadline
+								</label>
+								<input
+									{...getInputProps(fields.contributionDate, { type: 'date' })}
+									className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+								/>
+								<div className="min-h-[20px] px-4 pt-1">
+									{fields.contributionDate.errors && (
+										<ErrorList errors={fields.contributionDate.errors} />
+									)}
+								</div>
+							</div>
+
+							<div className="flex items-center gap-2">
+								<input
+									id="addEvent"
+									name="addEvent"
+									type="checkbox"
+									checked={showEvent}
+									onChange={(e) => setShowEvent(e.target.checked)}
+									className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+								/>
+								<label
+									htmlFor="addEvent"
+									className="text-sm font-medium text-gray-700"
+								>
+									Add an event to this registry?
+								</label>
+							</div>
 						</div>
+
+						{showEvent && (
+							<div className="border-t border-gray-200 pt-6">
+								<h3 className="mb-4 text-lg font-medium">Event Details</h3>
+
+								<div>
+									<label
+										htmlFor={fields.eventName.id}
+										className="mb-1 block text-sm font-medium text-gray-700"
+									>
+										Event Name
+									</label>
+									<input
+										{...getInputProps(fields.eventName, { type: 'text' })}
+										placeholder="e.g., Birthday Party"
+										className="w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+									/>
+									<div className="min-h-[20px] px-4 pt-1">
+										{fields.eventName.errors && (
+											<ErrorList errors={fields.eventName.errors} />
+										)}
+									</div>
+								</div>
+
+								<div>
+									<label
+										htmlFor={fields.eventDate.id}
+										className="mb-1 block text-sm font-medium text-gray-700"
+									>
+										Event Date
+									</label>
+									<input
+										{...getInputProps(fields.eventDate, { type: 'date' })}
+										className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+									/>
+									<div className="min-h-[20px] px-4 pt-1">
+										{fields.eventDate.errors && (
+											<ErrorList errors={fields.eventDate.errors} />
+										)}
+									</div>
+								</div>
+
+								<div>
+									<label
+										htmlFor={fields.eventStartTime.id}
+										className="mb-1 block text-sm font-medium text-gray-700"
+									>
+										Event Start Time (Optional)
+									</label>
+									<input
+										{...getInputProps(fields.eventStartTime, {
+											type: 'time',
+										})}
+										className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+									/>
+									<div className="min-h-[20px] px-4 pt-1">
+										{fields.eventStartTime.errors && (
+											<ErrorList errors={fields.eventStartTime.errors} />
+										)}
+									</div>
+								</div>
+
+								<div>
+									<label
+										htmlFor={fields.eventEndTime.id}
+										className="mb-1 block text-sm font-medium text-gray-700"
+									>
+										Event End Time (Optional)
+									</label>
+									<input
+										{...getInputProps(fields.eventEndTime, {
+											type: 'time',
+										})}
+										className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+									/>
+									<div className="min-h-[20px] px-4 pt-1">
+										{fields.eventEndTime.errors && (
+											<ErrorList errors={fields.eventEndTime.errors} />
+										)}
+									</div>
+								</div>
+
+								<div>
+									<label
+										htmlFor={fields.eventLocation.id}
+										className="mb-1 block text-sm font-medium text-gray-700"
+									>
+										Event Location (Optional)
+									</label>
+									<input
+										{...getInputProps(fields.eventLocation, {
+											type: 'text',
+										})}
+										placeholder="e.g., 123 Main St, City, State"
+										className="w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+									/>
+									<div className="min-h-[20px] px-4 pt-1">
+										{fields.eventLocation.errors && (
+											<ErrorList errors={fields.eventLocation.errors} />
+										)}
+									</div>
+								</div>
+
+								<div>
+									<label
+										htmlFor={fields.eventDescription.id}
+										className="mb-1 block text-sm font-medium text-gray-700"
+									>
+										Event Description (Optional)
+									</label>
+									<textarea
+										{...getInputProps(fields.eventDescription, {
+											type: 'text',
+										})}
+										placeholder="Tell us about your event..."
+										className="w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+										rows={3}
+									/>
+									<div className="min-h-[20px] px-4 pt-1">
+										{fields.eventDescription.errors && (
+											<ErrorList errors={fields.eventDescription.errors} />
+										)}
+									</div>
+								</div>
+							</div>
+						)}
 
 						<div className="pt-4">
 							<button

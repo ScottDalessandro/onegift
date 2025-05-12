@@ -8,7 +8,7 @@ import { Icon } from '#app/components/ui/icon'
 interface List {
 	id: string
 	title: string
-	description: string
+	description: string | null
 	itemCount: number
 	createdAt: string
 }

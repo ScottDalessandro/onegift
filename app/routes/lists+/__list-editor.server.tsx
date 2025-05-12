@@ -39,8 +39,8 @@ export async function action({ request }: ActionFunctionArgs) {
 	const {
 		id: listId,
 		title,
-		eventType,
-		eventDate,
+		listTypeId,
+		contributionDate,
 		description,
 	} = submission.value
 
@@ -50,14 +50,14 @@ export async function action({ request }: ActionFunctionArgs) {
 		create: {
 			ownerId: userId,
 			title,
-			eventType,
-			eventDate,
+			listTypeId,
+			contributionDate,
 			description,
 		},
 		update: {
 			title,
-			eventType,
-			eventDate,
+			listTypeId,
+			contributionDate,
 			description,
 		},
 	})

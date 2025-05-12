@@ -4,6 +4,7 @@ import { DatabaseError, NotFoundError, ValidationError, handlePrismaError } from
 
 export type RegistryWithDetails = List & {
   items: Array<{ id: string }>
+  description?: string | null
 }
 
 export async function getActiveRegistriesCount(userId: string, beforeDate?: Date) {
