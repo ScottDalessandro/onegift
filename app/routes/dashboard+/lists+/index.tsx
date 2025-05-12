@@ -2,11 +2,13 @@ import { useLoaderData, Link } from 'react-router'
 import { requireUserId } from '#app/utils/auth.server'
 import { prisma } from '#app/utils/db.server'
 import type { LoaderFunctionArgs } from 'react-router'
+import { Button } from '#app/components/ui/button'
+import { Icon } from '#app/components/ui/icon'
 
 interface List {
 	id: string
 	title: string
-	description: string
+	description: string | null
 	itemCount: number
 	createdAt: string
 }
@@ -43,12 +45,17 @@ export default function ListsIndex() {
 			<div className="mb-6 flex items-center justify-between">
 				<h1 className="text-2xl font-bold text-gray-900">My Lists</h1>
 				{lists.length > 0 && (
-					<Link
-						to="/dashboard/lists/new"
-						className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+					<Button
+						asChild
+						className="gap-2 px-5 py-2.5 text-base font-semibold shadow-sm"
+						variant="default"
+						size="default"
 					>
-						Create New List
-					</Link>
+						<Link to="/dashboard/lists/new">
+							<Icon name="plus" size="sm" />
+							Create New List
+						</Link>
+					</Button>
 				)}
 			</div>
 
@@ -83,28 +90,23 @@ export default function ListsIndex() {
 			) : (
 				<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 					{lists.map((list) => (
-						<div
+						<Link
 							key={list.id}
-							className="relative rounded-lg border bg-white p-6 shadow-sm hover:shadow"
+							to={`/dashboard/lists/${list.id}`}
+							className="relative flex flex-col rounded-lg border bg-white p-6 shadow-sm transition-all hover:border-blue-500 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+							tabIndex={0}
 						>
-							<div className="flex flex-col">
-								<h3 className="text-lg font-medium text-gray-900">
-									<Link
-										to={`/dashboard/lists/${list.id}`}
-										className="hover:underline"
-									>
-										{list.title}
-									</Link>
-								</h3>
-								<p className="mt-1 text-sm text-gray-500">{list.description}</p>
-								<div className="mt-4 flex items-center justify-between text-sm text-gray-500">
-									<span>{list.itemCount} items</span>
-									<span>
-										Created {new Date(list.createdAt).toLocaleDateString()}
-									</span>
-								</div>
+							<h3 className="text-lg font-medium text-gray-900">
+								{list.title}
+							</h3>
+							<p className="mt-1 text-sm text-gray-500">{list.description}</p>
+							<div className="mt-4 flex items-center justify-between text-sm text-gray-500">
+								<span>{list.itemCount} items</span>
+								<span>
+									Created {new Date(list.createdAt).toLocaleDateString()}
+								</span>
 							</div>
-						</div>
+						</Link>
 					))}
 				</div>
 			)}

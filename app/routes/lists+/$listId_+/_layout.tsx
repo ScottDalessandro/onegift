@@ -21,6 +21,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 		},
 		include: {
 			items: true,
+			event: true,
 		},
 	})
 
@@ -55,7 +56,12 @@ export default function ListLayout({ loaderData }: { loaderData: LoaderData }) {
 					<div className="space-y-4">
 						<div>
 							<h3 className="font-semibold">Event Details</h3>
-							<p>Date: {new Date(list.eventDate).toLocaleDateString()}</p>
+							<p>
+								Date:{' '}
+								{list.event
+									? new Date(list.event.date).toLocaleDateString()
+									: 'No date set'}
+							</p>
 						</div>
 
 						<div>

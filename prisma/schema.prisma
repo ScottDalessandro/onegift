@@ -153,40 +153,104 @@ model Connection {
   @@unique([providerName, providerId])
 }
 
+model ListType {
+  id          String   @id @default(cuid())
+  name        String   @unique // e.g., "Birthday", "Graduation", "Wedding"
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lists       List[]
+}
+
 model List {
   id            String         @id @default(cuid())
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   title         String
-  eventType     String
-  eventDate     DateTime
   description   String?
+  contributionDate DateTime // The deadline for contributions (gifts, cash, etc.)
+  listTypeId    String
+  listType      ListType       @relation(fields: [listTypeId], references: [id])
+  eventId       String?        // Optional connection to an event
+  event         Event?         @relation(fields: [eventId], references: [id])
   status        String         @default("draft")
   planType      String         @default("free")
   ownerId       String
-  PersonalProfile  PersonalProfile?
+  PersonalProfile PersonalProfile?
   contributions Contribution[]
   owner         User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   items         ListItem[]
   withdrawals   Withdrawal[]
+  invitees      ListInvitee[]  // People who can see/contribute to the list
 
   @@index([ownerId])
+  @@index([listTypeId])
+}
+
+model ListInvitee {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  email     String
+  listId    String
+  list      List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+  
+  @@index([listId])
+  @@unique([listId, email])
+}
+
+model Event {
+  id          String       @id @default(cuid())
+  name        String
+  date        DateTime
+  startTime   String?
+  endTime     String?
+  location    String?
+  description String?
+  lists       List[]
+  guests      EventGuest[] // People invited to the physical event
+}
+
+model EventGuest {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  email     String
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  
+  @@index([eventId])
+  @@unique([eventId, email])
 }
 
 model ListItem {
-  id          String         @id @default(cuid())
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id          String          @id @default(cuid())
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
   name        String
   description String?
   price       Decimal
   url         String?
   category    String?
   listId      String
-  list        List          @relation(fields: [listId], references: [id], onDelete: Cascade)
+  list        List            @relation(fields: [listId], references: [id], onDelete: Cascade)
   images      ListItemImage[]
+  giftStatus  ListGiftStatus?
 
   @@index([listId])
+}
+
+model ListGiftStatus {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  isPurchased   Boolean  @default(false)
+  purchaserName String?
+  purchaserEmail String?
+  listItemId    String   @unique
+  listItem      ListItem @relation(fields: [listItemId], references: [id], onDelete: Cascade)
 }
 
 model ListItemImage {

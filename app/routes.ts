@@ -3,7 +3,7 @@ import { remixRoutesOptionAdapter } from '@react-router/remix-routes-option-adap
 import { flatRoutes } from 'remix-flat-routes'
 
 export default remixRoutesOptionAdapter((defineRoutes) => {
-	return flatRoutes('routes', defineRoutes, {
+	const routes =flatRoutes('routes', defineRoutes, {
 		ignoredRouteFiles: [
 			'.*',
 			'**/*.css',
@@ -18,4 +18,10 @@ export default remixRoutesOptionAdapter((defineRoutes) => {
 			'**/*.client.*',
 		],
 	})
+
+	// For debugging only
+	console.log('GENERATED ROUTES:', JSON.stringify(routes, null, 2));
+
+	return routes
+  
 }) satisfies RouteConfig

@@ -17,12 +17,10 @@ import { type Info } from './$listId_+/+types/edit.ts'
 export const ListSchema = z.object({
 	id: z.string().optional(),
 	title: z.string().min(1, 'Title is required'),
-	eventType: z.enum(['birthday', 'wedding', 'baby-shower', 'other'], {
-		errorMap: () => ({ message: 'Please select an event type' }),
-	}),
-	eventDate: z
+	listTypeId: z.string().min(1, 'List type is required'),
+	contributionDate: z
 		.string()
-		.min(1, 'Event date is required')
+		.min(1, 'Contribution deadline is required')
 		.refine((str) => !isNaN(Date.parse(str)), {
 			message: 'Invalid date format',
 		})
@@ -37,9 +35,11 @@ export const ListSchema = z.object({
 export function ListEditor({
 	list,
 	actionData,
+	listTypes,
 }: {
 	list?: Info['loaderData']['list']
 	actionData?: Info['actionData']
+	listTypes: Array<{ id: string; name: string }>
 }) {
 	const [form, fields] = useForm({
 		id: 'list-form',
@@ -52,8 +52,8 @@ export function ListEditor({
 		shouldRevalidate: 'onInput',
 		defaultValue: {
 			...list,
-			eventDate: list?.eventDate
-				? new Date(list.eventDate).toISOString().split('T')[0]
+			contributionDate: list?.contributionDate
+				? new Date(list.contributionDate).toISOString().split('T')[0]
 				: undefined,
 		},
 	})
@@ -87,7 +87,6 @@ export function ListEditor({
 			<Form method="post" className="space-y-6" {...getFormProps(form)}>
 				<div>
 					<Label htmlFor={fields.title.id}>List Title</Label>
-
 					<Input
 						{...getInputProps(fields.title, {
 							type: 'text',
@@ -100,30 +99,34 @@ export function ListEditor({
 				</div>
 
 				<div>
-					<Label htmlFor={fields.eventType.id}>Event Type</Label>
+					<Label htmlFor={fields.listTypeId.id}>List Type</Label>
 					<select
-						{...getSelectProps(fields.eventType)}
+						{...getSelectProps(fields.listTypeId)}
 						className="w-full rounded border border-gray-300 px-3 py-2 text-black"
 					>
-						<option value="">Select event type...</option>
-						<option value="birthday">Birthday</option>
-						<option value="wedding">Wedding</option>
-						<option value="baby-shower">Baby Shower</option>
-						<option value="other">Other</option>
+						<option value="">Select list type...</option>
+						{listTypes.map((type) => (
+							<option key={type.id} value={type.id}>
+								{type.name}
+							</option>
+						))}
 					</select>
-					{fields.eventType.errors?.length && (
-						<span className="text-red-500">{fields.eventType.errors}</span>
+					{fields.listTypeId.errors?.length && (
+						<span className="text-red-500">{fields.listTypeId.errors}</span>
 					)}
 				</div>
 
 				<div>
-					<Label htmlFor={fields.eventDate.id}>Event Date</Label>
+					<Label htmlFor={fields.contributionDate.id}>
+						Contribution Deadline
+					</Label>
 					<Input
-						{...getInputProps(fields.eventDate, { type: 'date' })}
-						// placeholder={new Date().toISOString().split('T')[0]}
+						{...getInputProps(fields.contributionDate, { type: 'date' })}
 					/>
-					{fields.eventDate.errors?.length && (
-						<span className="text-red-500">{fields.eventDate.errors}</span>
+					{fields.contributionDate.errors?.length && (
+						<span className="text-red-500">
+							{fields.contributionDate.errors}
+						</span>
 					)}
 				</div>
 

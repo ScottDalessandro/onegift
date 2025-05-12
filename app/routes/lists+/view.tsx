@@ -2,6 +2,7 @@ import { useLoaderData, type LoaderFunctionArgs } from 'react-router'
 import { prisma } from '#app/utils/db.server.ts'
 
 export async function loader({ params }: LoaderFunctionArgs) {
+	console.log('WHAT ARE THE params', params)
 	const list = await prisma.list.findUnique({
 		where: { id: params.listId },
 		include: {
@@ -11,8 +12,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
 					images: true,
 				},
 			},
+			event: true,
 		},
 	})
+
+	console.log('list', list)
 
 	if (!list) {
 		throw new Response('Not found', { status: 404 })
@@ -46,7 +50,10 @@ export default function ListRoute() {
 			<div className="mb-8 text-center">
 				<h1 className="text-3xl font-bold">{list.title}</h1>
 				<p className="mt-2 text-gray-600">
-					Event Date: {new Date(list.eventDate).toLocaleDateString()}
+					Event Date:{' '}
+					{list.event
+						? new Date(list.event.date).toLocaleDateString()
+						: 'No event date set'}
 				</p>
 			</div>
 
