@@ -1,6 +1,11 @@
 export default function RegistryItems() {
 	return (
 		<div className="items-content">
+			<div className="items-content-header">
+				<h1>TESTING!!!</h1>
+				{/* <button className="add-item-btn">Add Item</button> */}
+			</div>
+
 			<div className="items-header">
 				<h2>Registry Items</h2>
 				<button className="add-item-btn">Add Item</button>
