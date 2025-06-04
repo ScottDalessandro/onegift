@@ -1,63 +1,371 @@
+import { useParams, NavLink } from 'react-router'
+import { useState } from 'react'
+import { cn } from '#app/lib/utils'
+import { Button } from '#app/components/ui/button'
+import { Input } from '#app/components/ui/input'
+import { Card } from '#app/components/ui/card'
+import {
+	Gift,
+	User,
+	Camera,
+	Calendar,
+	LayoutGrid,
+	List as ListIcon,
+	Pencil,
+	Trash2,
+} from 'lucide-react'
+
 export default function RegistryItems() {
+	const { id } = useParams()
+	const [view, setView] = useState<'grid' | 'list'>('grid')
+	// Placeholder data
+	const items = [
+		{
+			id: 1,
+			category: 'Want',
+			name: 'LEGO Friends Heartlake City School',
+			price: '$59.99',
+			description: 'Emma loves building and creating stories with LEGO sets.',
+		},
+		{
+			id: 2,
+			category: 'Need',
+			name: 'Art Supplies Set',
+			price: '$29.99',
+			description: 'Emma is getting into drawing and painting.',
+		},
+		{
+			id: 3,
+			category: 'Experience',
+			name: "Children's Museum Annual Pass",
+			price: '$120.00',
+			description: 'Emma loves learning through interactive exhibits.',
+		},
+		{
+			id: 4,
+			category: 'Wear',
+			name: 'Rain Boots',
+			price: '$24.99',
+			description: 'Emma needs new rain boots for spring puddle jumping!',
+		},
+		{
+			id: 5,
+			category: 'Learn',
+			name: "Beginner's Piano Lessons (3 months)",
+			price: '$150.00',
+			description: 'Emma has shown interest in learning to play piano.',
+		},
+		{
+			id: 6,
+			category: 'Want',
+			name: 'Watercolor Paint Set',
+			price: '$45.99',
+			description: 'Professional quality watercolors for young artists.',
+		},
+	]
+	const categoryCounts = {
+		Want: 2,
+		Need: 2,
+		Experience: 2,
+		Wear: 2,
+		Learn: 2,
+	}
+
+	// Tab config
+	const tabs = [
+		{ label: 'Items (10)', to: `/dashboard/lists/${id}/items`, icon: Gift },
+		{ label: 'Profile', to: `/dashboard/lists/${id}/profile`, icon: User },
+		{ label: 'Memories', to: `/dashboard/lists/${id}/memories`, icon: Camera },
+		{ label: 'Overview', to: `/dashboard/lists/${id}`, icon: Calendar },
+	]
+
 	return (
-		<div className="items-content">
-			<div className="items-content-header">
-				<h1>TESTING!!!</h1>
-				{/* <button className="add-item-btn">Add Item</button> */}
+		<div className="container py-8">
+			{/* Back Button */}
+			<div className="mb-2 flex items-center gap-2">
+				<button className="flex items-center text-gray-500 hover:text-gray-700">
+					<svg
+						className="mr-1 h-5 w-5"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M15 19l-7-7 7-7"
+						/>
+					</svg>
+					Back
+				</button>
+				<span className="ml-2 text-2xl font-extrabold tracking-tight">
+					Registry Items
+				</span>
+			</div>
+			<div className="mb-4 ml-12 text-base font-medium text-gray-400">
+				Emma's 5th Birthday
 			</div>
 
-			<div className="items-header">
-				<h2>Registry Items</h2>
-				<button className="add-item-btn">Add Item</button>
+			{/* Tabs */}
+			<div className="mb-6 flex flex-wrap gap-2">
+				{tabs.map(({ label, to, icon: Icon }, i) => (
+					<NavLink
+						key={label}
+						to={to}
+						end={i === 0 || i === 3}
+						className={({ isActive }) =>
+							cn(
+								'flex items-center gap-2 rounded-md px-5 py-2.5 text-base font-semibold transition-colors',
+								isActive
+									? 'border-none bg-teal-500 text-white shadow-none'
+									: 'border border-gray-200 bg-white text-gray-800 hover:bg-gray-50',
+								'focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500',
+							)
+						}
+						aria-label={label}
+					>
+						<Icon className="h-5 w-5" />
+						{label}
+					</NavLink>
+				))}
 			</div>
 
-			<div className="items-grid">
-				<div className="item-card">
-					<div className="item-image-placeholder"></div>
-					<div className="item-details">
-						<span className="item-status want">Want</span>
-						<h3>LEGO Friends Heartlake City School</h3>
-						<p>Emma loves building and creating stories with LEGO sets.</p>
-						<span className="price">$59.99</span>
-					</div>
+			{/* Manage Items Header & Actions */}
+			<div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+				<div>
+					<div className="text-xl font-bold">Manage Items</div>
+					<div className="text-sm text-gray-500">10 of 10 items</div>
 				</div>
-
-				<div className="item-card">
-					<div className="item-image-placeholder"></div>
-					<div className="item-details">
-						<span className="item-status need">Need</span>
-						<h3>Art Supplies Set</h3>
-						<p>Emma is getting into drawing and painting.</p>
-						<span className="price">$29.99</span>
+				<div className="flex items-center gap-2">
+					<Button
+						variant="outline"
+						className="flex items-center gap-2"
+						aria-label="Filters"
+					>
+						<svg
+							className="h-4 w-4"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707l-7 7V19a1 1 0 01-1 1h-2a1 1 0 01-1-1v-5.293l-7-7A1 1 0 013 6V4z"
+							/>
+						</svg>
+						Filters
+					</Button>
+					<div className="inline-flex overflow-hidden rounded-md border border-teal-500 shadow-sm">
+						<Button
+							variant={view === 'grid' ? 'default' : 'ghost'}
+							className={cn(
+								'flex items-center gap-2 rounded-none px-3 py-2',
+								view === 'grid'
+									? 'bg-teal-500 text-white hover:bg-teal-600'
+									: 'bg-white text-teal-500 hover:bg-teal-50',
+							)}
+							aria-label="Grid view"
+							onClick={() => setView('grid')}
+						>
+							<LayoutGrid className="h-5 w-5" />
+						</Button>
+						<Button
+							variant={view === 'list' ? 'default' : 'ghost'}
+							className={cn(
+								'flex items-center gap-2 rounded-none border-l border-teal-500 px-3 py-2',
+								view === 'list'
+									? 'bg-teal-500 text-white hover:bg-teal-600'
+									: 'bg-white text-teal-500 hover:bg-teal-50',
+							)}
+							aria-label="List view"
+							onClick={() => setView('list')}
+						>
+							<ListIcon className="h-5 w-5" />
+						</Button>
 					</div>
+					<Button
+						className="rounded-md bg-teal-500 px-5 py-2 font-semibold text-white hover:bg-teal-600"
+						aria-label="Add Item"
+					>
+						+ Add Item
+					</Button>
+				</div>
+			</div>
+
+			{/* Search Bar */}
+			<div className="mb-4 w-full">
+				<Input placeholder="Search items..." className="w-full" />
+			</div>
+
+			{/* Items View */}
+			{view === 'grid' ? (
+				<div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+					{items.map((item) => (
+						<Card key={item.id} className="flex flex-col">
+							<div className="relative flex flex-col">
+								{/* Image Placeholder */}
+								<div className="flex h-48 w-full items-center justify-center bg-gray-100">
+									<svg
+										className="h-10 w-10 text-gray-300"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<circle cx="12" cy="12" r="10" strokeWidth="2" />
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											strokeWidth="2"
+											d="M8 12l2 2 4-4"
+										/>
+									</svg>
+								</div>
+								{/* Edit/Delete Icons */}
+								<div className="absolute right-2 top-2 flex gap-2">
+									<button
+										className="rounded bg-white p-1 text-gray-400 shadow hover:text-gray-600"
+										aria-label="Edit"
+									>
+										<Pencil className="h-4 w-4" />
+									</button>
+									<button
+										className="rounded bg-white p-1 text-red-400 shadow hover:text-red-600"
+										aria-label="Delete"
+									>
+										<Trash2 className="h-4 w-4" />
+									</button>
+								</div>
+							</div>
+							<div className="flex flex-1 flex-col p-4">
+								<div className="mb-2 flex items-center gap-2">
+									<span
+										className={cn(
+											'rounded px-2 py-0.5 text-xs font-semibold',
+											item.category === 'Want' && 'bg-teal-50 text-teal-700',
+											item.category === 'Need' && 'bg-blue-50 text-blue-700',
+											item.category === 'Experience' &&
+												'bg-yellow-50 text-yellow-700',
+											item.category === 'Wear' && 'bg-green-50 text-green-700',
+											item.category === 'Learn' &&
+												'bg-purple-50 text-purple-700',
+										)}
+									>
+										{item.category}
+									</span>
+									<span className="ml-auto text-base font-semibold">
+										{item.price}
+									</span>
+								</div>
+								<h3 className="mb-1 text-lg font-bold">{item.name}</h3>
+								<p className="mb-2 text-sm text-gray-600">{item.description}</p>
+								<a href="#" className="text-sm text-teal-600 hover:underline">
+									View Product
+								</a>
+							</div>
+						</Card>
+					))}
+				</div>
+			) : (
+				<div className="mb-6 flex flex-col gap-4">
+					{items.map((item) => (
+						<Card
+							key={item.id}
+							className="flex flex-row items-center gap-4 p-4"
+						>
+							{/* Image Placeholder */}
+							<div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded bg-gray-100">
+								<svg
+									className="h-7 w-7 text-gray-300"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<circle cx="12" cy="12" r="10" strokeWidth="2" />
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2"
+										d="M8 12l2 2 4-4"
+									/>
+								</svg>
+							</div>
+							{/* Info */}
+							<div className="flex flex-1 flex-col gap-1">
+								<div className="flex items-center gap-2">
+									<span className="text-base font-bold">{item.name}</span>
+									<span
+										className={cn(
+											'rounded px-2 py-0.5 text-xs font-semibold',
+											item.category === 'Want' && 'bg-teal-50 text-teal-700',
+											item.category === 'Need' && 'bg-blue-50 text-blue-700',
+											item.category === 'Experience' &&
+												'bg-yellow-50 text-yellow-700',
+											item.category === 'Wear' && 'bg-green-50 text-green-700',
+											item.category === 'Learn' &&
+												'bg-purple-50 text-purple-700',
+										)}
+									>
+										{item.category}
+									</span>
+								</div>
+								<div className="text-sm text-gray-600">{item.description}</div>
+								<div className="mt-1 flex items-center gap-4">
+									<span className="font-semibold">{item.price}</span>
+									<a href="#" className="text-sm text-teal-600 hover:underline">
+										View Product
+									</a>
+								</div>
+							</div>
+							{/* Actions */}
+							<div className="ml-auto flex flex-col gap-2">
+								<button
+									className="rounded bg-white p-1 text-gray-400 shadow hover:text-gray-600"
+									aria-label="Edit"
+								>
+									<Pencil className="h-4 w-4" />
+								</button>
+								<button
+									className="rounded bg-white p-1 text-red-400 shadow hover:text-red-600"
+									aria-label="Delete"
+								>
+									<Trash2 className="h-4 w-4" />
+								</button>
+							</div>
+						</Card>
+					))}
+				</div>
+			)}
+
+			{/* Pagination */}
+			<div className="mb-6 flex flex-col items-center justify-between gap-2 sm:flex-row">
+				<span className="text-sm text-gray-600">
+					Showing 1 to 6 of 10 items
+				</span>
+				<div className="flex items-center gap-2">
+					<Button variant="outline" size="sm">
+						Previous
+					</Button>
+					<span className="text-sm text-gray-600">Page 1 of 2</span>
+					<Button variant="outline" size="sm">
+						Next
+					</Button>
 				</div>
 			</div>
 
 			{/* Category Balance */}
-			<div className="category-balance">
-				<h3>Category Balance</h3>
-				<div className="category-grid">
-					<div className="category want">
-						<span className="count">1</span>
-						<span className="label">Want</span>
+			<div className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-5">
+				{Object.entries(categoryCounts).map(([cat, count]) => (
+					<div
+						key={cat}
+						className="flex flex-col items-center rounded bg-gray-50 p-2"
+					>
+						<span className="text-lg font-bold">{count}</span>
+						<span className="text-xs">{cat}</span>
 					</div>
-					<div className="category need">
-						<span className="count">1</span>
-						<span className="label">Need</span>
-					</div>
-					<div className="category experience">
-						<span className="count">0</span>
-						<span className="label">Experience</span>
-					</div>
-					<div className="category wear">
-						<span className="count">0</span>
-						<span className="label">Wear</span>
-					</div>
-					<div className="category learn">
-						<span className="count">0</span>
-						<span className="label">Learn</span>
-					</div>
-				</div>
+				))}
 			</div>
 		</div>
 	)
