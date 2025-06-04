@@ -1,9 +1,9 @@
-import { useParams, NavLink } from 'react-router'
-import { useState } from 'react'
+import { useParams, NavLink, useSearchParams } from 'react-router'
+import { useState, useMemo, useCallback } from 'react'
 import { cn } from '#app/lib/utils'
 import { Button } from '#app/components/ui/button'
-import { Input } from '#app/components/ui/input'
 import { Card } from '#app/components/ui/card'
+import { SearchBar } from '#app/components/items-search-bar' // Your new component
 import {
 	Gift,
 	User,
@@ -17,8 +17,13 @@ import {
 
 export default function RegistryItems() {
 	const { id } = useParams()
+	const [searchParams] = useSearchParams()
 	const [view, setView] = useState<'grid' | 'list'>('grid')
-	// Placeholder data
+
+	// Get search from URL
+	const searchQuery = searchParams.get('search') || ''
+
+	// Placeholder data (in real app, this would come from loader)
 	const items = [
 		{
 			id: 1,
@@ -63,17 +68,50 @@ export default function RegistryItems() {
 			description: 'Professional quality watercolors for young artists.',
 		},
 	]
-	const categoryCounts = {
-		Want: 2,
-		Need: 2,
-		Experience: 2,
-		Wear: 2,
-		Learn: 2,
-	}
+
+	// Memoized search function for better performance
+	const searchItems = useCallback((items: typeof items, query: string) => {
+		if (!query.trim()) return items
+
+		const lowercaseQuery = query.toLowerCase()
+		return items.filter(
+			(item) =>
+				item.name.toLowerCase().includes(lowercaseQuery) ||
+				item.description.toLowerCase().includes(lowercaseQuery) ||
+				item.category.toLowerCase().includes(lowercaseQuery),
+		)
+	}, [])
+
+	// Memoized filtered items
+	const filteredItems = useMemo(
+		() => searchItems(items, searchQuery),
+		[items, searchQuery, searchItems],
+	)
+
+	// Handle search changes
+	const handleSearch = useCallback((query: string) => {
+		// Search state is managed by SearchBar component via URL params
+		// This could trigger server-side search in a real app
+		console.log('Search query:', query)
+	}, [])
+
+	const categoryCounts = useMemo(() => {
+		const counts = { Want: 0, Need: 0, Experience: 0, Wear: 0, Learn: 0 }
+		filteredItems.forEach((item) => {
+			if (item.category in counts) {
+				counts[item.category as keyof typeof counts]++
+			}
+		})
+		return counts
+	}, [filteredItems])
 
 	// Tab config
 	const tabs = [
-		{ label: 'Items (10)', to: `/dashboard/lists/${id}/items`, icon: Gift },
+		{
+			label: `Items (${filteredItems.length})`,
+			to: `/dashboard/lists/${id}/items`,
+			icon: Gift,
+		},
 		{ label: 'Profile', to: `/dashboard/lists/${id}/profile`, icon: User },
 		{ label: 'Memories', to: `/dashboard/lists/${id}/memories`, icon: Camera },
 		{ label: 'Overview', to: `/dashboard/lists/${id}`, icon: Calendar },
@@ -135,7 +173,18 @@ export default function RegistryItems() {
 			<div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
 				<div>
 					<div className="text-xl font-bold">Manage Items</div>
-					<div className="text-sm text-gray-500">10 of 10 items</div>
+					<div className="text-sm text-gray-500">
+						{searchQuery ? (
+							<>
+								Showing {filteredItems.length} of {items.length} items for "
+								{searchQuery}"
+							</>
+						) : (
+							<>
+								{filteredItems.length} of {items.length} items
+							</>
+						)}
+					</div>
 				</div>
 				<div className="flex items-center gap-2">
 					<Button
@@ -195,15 +244,30 @@ export default function RegistryItems() {
 				</div>
 			</div>
 
-			{/* Search Bar */}
-			<div className="mb-4 w-full">
-				<Input placeholder="Search items..." className="w-full" />
-			</div>
+			{/* Enhanced Search Bar */}
+			<SearchBar
+				onSearch={handleSearch}
+				className="mb-4 w-full"
+				placeholder="Search items by name, description, or category..."
+			/>
 
-			{/* Items View */}
-			{view === 'grid' ? (
+			{/* No Results Message */}
+			{searchQuery && filteredItems.length === 0 && (
+				<div className="mb-6 rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
+					<div className="mb-2 text-lg font-medium text-gray-900">
+						No items found
+					</div>
+					<div className="text-gray-600">
+						No items match your search for "{searchQuery}". Try a different
+						search term.
+					</div>
+				</div>
+			)}
+
+			{/* Items View - Grid */}
+			{view === 'grid' && filteredItems.length > 0 && (
 				<div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-					{items.map((item) => (
+					{filteredItems.map((item) => (
 						<Card key={item.id} className="flex flex-col">
 							<div className="relative flex flex-col">
 								{/* Image Placeholder */}
@@ -268,9 +332,12 @@ export default function RegistryItems() {
 						</Card>
 					))}
 				</div>
-			) : (
+			)}
+
+			{/* Items View - List */}
+			{view === 'list' && filteredItems.length > 0 && (
 				<div className="mb-6 flex flex-col gap-4">
-					{items.map((item) => (
+					{filteredItems.map((item) => (
 						<Card
 							key={item.id}
 							className="flex flex-row items-center gap-4 p-4"
@@ -340,33 +407,39 @@ export default function RegistryItems() {
 			)}
 
 			{/* Pagination */}
-			<div className="mb-6 flex flex-col items-center justify-between gap-2 sm:flex-row">
-				<span className="text-sm text-gray-600">
-					Showing 1 to 6 of 10 items
-				</span>
-				<div className="flex items-center gap-2">
-					<Button variant="outline" size="sm">
-						Previous
-					</Button>
-					<span className="text-sm text-gray-600">Page 1 of 2</span>
-					<Button variant="outline" size="sm">
-						Next
-					</Button>
-				</div>
-			</div>
-
-			{/* Category Balance */}
-			<div className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-5">
-				{Object.entries(categoryCounts).map(([cat, count]) => (
-					<div
-						key={cat}
-						className="flex flex-col items-center rounded bg-gray-50 p-2"
-					>
-						<span className="text-lg font-bold">{count}</span>
-						<span className="text-xs">{cat}</span>
+			{filteredItems.length > 0 && (
+				<div className="mb-6 flex flex-col items-center justify-between gap-2 sm:flex-row">
+					<span className="text-sm text-gray-600">
+						Showing {Math.min(filteredItems.length, 6)} of{' '}
+						{filteredItems.length} items
+						{searchQuery && ` for "${searchQuery}"`}
+					</span>
+					<div className="flex items-center gap-2">
+						<Button variant="outline" size="sm">
+							Previous
+						</Button>
+						<span className="text-sm text-gray-600">Page 1 of 1</span>
+						<Button variant="outline" size="sm">
+							Next
+						</Button>
 					</div>
-				))}
-			</div>
+				</div>
+			)}
+
+			{/* Category Balance - Updated counts based on search */}
+			{filteredItems.length > 0 && (
+				<div className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-5">
+					{Object.entries(categoryCounts).map(([cat, count]) => (
+						<div
+							key={cat}
+							className="flex flex-col items-center rounded bg-gray-50 p-2"
+						>
+							<span className="text-lg font-bold">{count}</span>
+							<span className="text-xs">{cat}</span>
+						</div>
+					))}
+				</div>
+			)}
 		</div>
 	)
 }
