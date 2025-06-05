@@ -15,6 +15,14 @@ import {
 	Trash2,
 } from 'lucide-react'
 
+interface Item {
+	id: number
+	category: string
+	name: string
+	price: string
+	description: string
+}
+
 export default function RegistryItems() {
 	const { id } = useParams()
 	const [searchParams] = useSearchParams()
@@ -70,7 +78,7 @@ export default function RegistryItems() {
 	]
 
 	// Memoized search function for better performance
-	const searchItems = useCallback((items: typeof items, query: string) => {
+	const searchItems = useCallback((items: Item[], query: string) => {
 		if (!query.trim()) return items
 
 		const lowercaseQuery = query.toLowerCase()
